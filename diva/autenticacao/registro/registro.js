@@ -1,76 +1,162 @@
 import {
   createUser,
   findUserByEmail
-} from "../core/storage.js";
+} from "../../core/storage.js";
 
-/*PEGAR FORMULÁRIO*/
+/* FORM */
 const form = document.querySelector("form");
 
-/*EVENTO DE SUBMIT*/
+/* INPUTS */
+const nome = document.querySelector("#nome");
+const email = document.querySelector("#email");
+const senha = document.querySelector("#senha");
+const confirmar = document.querySelector("#confirmar");
+
+/* SPANS DE ERRO */
+const nomeError = document.querySelector("#nome-error");
+const emailError = document.querySelector("#email-error");
+const senhaError = document.querySelector("#senha-error");
+const confirmarError = document.querySelector("#confirmar-error");
+
+/*LIMPAR ERROS*/
+function clearErrors(){
+
+  nomeError.textContent = "";
+  emailError.textContent = "";
+  senhaError.textContent = "";
+  confirmarError.textContent = "";
+
+  nome.classList.remove("input-error");
+  email.classList.remove("input-error");
+  senha.classList.remove("input-error");
+  confirmar.classList.remove("input-error");
+
+}
+
+/*VALIDAR EMAIL*/
+function isValidEmail(email){
+
+  return /\S+@\S+\.\S+/.test(email);
+
+}
+
+/*SUBMIT*/
 form.addEventListener("submit", (event) => {
 
-  /* EVITA RECARREGAR A PÁGINA */
   event.preventDefault();
 
-  /*PEGAR VALORES DOS INPUTS*/
-  const nome = document.querySelector("#nome").value;
+  clearErrors();
 
-  const email = document.querySelector("#email").value;
+  let isValid = true;
 
-  const senha = document.querySelector("#senha").value;
+  /*NOME*/
+  if(nome.value.trim() === ""){
 
-  const confirmar = document.querySelector("#confirmar").value;
+    nomeError.textContent = "O nome é obrigatório";
 
-  /*VALIDAÇÕES*/
+    nome.classList.add("input-error");
 
-  /* CAMPOS VAZIOS */
-  if(!nome || !email || !senha || !confirmar){
-
-    alert("Preencha todos os campos");
-
-    return;
+    isValid = false;
 
   }
 
-  /* SENHAS DIFERENTES */
-  if(senha !== confirmar){
+  /*EMAIL*/
+  if(email.value.trim() === ""){
 
-    alert("As senhas não coincidem");
+    emailError.textContent = "O email é obrigatório";
 
-    return;
+    email.classList.add("input-error");
+
+    isValid = false;
+
+  }
+  else if(!isValidEmail(email.value)){
+
+    emailError.textContent = "Digite um email válido";
+
+    email.classList.add("input-error");
+
+    isValid = false;
 
   }
 
-  /* VERIFICAR EMAIL EXISTENTE */
-  const userExists = findUserByEmail(email);
+  /*SENHA*/
+  if(senha.value.trim() === ""){
+
+    senhaError.textContent = "A senha é obrigatória";
+
+    senha.classList.add("input-error");
+
+    isValid = false;
+
+  }
+  else if(senha.value.length < 6){
+
+    senhaError.textContent = "A senha deve ter no mínimo 6 caracteres";
+
+    senha.classList.add("input-error");
+
+    isValid = false;
+
+  }
+
+  /*CONFIRMAR SENHA*/
+  if(confirmar.value.trim() === ""){
+
+    confirmarError.textContent = "Confirme sua senha";
+
+    confirmar.classList.add("input-error");
+
+    isValid = false;
+
+  }
+  else if(confirmar.value !== senha.value){
+
+    confirmarError.textContent = "As senhas não coincidem";
+
+    confirmar.classList.add("input-error");
+
+    isValid = false;
+
+  }
+
+  /*EMAIL JÁ EXISTE*/
+  const userExists = findUserByEmail(email.value);
 
   if(userExists){
 
-    alert("Esse email já está cadastrado");
+    emailError.textContent = "Esse email já está cadastrado";
+
+    email.classList.add("input-error");
+
+    isValid = false;
+
+  }
+
+  /*PARAR EXECUÇÃO*/
+  if(!isValid){
 
     return;
 
   }
 
-  /*CRIAR OBJETO USUÁRIO*/
+  /*OBJETO USUÁRIO*/
   const user = {
 
-    nome,
-    email,
-    senha
+    nome: nome.value,
+    email: email.value,
+    senha: senha.value
 
   };
 
-  /*SALVAR USUÁRIO*/
+  /*CRIAR USUÁRIO*/
   createUser(user);
 
-  /* SUCESSO */
+  /*SUCESSO*/
   alert("Conta criada com sucesso!");
 
-  /*LIMPAR FORMULÁRIO*/
   form.reset();
 
-  /*REDIRECIONAR*/
   window.location.href = "../login/index.html";
 
 });

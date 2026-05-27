@@ -1,61 +1,118 @@
 import {
   findUserByEmail
-} from "../core/storage.js";
+} from "../../core/storage.js";
 
-/*PEGAR FORMULÁRIO*/
+/* FORM */
 const form = document.querySelector("form");
 
-/*EVENTO DE LOGIN*/
+/* INPUTS */
+const email = document.querySelector("#email");
+const senha = document.querySelector("#senha");
+
+/* ERROS */
+const emailError = document.querySelector("#email-error");
+const senhaError = document.querySelector("#senha-error");
+
+/*LIMPAR ERROS*/
+function clearErrors(){
+
+  emailError.textContent = "";
+  senhaError.textContent = "";
+
+  email.classList.remove("input-error");
+  senha.classList.remove("input-error");
+
+}
+
+/*VALIDAR EMAIL*/
+function isValidEmail(emailValue){
+
+  return /\S+@\S+\.\S+/.test(emailValue);
+
+}
+
+/*LOGIN*/
 form.addEventListener("submit", (event) => {
 
-  /* EVITA RECARREGAR */
   event.preventDefault();
 
-  /*PEGAR VALORES*/
-  const email = document.querySelector("#email").value;
+  clearErrors();
 
-  const senha = document.querySelector("#senha").value;
+  let isValid = true;
 
-  /*VALIDAR CAMPOS*/
-  if(!email || !senha){
+  /*VALIDAR EMAIL */
+  if(email.value.trim() === ""){
 
-    alert("Preencha todos os campos");
+    emailError.textContent = "O email é obrigatório";
+
+    email.classList.add("input-error");
+
+    isValid = false;
+
+  }
+  else if(!isValidEmail(email.value)){
+
+    emailError.textContent = "Digite um email válido";
+
+    email.classList.add("input-error");
+
+    isValid = false;
+
+  }
+
+  /*VALIDAR SENHA*/
+  if(senha.value.trim() === ""){
+
+    senhaError.textContent = "A senha é obrigatória";
+
+    senha.classList.add("input-error");
+
+    isValid = false;
+
+  }
+
+  /*PARAR EXECUÇÃO */
+  if(!isValid){
 
     return;
 
   }
 
-  /*BUSCAR USUÁRIO*/
-  const user = findUserByEmail(email);
+  /*BUSCAR USUÁRIO */
+  const user = findUserByEmail(email.value);
 
-  /*VERIFICAR USUÁRIO*/
+  /*USUÁRIO NÃO EXISTE*/
   if(!user){
 
-    alert("Usuário não encontrado");
+    emailError.textContent = "Usuário não encontrado";
+
+    email.classList.add("input-error");
 
     return;
 
   }
 
-  /* VERIFICAR SENHA*/
-  if(user.senha !== senha){
+  /*SENHA INCORRETA*/
+  if(user.senha !== senha.value){
 
-    alert("Senha incorreta");
+    senhaError.textContent = "Senha incorreta";
+
+    senha.classList.add("input-error");
 
     return;
 
   }
 
   /*LOGIN REALIZADO*/
-  alert(`Bem-vinda ${user.nome}!`);
-
-  /* SALVAR SESSÃO*/
   localStorage.setItem(
     "usuarioLogado",
     JSON.stringify(user)
   );
 
+  /*SUCESSO*/
+  alert(`Bem-vinda ${user.nome}!`);
+
   /*REDIRECIONAR*/
-  window.location.href = "../home/index.html";
+  window.location.href = "../../index.html";
 
 });
