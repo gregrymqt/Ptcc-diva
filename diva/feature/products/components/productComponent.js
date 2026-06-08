@@ -1,3 +1,8 @@
+import {
+  favoriteButtonComponent
+}
+from "../../favorites/components/favoriteButtonComponent.js";
+
 export function renderProducts(
   products,
   containerId
@@ -14,10 +19,18 @@ export function renderProducts(
 
       <div class="product-card">
 
-        <img
-          src="${product.imagem}"
-          alt="${product.nome}"
-        >
+        <div class="product-image-wrapper">
+
+          <img
+            src="${product.imagem}"
+            alt="${product.nome}"
+          >
+
+          ${favoriteButtonComponent(
+            product.id
+          )}
+
+        </div>
 
         <h3>${product.nome}</h3>
 
