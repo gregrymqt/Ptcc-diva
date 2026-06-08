@@ -120,12 +120,11 @@ export function toggleFavorite(
 
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(
-        updatedFavorites
-      )
+      JSON.stringify(updatedFavorites)
     );
 
-    return;
+    return false;
+
   }
 
   const newFavorite =
@@ -142,6 +141,8 @@ export function toggleFavorite(
     STORAGE_KEY,
     JSON.stringify(favorites)
   );
+
+  return true;
 
 }
 

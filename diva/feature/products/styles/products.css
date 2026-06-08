@@ -136,6 +136,33 @@ main{
 
 }
 
+.add-to-cart-btn{
+
+    margin:0 16px 16px;
+
+    border:none;
+
+    background:#e91e63;
+    color:white;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.add-to-cart-btn:hover{
+
+    opacity:.9;
+
+}
+
 /* HOVER DESKTOP */
 
 @media (hover:hover){

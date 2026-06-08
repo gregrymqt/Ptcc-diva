@@ -3,6 +3,13 @@ import {
   findUserByEmail
 } from "../../../core/storage.js";
 
+
+import {
+  showToast
+}
+from "../../../shared/components/toast/toastComponent.js";
+
+
 /* FORM */
 const form = document.querySelector("form");
 
@@ -149,14 +156,19 @@ form.addEventListener("submit", (event) => {
 
   };
 
-  /*CRIAR USUÁRIO*/
-  createUser(user);
+ createUser(user);
 
-  /*SUCESSO*/
-  alert("Conta criada com sucesso!");
+showToast(
+  "Conta criada com sucesso!"
+);
 
-  form.reset();
+form.reset();
 
-  window.location.href = "../login/index.html";
+setTimeout(() => {
+
+  window.location.href =
+    "../login/index.html";
+
+}, 1500);
 
 });

@@ -2,6 +2,11 @@ import {
   findUserByEmail
 } from "../../../core/storage.js";
 
+import {
+  showToast
+}
+from "../../../shared/components/toast/toastComponent.js";
+
 /* FORM */
 const form = document.querySelector("form");
 
@@ -13,7 +18,6 @@ const senha = document.querySelector("#senha");
 const emailError = document.querySelector("#email-error");
 const senhaError = document.querySelector("#senha-error");
 
-/*LIMPAR ERROS*/
 function clearErrors(){
 
   emailError.textContent = "";
@@ -24,14 +28,12 @@ function clearErrors(){
 
 }
 
-/*VALIDAR EMAIL*/
 function isValidEmail(emailValue){
 
   return /\S+@\S+\.\S+/.test(emailValue);
 
 }
 
-/*LOGIN*/
 form.addEventListener("submit", (event) => {
 
   event.preventDefault();
@@ -40,7 +42,6 @@ form.addEventListener("submit", (event) => {
 
   let isValid = true;
 
-  /*VALIDAR EMAIL */
   if(email.value.trim() === ""){
 
     emailError.textContent = "O email é obrigatório";
@@ -60,7 +61,6 @@ form.addEventListener("submit", (event) => {
 
   }
 
-  /*VALIDAR SENHA*/
   if(senha.value.trim() === ""){
 
     senhaError.textContent = "A senha é obrigatória";
@@ -71,17 +71,14 @@ form.addEventListener("submit", (event) => {
 
   }
 
-  /*PARAR EXECUÇÃO */
   if(!isValid){
 
     return;
 
   }
 
-  /*BUSCAR USUÁRIO */
   const user = findUserByEmail(email.value);
 
-  /*USUÁRIO NÃO EXISTE*/
   if(!user){
 
     emailError.textContent = "Usuário não encontrado";
@@ -92,7 +89,6 @@ form.addEventListener("submit", (event) => {
 
   }
 
-  /*SENHA INCORRETA*/
   if(user.senha !== senha.value){
 
     senhaError.textContent = "Senha incorreta";
@@ -103,16 +99,20 @@ form.addEventListener("submit", (event) => {
 
   }
 
-  /*LOGIN REALIZADO*/
   localStorage.setItem(
     "usuarioLogado",
     JSON.stringify(user)
   );
 
-  /*SUCESSO*/
-  alert(`Bem-vinda ${user.nome}!`);
+  showToast(
+    `Bem-vinda ${user.nome}!`
+  );
 
-  /*REDIRECIONAR*/
-  window.location.href = "../../index.html";
+  setTimeout(() => {
+
+    window.location.href =
+      "../../index.html";
+
+  }, 1500);
 
 });

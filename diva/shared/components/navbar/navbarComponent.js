@@ -1,47 +1,59 @@
 export function navbarComponent() {
-    return `
-        <header class="navbar">
 
-            <div class="navbar__container">
+  return `
+    <header class="navbar">
 
-                <a href="../../home/pages/home.html" class="navbar__logo">
-                    Diva Makeup
-                </a>
+      <div class="navbar__container">
 
-                <button
-                    class="navbar__toggle"
-                    id="menuToggle"
-                    aria-label="Abrir Menu"
-                >
-                    ☰
-                </button>
+        <a
+          href="../../home/pages/home.html"
+          class="navbar__logo"
+        >
+          Diva Makeup
+        </a>
 
-                <nav class="navbar__menu" id="navbarMenu">
+        <button
+          class="navbar__toggle"
+          id="menuToggle"
+          aria-label="Abrir Menu"
+        >
+          ☰
+        </button>
 
-                    <a href="../../home/pages/home.html">
-                        Home
-                    </a>
+        <nav
+          class="navbar__menu"
+          id="navbarMenu"
+        >
 
-                    <a href="../../products/pages/products.html">
-                        Produtos
-                    </a>
+          <a href="../../home/pages/home.html">
+            Home
+          </a>
 
-                    <a href="#">
-                        Categorias
-                    </a>
+          <a href="../../products/pages/products.html">
+            Produtos
+          </a>
 
-                    <a href="#">
-                        Favoritos
-                    </a>
+          <a href="../../categories/pages/categories.html">
+            Categorias
+          </a>
 
-                    <a href="#" class="navbar__button">
-                        Carrinho
-                    </a>
+          <a href="../../favorites/pages/favorites.html">
+            Favoritos
+            <span id="favorites-count">(0)</span>
+          </a>
 
-                </nav>
+          <a
+            href="../../cart/pages/cart.html"
+            class="navbar__button"
+          >
+            Carrinho
+            <span id="cart-count">(0)</span>
+          </a>
 
-            </div>
+        </nav>
 
-        </header>
-    `;
+      </div>
+
+    </header>
+  `;
 }

@@ -9,6 +9,11 @@ import {
 }
 from "../../categories/services/categoryService.js";
 
+import {
+  showToast
+}
+from "../../../shared/components/toast/toastComponent.js";
+
 export function initProductForm(formId) {
 
   const form =
@@ -70,7 +75,7 @@ export function initProductForm(formId) {
 
       form.reset();
 
-      alert(
+      showToast(
         "Produto cadastrado com sucesso!"
       );
 

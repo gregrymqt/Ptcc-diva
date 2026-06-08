@@ -42,8 +42,15 @@ export function renderProducts(
         </small>
 
         <span>
-          R$ ${product.preco}
+          R$ ${Number(product.preco).toFixed(2)}
         </span>
+
+        <button
+          class="add-to-cart-btn"
+          data-id="${product.id}"
+        >
+          Adicionar ao Carrinho
+        </button>
 
       </div>
 

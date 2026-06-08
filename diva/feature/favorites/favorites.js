@@ -4,18 +4,25 @@ import { footerComponent } from "../../shared/components/footer/footerComponent.
 import { favoriteComponent } from "./components/favoriteComponent.js";
 
 import {
-    getFavoriteProducts
-} from "./services/favoriteService.js";
+  getFavoriteProducts
+}
+from "./services/favoriteService.js";
+
+import {
+  initNavbar
+}
+from "../../shared/components/navbar/navbarController.js";
 
 document.getElementById("navbar").innerHTML =
-    navbarComponent();
+  navbarComponent();
 
 document.getElementById("footer").innerHTML =
-    footerComponent();
+  footerComponent();
 
 const favoriteProducts =
-    getFavoriteProducts();
+  getFavoriteProducts();
 
 document.getElementById("favorites-content").innerHTML =
-    favoriteComponent(favoriteProducts);
-    
+  favoriteComponent(favoriteProducts);
+
+initNavbar();

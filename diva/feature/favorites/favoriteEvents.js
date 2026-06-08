@@ -3,6 +3,11 @@ import {
 }
 from "./services/favoriteService.js";
 
+import {
+  showToast
+}
+from "../../shared/components/toast/toastComponent.js";
+
 export function initFavoriteEvents() {
 
   document.addEventListener(
@@ -21,9 +26,20 @@ export function initFavoriteEvents() {
           button.dataset.productId
         );
 
-      toggleFavorite(productId);
+      const added =
+        toggleFavorite(productId);
 
-      location.reload();
+      showToast(
+        added
+          ? "Produto adicionado aos favoritos!"
+          : "Produto removido dos favoritos!"
+      );
+
+      setTimeout(() => {
+
+        location.reload();
+
+      }, 600);
 
     }
   );

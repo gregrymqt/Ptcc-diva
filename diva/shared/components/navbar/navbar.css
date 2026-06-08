@@ -67,6 +67,28 @@
     padding: .8rem;
     border-radius: 8px;
 }
+
+#cart-count,
+#favorites-count {
+
+  font-size: .8rem;
+  font-weight: bold;
+
+}
+
+.navbar__menu a {
+
+    transition: .2s;
+
+}
+
+.navbar__menu a:hover {
+
+    color: #e91e63;
+
+}
+
+
 @media (min-width: 768px) {
 
     .navbar__toggle {
@@ -84,3 +106,4 @@
     }
 
 }
+

@@ -4,6 +4,11 @@ from "../models/categoryModel.js";
 import { createCategory }
 from "../services/categoryService.js";
 
+import {
+  showToast
+}
+from "../../../shared/components/toast/toastComponent.js";
+
 export function initCategoryForm(formId) {
 
   const form =
@@ -36,7 +41,7 @@ export function initCategoryForm(formId) {
 
       form.reset();
 
-      alert(
+      showToast(
         "Categoria cadastrada com sucesso!"
       );
 

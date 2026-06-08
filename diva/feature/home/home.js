@@ -7,11 +7,18 @@ from "../../shared/components/footer/footerComponent.js";
 import { homeContentComponent }
 from "./components/homeContentComponent.js";
 
+import {
+  initNavbar
+}
+from "../../shared/components/navbar/navbarController.js";
+
 document.getElementById("navbar").innerHTML =
-    navbarComponent();
+  navbarComponent();
 
 document.getElementById("content").innerHTML =
-    homeContentComponent();
+  homeContentComponent();
 
 document.getElementById("footer").innerHTML =
-    footerComponent();
+  footerComponent();
+
+initNavbar();
