@@ -1,8 +1,8 @@
 import { navbarComponent }
-from "../../../shared/components/navbar/navbarComponent.js";
+from "../../shared/components/navbar/navbarComponent.js";
 
 import { footerComponent }
-from "../../../shared/components/footer/footerComponent.js";
+from "../../shared/components/footer/footerComponent.js";
 
 import { homeContentComponent }
 from "./components/homeContentComponent.js";

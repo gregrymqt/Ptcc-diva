@@ -1,29 +1,53 @@
+import {
+  getCategories
+} from "../../categories/services/categoryService.js";
+
 export function categoryComponent() {
 
-    const categories = [
-        "Maquiagem",
-        "Cuidados com a Pele",
-        "Olhos",
-        "Unhas"
-    ];
+  const categories = getCategories();
+
+  if (categories.length === 0) {
 
     return `
-        <section class="categories-section">
+      <section class="categories-section">
 
-            <h2>Categorias</h2>
+        <h2>Categorias</h2>
 
-            <div class="categories-grid">
+        <p>
+          Nenhuma categoria cadastrada.
+        </p>
 
-                ${categories.map(category => `
-                    <div class="category-card">
-
-                        <h3>${category}</h3>
-
-                    </div>
-                `).join("")}
-
-            </div>
-
-        </section>
+      </section>
     `;
+
+  }
+
+  return `
+    <section class="categories-section">
+
+      <h2>Categorias</h2>
+
+      <div class="categories-grid">
+
+        ${categories.map(category => `
+
+          <div class="category-card">
+
+            <img
+              src="${category.imagem}"
+              alt="${category.nome}"
+            >
+
+            <h3>${category.nome}</h3>
+
+            <p>${category.descricao}</p>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
 }

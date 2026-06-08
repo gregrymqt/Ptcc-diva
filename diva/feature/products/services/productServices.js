@@ -1,6 +1,12 @@
-const STORAGE_KEY = "produtos";
+import {
+  getCategories
+}
+from "../../categories/services/categoryService.js";
+
+const STORAGE_KEY = "products";
 
 /* PEGAR TODOS PRODUTOS */
+
 export function getProducts() {
 
   const products = localStorage.getItem(STORAGE_KEY);
@@ -75,5 +81,35 @@ export function deleteProduct(id) {
   );
 
   saveProducts(filteredProducts);
+
+}
+
+export function getProductsWithCategory() {
+
+  const products =
+    getProducts();
+
+  const categories =
+    getCategories();
+
+  return products.map(product => {
+
+    const category =
+      categories.find(
+        category =>
+          category.id === product.categoryId
+      );
+
+    return {
+
+      ...product,
+
+      categoryName:
+        category?.nome ||
+        "Sem Categoria"
+
+    };
+
+  });
 
 }

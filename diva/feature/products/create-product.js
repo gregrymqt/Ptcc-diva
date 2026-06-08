@@ -1,5 +1,5 @@
 import {
   initProductForm
-} from "../components/productFormComponent.js";
+} from "./components/productFormComponent.js";
 
 initProductForm("product-form");

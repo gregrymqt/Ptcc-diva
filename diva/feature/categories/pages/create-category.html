@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Cadastrar Categoria</title>
+
+    <link
+        rel="stylesheet"
+        href="../styles/create-category.css"
+    >
+
+</head>
+
+<body>
+
+    <main>
+
+        <form id="category-form">
+
+            <h1>Cadastrar Categoria</h1>
+
+            <input
+                type="text"
+                id="nome"
+                placeholder="Nome da categoria"
+                required
+            >
+
+            <textarea
+                id="descricao"
+                placeholder="Descrição da categoria"
+                required
+            ></textarea>
+
+            <input
+                type="text"
+                id="imagem"
+                placeholder="URL da imagem"
+                required
+            >
+
+            <button type="submit">
+                Salvar Categoria
+            </button>
+
+        </form>
+
+    </main>
+
+    <script
+        type="module"
+        src="../pages/create-category.js"
+    ></script>
+
+</body>
+
+</html>
