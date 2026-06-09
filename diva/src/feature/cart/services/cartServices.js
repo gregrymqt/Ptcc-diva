@@ -1,85 +1,40 @@
+/* ================================================
+   CARTSERVICES.JS — Serviço Compartilhado do Carrinho
+
+   Este arquivo contém as funções do carrinho que
+   são usadas por outros módulos (navbar, checkout).
+
+   A chave usada no localStorage é "carrinho".
+   ================================================ */
+
 import { getStorageData, setStorageData } from "../../../core/storage.js";
 
-const CART_KEY = "carrinho";
+// Nome da chave onde o carrinho fica salvo no navegador
+var CHAVE_CARRINHO = "carrinho";
 
-// Retorna os itens do carrinho
-export async function getCart() {
-  return await getStorageData(CART_KEY, []);
+/* Lê e retorna todos os itens do carrinho.
+   Se não houver nada salvo, retorna uma lista vazia. */
+export function getCart() {
+  return getStorageData(CHAVE_CARRINHO, []);
 }
 
-// Adiciona um item ao carrinho
-export async function addToCart(produto, corSelecionada) {
-  const cart = await getCart();
-  
-  const existingItemIndex = cart.findIndex(
-    item => item.id === produto.id && item.corSelecionada === corSelecionada
-  );
+/* Calcula e retorna o total de itens e o valor total do carrinho. */
+export function getCartTotals() {
+  var carrinho   = getCart();
+  var totalItens = 0;
+  var totalValor = 0;
 
-  if (existingItemIndex !== -1) {
-    // Se já existe, incrementa a quantidade
-    cart[existingItemIndex].quantidade += 1;
-  } else {
-    // Se não existe, adiciona novo item
-    const newItem = {
-      id: produto.id,
-      nome: produto.nome,
-      preco: produto.preco,
-      imagem: produto.variacoes ? 
-        (produto.variacoes.find(v => v.cor === corSelecionada)?.imagem || produto.variacoes[0].imagem) 
-        : 'https://via.placeholder.com/600x600?text=Sem+Imagem',
-      corSelecionada: corSelecionada,
-      quantidade: 1
-    };
-    cart.push(newItem);
+  // Percorre todos os itens somando quantidades e valores
+  for (var i = 0; i < carrinho.length; i++) {
+    totalItens = totalItens + carrinho[i].quantidade;
+    totalValor = totalValor + (carrinho[i].preco * carrinho[i].quantidade);
   }
 
-  await setStorageData(CART_KEY, cart);
-  
-  // Opcionalmente disparar um evento customizado para notificar componentes de UI
-  window.dispatchEvent(new Event('cartUpdated'));
+  return { totalItems: totalItens, totalValue: totalValor };
 }
 
-// Atualiza a quantidade de um item
-export async function updateQuantity(productId, cor, novaQuantidade) {
-  if (novaQuantidade < 1) return;
-
-  const cart = await getCart();
-  const item = cart.find(i => i.id === productId && i.corSelecionada === cor);
-  
-  if (item) {
-    item.quantidade = novaQuantidade;
-    await setStorageData(CART_KEY, cart);
-    window.dispatchEvent(new Event('cartUpdated'));
-  }
+/* Esvazia completamente o carrinho. */
+export function clearCart() {
+  setStorageData(CHAVE_CARRINHO, []);
+  window.dispatchEvent(new Event("cartUpdated"));
 }
-
-// Remove um item do carrinho
-export async function removeFromCart(productId, cor) {
-  const cart = await getCart();
-  const updatedCart = cart.filter(
-    item => !(item.id === productId && item.corSelecionada === cor)
-  );
-  
-  await setStorageData(CART_KEY, updatedCart);
-  window.dispatchEvent(new Event('cartUpdated'));
-}
-
-// Retorna o total de itens e valor
-export async function getCartTotals() {
-  const cart = await getCart();
-  
-  const totalItems = cart.reduce((total, item) => total + item.quantidade, 0);
-  const totalValue = cart.reduce((total, item) => total + (item.preco * item.quantidade), 0);
-
-  return {
-    totalItems,
-    totalValue
-  };
-}
-
-// Esvazia o carrinho
-export async function clearCart() {
-  await setStorageData(CART_KEY, []);
-  window.dispatchEvent(new Event('cartUpdated'));
-}
-

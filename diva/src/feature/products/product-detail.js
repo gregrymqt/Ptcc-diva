@@ -1,102 +1,272 @@
-import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
-import { footerComponent } from "../../shared/components/footer/footerComponent.js";
-import { initNavbar } from "../../shared/components/navbar/navbarController.js";
-import { PdpComponent } from "./components/PdpComponent.js";
-import { findProductById } from "./services/productServices.js";
-import { addToCart } from "../cart/services/cartServices.js";
-import { openCartDrawer } from "../cart/components/CartDrawerComponent.js";
+/* ================================================
+   PRODUCT-DETAIL.JS — Página de Detalhe do Produto (PDP)
 
-async function initPdp() {
-  const navbarEl = document.getElementById("navbar");
-  if (navbarEl) navbarEl.innerHTML = navbarComponent();
-  
-  // Loading state
-  const contentEl = document.getElementById("content");
-  if (!contentEl) {
-    console.warn("Container #content não encontrado na PDP.");
+   Este arquivo monta a página de detalhe de um produto
+   específico. O produto é identificado pelo "id" na URL.
+   Exemplo de URL: product-detail.html?id=1
+
+   Ele está dividido em 4 partes:
+   1. Montar a navbar e o footer
+   2. Buscar o produto pelo ID da URL e montar o HTML
+   3. Ativar a troca de imagem ao clicar nas cores
+   4. Ativar o botão "Adicionar à Sacola"
+   ================================================ */
+
+import { navbarComponent }   from "../../shared/components/navbar/navbarComponent.js";
+import { footerComponent }   from "../../shared/components/footer/footerComponent.js";
+import { initNavbar }        from "../../shared/components/navbar/navbarController.js";
+import { findProductById }   from "./services/productServices.js";
+import { addToCart }         from "../cart/components/CartDrawerComponent.js";
+import { openCartDrawer }    from "../cart/components/CartDrawerComponent.js";
+
+
+/* --------------------------------------------------
+   PARTE 1: MONTAR NAVBAR E FOOTER
+   -------------------------------------------------- */
+document.getElementById("navbar").innerHTML = navbarComponent();
+document.getElementById("footer").innerHTML = footerComponent();
+
+initNavbar();
+
+
+/* --------------------------------------------------
+   PARTE 2: BUSCAR O PRODUTO E MONTAR A TELA
+
+   Lê o "id" da URL e busca o produto no localStorage.
+   Monta o HTML completo da página de detalhe.
+   -------------------------------------------------- */
+
+/* Lê o parâmetro "id" da URL atual.
+   Exemplo: "product-detail.html?id=3" → retorna "3" */
+function pegarIdDaUrl() {
+  var parametros = new URLSearchParams(window.location.search);
+  return parametros.get("id");
+}
+
+/* Formata um número para o padrão de moeda brasileira.
+   Exemplo: 89.9 → "R$ 89,90" */
+function formatarPreco(preco) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(preco);
+}
+
+/* Monta o HTML dos botões de cor (swatches) do produto. */
+function montarSwatches(variacoes) {
+  if (!variacoes || variacoes.length === 0) {
+    return "";
+  }
+
+  var html = "";
+
+  for (var i = 0; i < variacoes.length; i++) {
+    var v       = variacoes[i];
+    var ativo   = (i === 0) ? "active" : "";  // O primeiro swatch começa ativo
+
+    html = html +
+      '<button ' +
+        'class="swatch ' + ativo + '" ' +
+        'style="background-color: ' + v.hexadecimal + ';" ' +
+        'data-image="' + v.imagem + '" ' +
+        'data-colorname="' + v.cor + '" ' +
+        'aria-label="Cor: ' + v.cor + '">' +
+      '</button>';
+  }
+
+  return html;
+}
+
+/* Busca o produto pelo ID da URL e exibe o HTML completo da PDP. */
+function montarPaginaDoProduto() {
+  var conteudo = document.getElementById("content");
+
+  if (!conteudo) {
     return;
   }
-  
-  contentEl.innerHTML = '<div style="text-align:center; padding: 100px;">Carregando detalhes do produto...</div>';
 
-  // Injetar PDP
-  const pdpHtml = await PdpComponent();
-  contentEl.innerHTML = pdpHtml;
-  
-  const footerEl = document.getElementById("footer");
-  if (footerEl) footerEl.innerHTML = footerComponent();
-  
-  initNavbar();
-  
-  // Após injetar no DOM, inicializar as micro-interações
-  initPdpInteractions();
-}
+  var id = pegarIdDaUrl();
 
-function initPdpInteractions() {
-  const swatches = document.querySelectorAll('.swatch');
-  const mainImage = document.getElementById('pdp-main-image');
-  const selectedColorName = document.getElementById('pdp-selected-color');
-
-  if (swatches.length > 0 && mainImage) {
-    swatches.forEach(swatch => {
-      swatch.addEventListener('click', (e) => {
-        // Remover classe active de todos
-        swatches.forEach(s => s.classList.remove('active'));
-        
-        // Adicionar active no clicado
-        const target = e.currentTarget;
-        target.classList.add('active');
-
-        // Trocar imagem (Micro-interação suave)
-        const newImage = target.getAttribute('data-image');
-        const newColorName = target.getAttribute('data-colorname');
-
-        // Efeito de fade out rápido
-        mainImage.style.opacity = 0.5;
-        
-        setTimeout(() => {
-          mainImage.src = newImage;
-          selectedColorName.textContent = newColorName;
-          mainImage.style.opacity = 1;
-        }, 150);
-      });
-    });
+  // Se não houver ID na URL, mostra mensagem de erro
+  if (!id) {
+    conteudo.innerHTML =
+      '<div class="pdp-error">' +
+        '<h2>Produto não encontrado.</h2>' +
+        '<a href="../../home/pages/home.html" class="btn-voltar">Voltar para a Vitrine</a>' +
+      '</div>';
+    return;
   }
 
-  // Botão Adicionar à Sacola
-  const btnAdd = document.getElementById('btn-add-cart');
-  if (btnAdd) {
-    btnAdd.addEventListener('click', async () => {
-      const activeColor = document.querySelector('.swatch.active')?.getAttribute('data-colorname') || 'Única';
-      
-      // Feedback visual inicial
-      const originalText = btnAdd.textContent;
-      btnAdd.textContent = 'Adicionando...';
-      btnAdd.disabled = true;
-      btnAdd.style.backgroundColor = '#2c2c2c';
-      btnAdd.style.color = '#fff';
-      
-      // Pegar produto para adicionar
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-      const product = await findProductById(id);
+  // Busca o produto no localStorage
+  var produto = findProductById(id);
 
-      if(product) {
-        await addToCart(product, activeColor);
-        btnAdd.textContent = 'Adicionado ✔';
-        openCartDrawer();
-      } else {
-        btnAdd.textContent = 'Erro ao adicionar';
+  // Se o produto não existir, mostra mensagem de erro
+  if (!produto) {
+    conteudo.innerHTML =
+      '<div class="pdp-error">' +
+        '<h2>Produto não encontrado.</h2>' +
+        '<a href="../../home/pages/home.html" class="btn-voltar">Voltar para a Vitrine</a>' +
+      '</div>';
+    return;
+  }
+
+  // Determina a imagem e cor inicial (primeira variação ou placeholder)
+  var imagemInicial    = "https://via.placeholder.com/600x600?text=Sem+Imagem";
+  var corInicial       = "Única";
+  var temVariacoes     = produto.variacoes && produto.variacoes.length > 0;
+
+  if (temVariacoes) {
+    imagemInicial = produto.variacoes[0].imagem;
+    corInicial    = produto.variacoes[0].cor;
+  }
+
+  var precoFormatado  = formatarPreco(produto.preco);
+  var htmlSwatches    = montarSwatches(produto.variacoes);
+  var nomeCategoria   = produto.categoryName || "Produto";
+  var modoUso         = produto.modoUso || "Consulte a embalagem do produto.";
+  var ingredientes    = produto.ingredientes || "Não informado.";
+
+  // Monta o HTML completo da página de detalhe
+  conteudo.innerHTML =
+    '<section class="pdp-section">' +
+      '<div class="pdp-container">' +
+
+        // --- Galeria de Imagens ---
+        '<div class="pdp-gallery">' +
+          '<img id="pdp-main-image" src="' + imagemInicial + '" alt="' + produto.nome + '" class="pdp-image" loading="eager">' +
+        '</div>' +
+
+        // --- Informações do Produto ---
+        '<div class="pdp-details">' +
+          '<span class="pdp-category">' + nomeCategoria + '</span>' +
+          '<h1 class="pdp-title">' + produto.nome + '</h1>' +
+          '<p class="pdp-price">' + precoFormatado + '</p>' +
+
+          '<div class="pdp-description-box">' +
+            '<p>' + produto.descricao + '</p>' +
+          '</div>' +
+
+          // --- Seleção de Cores ---
+          '<div class="pdp-variations">' +
+            '<h3 class="variation-label">Cor selecionada: <span id="pdp-selected-color">' + corInicial + '</span></h3>' +
+            '<div class="swatch-container">' +
+              htmlSwatches +
+            '</div>' +
+          '</div>' +
+
+          // --- Botões de Ação ---
+          '<div class="pdp-actions">' +
+            '<button class="btn-add-cart" id="btn-add-cart">Adicionar à Sacola</button>' +
+            '<button class="btn-wishlist" aria-label="Adicionar aos favoritos">❤</button>' +
+          '</div>' +
+
+          // --- Abas de Informação Adicional ---
+          '<div class="pdp-accordion">' +
+            '<details class="accordion-item" open>' +
+              '<summary class="accordion-header">Modo de Uso</summary>' +
+              '<div class="accordion-body"><p>' + modoUso + '</p></div>' +
+            '</details>' +
+            '<details class="accordion-item">' +
+              '<summary class="accordion-header">Ingredientes</summary>' +
+              '<div class="accordion-body"><p>' + ingredientes + '</p></div>' +
+            '</details>' +
+          '</div>' +
+
+        '</div>' +
+      '</div>' +
+    '</section>';
+
+  // Após montar o HTML, ativa as interações da página
+  ativarTrocaDeImagem();
+  ativarBotaoAdicionarCarrinho(produto);
+}
+
+
+/* --------------------------------------------------
+   PARTE 3: TROCA DE IMAGEM AO CLICAR NAS CORES
+
+   Quando o usuário clica em um swatch de cor,
+   troca a imagem principal para a cor selecionada.
+   -------------------------------------------------- */
+
+/* Ativa o evento de clique nos botões de cor (swatches). */
+function ativarTrocaDeImagem() {
+  var swatches      = document.querySelectorAll(".swatch");
+  var imagemPrinc   = document.getElementById("pdp-main-image");
+  var spanCorNome   = document.getElementById("pdp-selected-color");
+
+  for (var i = 0; i < swatches.length; i++) {
+    swatches[i].addEventListener("click", function() {
+      // Remove a classe "active" de todos os swatches
+      for (var j = 0; j < swatches.length; j++) {
+        swatches[j].classList.remove("active");
       }
 
-      setTimeout(() => {
-        btnAdd.textContent = originalText;
-        btnAdd.style.backgroundColor = '';
-        btnAdd.style.color = '';
-        btnAdd.disabled = false;
-      }, 2000);
+      // Marca o swatch clicado como ativo
+      this.classList.add("active");
+
+      // Troca a imagem com efeito de fade
+      var novaImagem  = this.getAttribute("data-image");
+      var nomeNovaCor = this.getAttribute("data-colorname");
+
+      imagemPrinc.style.opacity = "0.5";
+
+      setTimeout(function() {
+        imagemPrinc.src            = novaImagem;
+        spanCorNome.textContent    = nomeNovaCor;
+        imagemPrinc.style.opacity  = "1";
+      }, 150);
     });
   }
 }
 
-initPdp();
+
+/* --------------------------------------------------
+   PARTE 4: BOTÃO "ADICIONAR À SACOLA"
+
+   Lê a cor selecionada, adiciona o produto ao
+   carrinho e abre a gaveta lateral.
+   -------------------------------------------------- */
+
+/* Ativa o botão de adicionar ao carrinho. */
+function ativarBotaoAdicionarCarrinho(produto) {
+  var btnAdicionar = document.getElementById("btn-add-cart");
+
+  if (!btnAdicionar) {
+    return;
+  }
+
+  btnAdicionar.addEventListener("click", function() {
+    var textOriginal = btnAdicionar.textContent;
+
+    // Feedback visual imediato
+    btnAdicionar.textContent       = "Adicionando...";
+    btnAdicionar.disabled          = true;
+    btnAdicionar.style.backgroundColor = "#2c2c2c";
+    btnAdicionar.style.color           = "#fff";
+
+    // Lê a cor ativa no momento do clique
+    var swatchAtivo = document.querySelector(".swatch.active");
+    var corAtiva    = swatchAtivo ? swatchAtivo.getAttribute("data-colorname") : "Única";
+
+    // Adiciona o produto ao carrinho e abre a gaveta
+    addToCart(produto, corAtiva);
+
+    btnAdicionar.textContent = "Adicionado ✔";
+
+    openCartDrawer();
+
+    // Restaura o botão após 2 segundos
+    setTimeout(function() {
+      btnAdicionar.textContent       = textOriginal;
+      btnAdicionar.style.backgroundColor = "";
+      btnAdicionar.style.color           = "";
+      btnAdicionar.disabled          = false;
+    }, 2000);
+  });
+}
+
+
+/* --------------------------------------------------
+   INICIALIZAÇÃO
+
+   Monta a página ao carregar o arquivo.
+   -------------------------------------------------- */
+montarPaginaDoProduto();

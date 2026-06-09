@@ -1,51 +1,324 @@
-import { protectAdminPage } from "../../core/rolesManager.js";
-import { initProductForm } from "./components/productFormComponent.js";
-import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
-import { footerComponent } from "../../shared/components/footer/footerComponent.js";
-import { initNavbar } from "../../shared/components/navbar/navbarController.js";
-import { AdminOrdersComponent } from "./components/AdminOrdersComponent.js";
+/* ================================================
+   CREATE-PRODUCT.JS — Painel de Administração
 
-// 1. GUARDA DE ROTA: Verifica a permissão antes de renderizar a página
+   Página exclusiva para administradores.
+   Permite cadastrar novos produtos e ver os
+   pedidos recebidos (Painel Admin).
+
+   Dividido em:
+   1. Proteção de rota
+   2. Montagem da página (Navbar, Footer, Abas)
+   3. Formulário de criação de produto
+   4. Listagem de pedidos
+   ================================================ */
+
+import { protectAdminPage }  from "../../core/rolesManager.js";
+import { navbarComponent }   from "../../shared/components/navbar/navbarComponent.js";
+import { footerComponent }   from "../../shared/components/footer/footerComponent.js";
+import { initNavbar }        from "../../shared/components/navbar/navbarController.js";
+import { getCategories }     from "../../categories/services/categoryService.js";
+import { createProduct }     from "./services/productServices.js";
+import { getOrders }         from "../checkout/services/checkoutServices.js";
+import { showToast }         from "../../shared/components/toast/toastComponent.js";
+
+
+/* --------------------------------------------------
+   PARTE 1: PROTEÇÃO DE ROTA
+   Bloqueia quem não for admin antes de carregar a tela.
+   -------------------------------------------------- */
 protectAdminPage();
 
-async function initAdminPanel() {
-  // 2. RENDERIZAÇÃO DA INTERFACE BÁSICA
+
+/* --------------------------------------------------
+   PARTE 2: MONTAGEM DA PÁGINA (NAVBAR E ABAS)
+   -------------------------------------------------- */
+
+/* Preenche as categorias no select do formulário. */
+function carregarCategoriasNoSelect() {
+  var select     = document.getElementById("categoryId");
+  var categorias = getCategories();
+
+  if (!select) {
+    return;
+  }
+
+  select.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+  for (var i = 0; i < categorias.length; i++) {
+    select.innerHTML = select.innerHTML +
+      '<option value="' + categorias[i].id + '">' +
+        categorias[i].nome +
+      '</option>';
+  }
+}
+
+/* Configura as abas do painel (Produto vs Pedidos). */
+function iniciarAbas() {
+  var botoesAba = document.querySelectorAll(".tab-btn");
+  var conteudosAba = document.querySelectorAll(".tab-content");
+
+  for (var i = 0; i < botoesAba.length; i++) {
+    botoesAba[i].addEventListener("click", function() {
+      // Tira a classe 'active' de todos os botões e conteúdos
+      for (var j = 0; j < botoesAba.length; j++) {
+        botoesAba[j].classList.remove("active");
+        conteudosAba[j].classList.remove("active");
+      }
+
+      // Coloca 'active' no botão clicado
+      this.classList.add("active");
+
+      // Mostra o conteúdo correspondente
+      var idAlvo = this.getAttribute("data-target");
+      document.getElementById(idAlvo).classList.add("active");
+
+      // Se o usuário clicou em "Pedidos", carrega a lista
+      if (idAlvo === "tab-pedidos") {
+        renderizarPedidos();
+      }
+    });
+  }
+}
+
+
+/* --------------------------------------------------
+   PARTE 3: FORMULÁRIO DE CRIAR PRODUTO
+   -------------------------------------------------- */
+
+// Variável global para guardar a imagem convertida em Base64
+var imagemBase64 = "";
+
+/* Configura a pré-visualização da imagem no formulário. */
+function iniciarUploadDeImagem() {
+  var inputImagem   = document.getElementById("product-image-input");
+  var previewImagem = document.getElementById("product-image-preview");
+
+  if (!inputImagem) {
+    return;
+  }
+
+  inputImagem.addEventListener("change", function(evento) {
+    var arquivo = evento.target.files[0];
+
+    // Se o usuário cancelou a escolha da imagem
+    if (!arquivo) {
+      previewImagem.style.display = "none";
+      imagemBase64 = "";
+      return;
+    }
+
+    // Validação de segurança: a imagem não pode ser muito grande (300KB)
+    var tamanhoMaximo = 300 * 1024;
+
+    if (arquivo.size > tamanhoMaximo) {
+      showToast("A imagem deve ter no máximo 300KB.", "error");
+      inputImagem.value = "";
+      previewImagem.style.display = "none";
+      imagemBase64 = "";
+      return;
+    }
+
+    // Lê o arquivo e converte para texto (Base64)
+    var leitor = new FileReader();
+
+    leitor.onload = function(eventoLeitura) {
+      imagemBase64 = eventoLeitura.target.result;
+
+      if (previewImagem) {
+        previewImagem.src = imagemBase64;
+        previewImagem.style.display = "block";
+      }
+    };
+
+    leitor.onerror = function() {
+      showToast("Erro ao ler a imagem.", "error");
+      inputImagem.value = "";
+      previewImagem.style.display = "none";
+      imagemBase64 = "";
+    };
+
+    leitor.readAsDataURL(arquivo);
+  });
+}
+
+/* Configura o comportamento do formulário de salvar. */
+function iniciarFormulario() {
+  var formulario = document.getElementById("product-form");
+
+  if (!formulario) {
+    return;
+  }
+
+  formulario.addEventListener("submit", function(evento) {
+    evento.preventDefault();
+
+    // Lê todos os dados preenchidos
+    var nome       = document.getElementById("nome").value;
+    var preco      = document.getElementById("preco").value;
+    var descricao  = document.getElementById("descricao").value;
+    var categoryId = document.getElementById("categoryId").value;
+
+    // Se não tiver imagem, usa um placeholder genérico
+    var imagemFinal = imagemBase64;
+
+    if (!imagemFinal || imagemFinal === "") {
+      imagemFinal = "https://via.placeholder.com/600x600?text=Sem+Imagem";
+    }
+
+    // Monta o objeto do produto
+    var novoProduto = {
+      id:         Date.now(), // Será substituído pelo service
+      nome:       nome,
+      preco:      Number(preco),
+      descricao:  descricao,
+      imagem:     imagemFinal,
+      categoryId: Number(categoryId),
+      variacoes:  [] // Por padrão, cria sem variações (MVP)
+    };
+
+    // Salva o produto
+    createProduct(novoProduto);
+
+    // Limpa o formulário e a tela
+    formulario.reset();
+
+    var previewImagem = document.getElementById("product-image-preview");
+
+    if (previewImagem) {
+      previewImagem.style.display = "none";
+      previewImagem.src = "";
+    }
+
+    imagemBase64 = "";
+
+    showToast("Produto cadastrado com sucesso!", "success");
+  });
+}
+
+
+/* --------------------------------------------------
+   PARTE 4: LISTAGEM DE PEDIDOS (ADMIN ORDERS)
+
+   Exibe os pedidos que os clientes fizeram.
+   -------------------------------------------------- */
+
+/* Pega a lista de pedidos, monta o HTML e coloca na tela. */
+function renderizarPedidos() {
+  var container = document.getElementById("admin-orders-container");
+
+  if (!container) {
+    return;
+  }
+
+  var pedidos = getOrders();
+
+  // Se não houver pedidos, mostra uma mensagem elegante
+  if (pedidos.length === 0) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<i class="fas fa-box-open empty-icon"></i>' +
+        '<p>Nenhum pedido recebido até o momento.</p>' +
+      '</div>';
+    return;
+  }
+
+  // Ordena os pedidos para que o mais recente fique no topo
+  pedidos.sort(function(a, b) {
+    var dataA = new Date(a.data).getTime();
+    var dataB = new Date(b.data).getTime();
+    return dataB - dataA;
+  });
+
+  var htmlCompleto = "";
+
+  // Percorre cada pedido e monta o HTML do seu "card"
+  for (var i = 0; i < pedidos.length; i++) {
+    var pedido = pedidos[i];
+
+    // Formata a data (ex: 15/10/2026, 14:30)
+    var dataFormatada = new Date(pedido.data).toLocaleDateString("pt-BR", {
+      day: "2-digit", month: "2-digit", year: "numeric",
+      hour: "2-digit", minute: "2-digit"
+    });
+
+    // Formata o valor
+    var valorFormatado = pedido.totais.totalValue.toFixed(2).replace(".", ",");
+
+    // Monta uma string rápida com todos os itens daquele pedido
+    var textoItens = "";
+
+    for (var j = 0; j < pedido.itens.length; j++) {
+      var item = pedido.itens[j];
+      textoItens = textoItens +
+        '<span class="order-item-chip">' +
+          item.quantidade + 'x ' + item.nome + ' (' + item.corSelecionada + ')' +
+        '</span>';
+    }
+
+    // Se houver e-mail, coloca entre parênteses
+    var textoEmail = "";
+    if (pedido.email && pedido.email !== "") {
+      textoEmail = " (" + pedido.email + ")";
+    }
+
+    // Concatena o HTML do card do pedido
+    htmlCompleto = htmlCompleto +
+      '<div class="admin-order-card">' +
+        '<div class="order-card-header">' +
+          '<div class="order-id"><i class="fas fa-hashtag"></i> ' + pedido.id + '</div>' +
+          '<div class="order-status badge-waiting">' + pedido.status + '</div>' +
+        '</div>' +
+
+        '<div class="order-card-body">' +
+          '<div class="order-info-group">' +
+            '<span class="info-label">Cliente:</span>' +
+            '<span class="info-value">' + pedido.cliente + textoEmail + '</span>' +
+          '</div>' +
+          '<div class="order-info-group">' +
+            '<span class="info-label">Data:</span>' +
+            '<span class="info-value">' + dataFormatada + '</span>' +
+          '</div>' +
+          '<div class="order-info-group">' +
+            '<span class="info-label">Itens:</span>' +
+            '<div class="order-items-list">' + textoItens + '</div>' +
+          '</div>' +
+          '<div class="order-info-group">' +
+            '<span class="info-label">Pagamento:</span>' +
+            '<span class="info-value payment-method">' + pedido.formaPagamento.toUpperCase() + '</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="order-card-footer">' +
+          '<div class="order-total">Total: R$ ' + valorFormatado + '</div>' +
+          '<button class="btn-order-action" disabled>Gerenciar Envio</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // Joga tudo na tela
+  container.innerHTML =
+    '<div class="admin-orders-list">' +
+      htmlCompleto +
+    '</div>';
+}
+
+
+/* --------------------------------------------------
+   INICIALIZAÇÃO
+
+   Monta a página quando tudo estiver pronto.
+   -------------------------------------------------- */
+document.addEventListener("DOMContentLoaded", function() {
+  // Monta navbar e footer
   document.getElementById("navbar").innerHTML = navbarComponent();
   document.getElementById("footer").innerHTML = footerComponent();
   initNavbar();
 
-  // 3. INICIALIZAÇÃO DO FORMULÁRIO DE PRODUTO
-  initProductForm("product-form");
+  // Configura a tela de criação
+  carregarCategoriasNoSelect();
+  iniciarUploadDeImagem();
+  iniciarFormulario();
 
-  // 4. LÓGICA DAS ABAS (TABS)
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      // Remove 'active' de todos os botões e conteúdos
-      tabBtns.forEach(b => b.classList.remove('active'));
-      tabContents.forEach(c => c.classList.remove('active'));
-
-      // Adiciona 'active' na aba clicada
-      btn.classList.add('active');
-      const targetId = btn.getAttribute('data-target');
-      document.getElementById(targetId).classList.add('active');
-
-      // Se clicou na aba de pedidos, renderiza a lista
-      if (targetId === 'tab-pedidos') {
-        const ordersContainer = document.getElementById('admin-orders-container');
-        ordersContainer.innerHTML = '<div class="loading">Carregando pedidos...</div>';
-        try {
-          const ordersHtml = await AdminOrdersComponent();
-          ordersContainer.innerHTML = ordersHtml;
-        } catch (error) {
-          ordersContainer.innerHTML = '<div class="error-message">Erro ao carregar pedidos.</div>';
-          console.error(error);
-        }
-      }
-    });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", initAdminPanel);
+  // Configura a navegação por abas
+  iniciarAbas();
+});

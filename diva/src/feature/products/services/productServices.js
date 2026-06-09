@@ -1,23 +1,34 @@
-import {
-  getCategories
-}
-from "../../categories/services/categoryService.js";
+/* ================================================
+   PRODUCTSERVICES.JS — Serviço de Produtos
 
-const STORAGE_KEY = "products";
+   Responsável por ler, salvar e buscar os dados
+   dos produtos no localStorage.
 
-// Dados simulados iniciais para a loja "Diva Cosméticos"
-const initialProducts = [
+   Na primeira vez que a página carrega, este arquivo
+   também pré-preenche o localStorage com produtos
+   iniciais para a loja não aparecer vazia.
+   ================================================ */
+
+import { getCategories } from "../../categories/services/categoryService.js";
+
+// Nome da chave onde os produtos ficam salvos no navegador
+var CHAVE_PRODUTOS = "products";
+
+/* Lista de produtos iniciais da loja Diva.
+   São carregados automaticamente se o localStorage
+   estiver vazio (primeira visita do usuário). */
+var produtosIniciais = [
   {
     id: 1,
     nome: "Batom Matte Diva",
     descricao: "Batom líquido com acabamento super matte e longa duração. Não transfere e possui alta pigmentação.",
     preco: 49.90,
-    categoryId: 1, // Assumindo ID de categoria genérico
+    categoryId: 1,
     ingredientes: "Isododecane, Dimethicone, Trimethylsiloxysilicate, Silica, Polybutene, Macadamia Seed Oil.",
     modoUso: "Aplique uma camada uniforme sobre os lábios limpos e secos. Aguarde secar.",
     variacoes: [
       { cor: "Nude Elegance", hexadecimal: "#e0a899", imagem: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400&auto=format&fit=crop" },
-      { cor: "Bordô Fatal", hexadecimal: "#801515", imagem: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop" }
+      { cor: "Bordô Fatal",   hexadecimal: "#801515", imagem: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop" }
     ]
   },
   {
@@ -29,7 +40,7 @@ const initialProducts = [
     ingredientes: "Water, Cyclopentasiloxane, Titanium Dioxide, Glycerin, Hyaluronic Acid, Niacinamide.",
     modoUso: "Com um pincel ou esponja, espalhe do centro do rosto para as extremidades.",
     variacoes: [
-      { cor: "Claro Frio", hexadecimal: "#fceadd", imagem: "https://images.unsplash.com/photo-1631214500115-598fc2cb8d2d?q=80&w=400&auto=format&fit=crop" },
+      { cor: "Claro Frio",   hexadecimal: "#fceadd", imagem: "https://images.unsplash.com/photo-1631214500115-598fc2cb8d2d?q=80&w=400&auto=format&fit=crop" },
       { cor: "Médio Quente", hexadecimal: "#d4a373", imagem: "https://images.unsplash.com/photo-1631214499929-1662921e1022?q=80&w=400&auto=format&fit=crop" }
     ]
   },
@@ -43,7 +54,7 @@ const initialProducts = [
     modoUso: "Aplique com os dedos nas maçãs do rosto dando leves batidinhas.",
     variacoes: [
       { cor: "Pêssego", hexadecimal: "#ffbfa8", imagem: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop" },
-      { cor: "Rosado", hexadecimal: "#e58a9e", imagem: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400&auto=format&fit=crop" }
+      { cor: "Rosado",  hexadecimal: "#e58a9e", imagem: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400&auto=format&fit=crop" }
     ]
   },
   {
@@ -60,82 +71,135 @@ const initialProducts = [
   }
 ];
 
-// Inicialização da seed
-function initSeed() {
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialProducts));
+/* Se o localStorage não tiver produtos ainda,
+   preenche com os produtos iniciais automaticamente. */
+function carregarProdutosIniciais() {
+  if (!localStorage.getItem(CHAVE_PRODUTOS)) {
+    localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtosIniciais));
   }
 }
-initSeed();
 
-// Simula um delay de rede para acostumar o sistema a uma API real
-const delay = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
+// Executa ao carregar o arquivo
+carregarProdutosIniciais();
 
-/* PEGAR TODOS PRODUTOS */
-export async function getProducts() {
-  await delay();
-  const products = localStorage.getItem(STORAGE_KEY);
-  return products ? JSON.parse(products) : [];
+
+/* --------------------------------------------------
+   FUNÇÕES DE LEITURA E ESCRITA DE PRODUTOS
+   -------------------------------------------------- */
+
+/* Retorna a lista completa de produtos do localStorage. */
+export function getProducts() {
+  var dados = localStorage.getItem(CHAVE_PRODUTOS);
+
+  if (!dados) {
+    return [];
+  }
+
+  return JSON.parse(dados);
 }
 
-/* SALVAR TODOS PRODUTOS (Uso interno na API mockada) */
-async function saveProducts(products) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+/* Salva a lista completa de produtos no localStorage.
+   Função interna — usada pelas funções abaixo. */
+function salvarProdutos(produtos) {
+  localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtos));
 }
 
-/* CRIAR PRODUTO */
-export async function createProduct(product) {
-  await delay();
-  const products = await getProducts();
-  
-  // Garantir ID numérico único
-  const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-  const newProduct = { ...product, id: newId };
-  
-  products.push(newProduct);
-  await saveProducts(products);
-  return newProduct;
-}
+/* Cria e salva um novo produto no localStorage.
+   Gera um ID único baseado no maior ID existente. */
+export function createProduct(produto) {
+  var produtos = getProducts();
 
-/* BUSCAR PRODUTO POR ID */
-export async function findProductById(id) {
-  await delay();
-  const products = await getProducts();
-  // O id pode vir como string da URL
-  return products.find(product => product.id == id);
-}
+  // Calcula o próximo ID disponível
+  var maiorId = 0;
 
-/* ATUALIZAR PRODUTO */
-export async function updateProduct(id, updatedData) {
-  await delay();
-  const products = await getProducts();
-  const updatedProducts = products.map(product => {
-    if (product.id == id) {
-      return { ...product, ...updatedData };
+  for (var i = 0; i < produtos.length; i++) {
+    if (produtos[i].id > maiorId) {
+      maiorId = produtos[i].id;
     }
-    return product;
-  });
-  await saveProducts(updatedProducts);
+  }
+
+  // Adiciona o ID ao produto e salva
+  produto.id = maiorId + 1;
+  produtos.push(produto);
+  salvarProdutos(produtos);
+
+  return produto;
 }
 
-/* DELETAR PRODUTO */
-export async function deleteProduct(id) {
-  await delay();
-  const products = await getProducts();
-  const filteredProducts = products.filter(product => product.id != id);
-  await saveProducts(filteredProducts);
+/* Busca e retorna um produto pelo seu ID.
+   Aceita tanto números quanto texto (vem da URL como texto). */
+export function findProductById(id) {
+  var produtos = getProducts();
+
+  for (var i = 0; i < produtos.length; i++) {
+    // O == (sem ===) permite comparar "1" com 1 sem erro
+    if (produtos[i].id == id) {
+      return produtos[i];
+    }
+  }
+
+  return null;
 }
 
-/* PEGAR PRODUTOS COM CATEGORIA (Mapeamento relacional) */
-export async function getProductsWithCategory() {
-  const products = await getProducts();
-  const categories = getCategories(); // getCategories permanece síncrono por ora, mas ideal é virar async no futuro
+/* Atualiza os dados de um produto existente pelo ID. */
+export function updateProduct(id, novosDados) {
+  var produtos = getProducts();
 
-  return products.map(product => {
-    const category = categories.find(c => c.id == product.categoryId);
-    return {
-      ...product,
-      categoryName: category?.nome || "Sem Categoria"
-    };
-  });
+  for (var i = 0; i < produtos.length; i++) {
+    if (produtos[i].id == id) {
+      // Copia os dados antigos e sobrescreve com os novos
+      for (var prop in novosDados) {
+        produtos[i][prop] = novosDados[prop];
+      }
+    }
+  }
+
+  salvarProdutos(produtos);
+}
+
+/* Remove um produto da lista pelo ID. */
+export function deleteProduct(id) {
+  var produtos    = getProducts();
+  var restantes   = [];
+
+  for (var i = 0; i < produtos.length; i++) {
+    if (produtos[i].id != id) {
+      restantes.push(produtos[i]);
+    }
+  }
+
+  salvarProdutos(restantes);
+}
+
+/* Retorna todos os produtos com o NOME da categoria
+   já incluído em cada produto.
+   Útil para exibir "Batom — Lábios" nos cards. */
+export function getProductsWithCategory() {
+  var produtos    = getProducts();
+  var categorias  = getCategories();
+  var resultado   = [];
+
+  for (var i = 0; i < produtos.length; i++) {
+    var produto     = produtos[i];
+    var nomeCateg   = "Sem Categoria";
+
+    // Procura a categoria correspondente ao produto
+    for (var j = 0; j < categorias.length; j++) {
+      if (categorias[j].id == produto.categoryId) {
+        nomeCateg = categorias[j].nome;
+      }
+    }
+
+    // Cria um objeto novo com todos os dados do produto + o nome da categoria
+    var produtoComCateg = {};
+
+    for (var prop in produto) {
+      produtoComCateg[prop] = produto[prop];
+    }
+
+    produtoComCateg.categoryName = nomeCateg;
+    resultado.push(produtoComCateg);
+  }
+
+  return resultado;
 }

@@ -1,77 +1,109 @@
-import { findUserByEmail, updateUser } from "./storage.js";
-import { showToast } from "../shared/components/toast/toastComponent.js"; // Ajuste o caminho do toast se necessário
+/* ================================================
+   ROLES MANAGER — Gerencia os tipos de usuário
+   (permissões) dentro da aplicação.
 
-export const ROLES = {
+   Existem dois tipos de usuário:
+   - "user"  → usuário comum, pode navegar e comprar
+   - "admin" → administrador, pode cadastrar produtos
+              e visualizar todos os pedidos
+   ================================================ */
+
+import { findUserByEmail, updateUser } from "./storage.js";
+import { showToast } from "../shared/components/toast/toastComponent.js";
+
+/* Define as roles disponíveis como constantes,
+   para evitar erros de digitação no código. */
+export var ROLES = {
   ADMIN: "admin",
   USER: "user"
 };
 
-/* ==========================================================================
-   CRUD DE ROLES
-   ========================================================================== */
 
-/**
- * Atribui uma role (admin/user) para um usuário específico via e-mail.
- */
+/* --------------------------------------------------
+   FUNÇÕES DE GERENCIAMENTO DE ROLES
+   -------------------------------------------------- */
+
+/* Atribui uma role (tipo de usuário) a alguém pelo e-mail.
+   Só aceita "admin" ou "user". Qualquer outro valor é ignorado. */
 export function setUserRole(email, role) {
+  // Verifica se a role passada é válida
   if (role !== ROLES.ADMIN && role !== ROLES.USER) {
-    console.error("Role inválida. Use 'admin' ou 'user'.");
+    console.error("Tipo de usuário inválido. Use 'admin' ou 'user'.");
     return;
   }
-  
-  updateUser(email, { role });
+
+  // Atualiza o campo "role" do usuário no localStorage
+  updateUser(email, { role: role });
 }
 
-/**
- * Retorna a role do usuário. Caso não tenha nenhuma, define como 'user' por padrão.
- */
+/* Retorna qual é a role (tipo) de um usuário pelo e-mail.
+   Se o usuário não tiver role definida, retorna "user" por padrão. */
 export function getUserRole(email) {
-  const user = findUserByEmail(email);
-  return user ? user.role || ROLES.USER : null;
+  var usuario = findUserByEmail(email);
+
+  // Se não encontrou o usuário, retorna null
+  if (!usuario) {
+    return null;
+  }
+
+  // Se o usuário tem uma role definida, retorna ela
+  if (usuario.role) {
+    return usuario.role;
+  }
+
+  // Caso contrário, considera como usuário comum
+  return ROLES.USER;
 }
 
-/* ==========================================================================
-   GUARD (VERIFICAÇÃO E REDIRECIONAMENTO)
-   ========================================================================== */
 
-/**
- * Guarda de rota: Verifica se o usuário atual é admin. 
- * Se não for, exibe um toast e redireciona para a home.
- */
+/* --------------------------------------------------
+   PROTEÇÃO DE PÁGINAS (GUARD)
+   Impede que usuários comuns acessem páginas
+   que são exclusivas de administradores.
+   -------------------------------------------------- */
+
+/* Verifica se o usuário atual é administrador.
+   Se não for, exibe um aviso e redireciona para a página inicial.
+   Deve ser chamada no início de qualquer página de admin. */
 export function protectAdminPage() {
-  // Recupera a sessão do usuário logado (ajuste a chave conforme seu sistema de login)
-  const session = localStorage.getItem("usuarioLogado");
+  // Busca os dados da sessão (quem está logado agora)
+  var sessao = localStorage.getItem("usuarioLogado");
 
-  if (!session) {
-    redirectWithAlert();
+  // Se não há ninguém logado, redireciona imediatamente
+  if (!sessao) {
+    redirecionarComAviso();
     return;
   }
 
-  let email;
+  // Tenta ler o e-mail do usuário logado
+  var email;
+
   try {
-    // Caso você salve o objeto do usuário completo na sessão
-    const parsedSession = JSON.parse(session);
-    email = parsedSession.email;
+    // Caso a sessão esteja salva como um objeto completo
+    var sessaoParsed = JSON.parse(sessao);
+    email = sessaoParsed.email;
   } catch (e) {
-    // Caso você salve apenas a string do e-mail na sessão
-    email = session;
+    // Caso a sessão seja apenas o e-mail em texto simples
+    email = sessao;
   }
 
-  const currentRole = getUserRole(email);
+  // Busca a role (tipo) do usuário logado
+  var roleAtual = getUserRole(email);
 
-  if (currentRole !== ROLES.ADMIN) {
-    redirectWithAlert();
+  // Se não for admin, barra o acesso e redireciona
+  if (roleAtual !== ROLES.ADMIN) {
+    redirecionarComAviso();
   }
 }
 
-/**
- * Função auxiliar para disparar o aviso e tirar o usuário da página
- */
-function redirectWithAlert() {
+/* Exibe um aviso de "Acesso Negado" e redireciona
+   para a página inicial após 2 segundos.
+   Função auxiliar usada internamente por protectAdminPage(). */
+function redirecionarComAviso() {
   showToast("Acesso negado. Redirecionando para a home...", 2500);
-  
-  // Aguarda o tempo do toast para fazer o redirecionamento fluído
-  setTimeout(() => {
-    window.location.href = "/index.html"; // Ajuste o caminho para a sua Home se necessário
+
+  // Aguarda 2 segundos para o usuário ler o aviso antes de redirecionar
+  setTimeout(function() {
+    window.location.href = "/index.html";
   }, 2000);
 }

@@ -1,68 +1,155 @@
-/* CRUD LOCAL STORAGE ASSÍNCRONO */
+/* ================================================
+   STORAGE.JS — Responsável por salvar e buscar
+   dados no localStorage do navegador.
 
-// Simula delay de rede (200ms)
-const simulateNetworkDelay = () => new Promise(resolve => setTimeout(resolve, 200));
+   O localStorage funciona como um "caderno" do
+   navegador: ele guarda informações mesmo depois
+   que o usuário fecha a aba.
+   ================================================ */
 
-/* GENÉRICOS */
-export async function getStorageData(key, defaultValue = null) {
-  await simulateNetworkDelay();
-  const data = localStorage.getItem(key);
-  if (!data) return defaultValue;
-  
+
+/* --------------------------------------------------
+   FUNÇÕES GENÉRICAS
+   Essas funções servem para qualquer tipo de dado.
+   -------------------------------------------------- */
+
+/* Lê um dado salvo no localStorage pelo nome (chave).
+   Se não encontrar nada, retorna o valorPadrao. */
+function getStorageData(chave, valorPadrao) {
+  // Se valorPadrao não foi passado, usa null como padrão
+  if (valorPadrao === undefined) {
+    valorPadrao = null;
+  }
+
+  // Tenta buscar o dado pelo nome da chave
+  var dado = localStorage.getItem(chave);
+
+  // Se não encontrou nada, retorna o valor padrão
+  if (!dado) {
+    return valorPadrao;
+  }
+
+  // Tenta converter o texto salvo de volta para objeto JavaScript
   try {
-    return JSON.parse(data);
-  } catch (error) {
-    console.error(`Falha crítica ao ler a chave ${key} do Storage.`, error);
-    return defaultValue;
+    return JSON.parse(dado);
+  } catch (erro) {
+    console.error("Erro ao ler o dado salvo: " + chave, erro);
+    return valorPadrao;
   }
 }
 
-export async function setStorageData(key, data) {
-  await simulateNetworkDelay();
-  localStorage.setItem(key, JSON.stringify(data));
+/* Salva um dado no localStorage.
+   Converte o dado para texto antes de salvar,
+   porque o localStorage só aceita texto. */
+function setStorageData(chave, dado) {
+  localStorage.setItem(chave, JSON.stringify(dado));
 }
 
-/* USUÁRIOS */
-const STORAGE_KEY = "usuarios";
 
-/* PEGAR TODOS USUÁRIOS */
-export async function getUsers() {
-  return await getStorageData(STORAGE_KEY, []);
+/* --------------------------------------------------
+   FUNÇÕES DE USUÁRIOS
+   Usadas para criar, buscar, atualizar e deletar
+   usuários cadastrados na aplicação.
+   -------------------------------------------------- */
+
+// Nome da chave onde a lista de usuários fica salva
+var CHAVE_USUARIOS = "usuarios";
+
+/* Busca e retorna a lista completa de usuários salvos.
+   Se não houver nenhum usuário, retorna uma lista vazia. */
+function getUsers() {
+  return getStorageData(CHAVE_USUARIOS, []);
 }
 
-/* SALVAR TODOS USUÁRIOS */
-async function saveUsers(users) {
-  await setStorageData(STORAGE_KEY, users);
+/* Salva a lista completa de usuários no localStorage.
+   Função interna — usada pelas outras funções abaixo. */
+function saveUsers(usuarios) {
+  setStorageData(CHAVE_USUARIOS, usuarios);
 }
 
-/* CRIAR USUÁRIO */
-export async function createUser(user) {
-  const users = await getUsers();
-  users.push(user);
-  await saveUsers(users);
+/* Adiciona um novo usuário à lista de usuários.
+   Recebe um objeto com os dados do usuário (nome, email, senha...). */
+export function createUser(usuario) {
+  // Pega a lista atual de usuários
+  var usuarios = getUsers();
+
+  // Adiciona o novo usuário no final da lista
+  usuarios.push(usuario);
+
+  // Salva a lista atualizada
+  saveUsers(usuarios);
 }
 
-/* BUSCAR USUÁRIO POR EMAIL */
-export async function findUserByEmail(email) {
-  const users = await getUsers();
-  return users.find(user => user.email === email);
-}
+/* Procura e retorna um usuário pelo e-mail.
+   Se não encontrar, retorna null. */
+export function findUserByEmail(email) {
+  var usuarios = getUsers();
 
-/* ATUALIZAR USUÁRIO */
-export async function updateUser(email, updatedData) {
-  const users = await getUsers();
-  const updatedUsers = users.map(user => {
-    if (user.email === email) {
-      return { ...user, ...updatedData };
+  // Percorre a lista de usuários um por um
+  for (var i = 0; i < usuarios.length; i++) {
+    // Se o e-mail bater, retorna esse usuário
+    if (usuarios[i].email === email) {
+      return usuarios[i];
     }
-    return user;
-  });
-  await saveUsers(updatedUsers);
+  }
+
+  // Se não encontrou nenhum, retorna null
+  return null;
 }
 
-/* DELETAR USUÁRIO */
-export async function deleteUser(email) {
-  const users = await getUsers();
-  const filteredUsers = users.filter(user => user.email !== email);
-  await saveUsers(filteredUsers);
+/* Atualiza os dados de um usuário existente pelo e-mail.
+   Recebe o e-mail do usuário e os novos dados a atualizar. */
+export function updateUser(email, novosDados) {
+  var usuarios = getUsers();
+  var usuariosAtualizados = [];
+
+  // Percorre todos os usuários
+  for (var i = 0; i < usuarios.length; i++) {
+    var usuario = usuarios[i];
+
+    // Se encontrou o usuário pelo e-mail, atualiza os dados
+    if (usuario.email === email) {
+      // Copia os dados antigos e sobrescreve com os novos
+      var usuarioAtualizado = {};
+
+      // Copia cada propriedade do usuário antigo
+      for (var propriedade in usuario) {
+        usuarioAtualizado[propriedade] = usuario[propriedade];
+      }
+
+      // Sobrescreve com os novos dados recebidos
+      for (var novaProp in novosDados) {
+        usuarioAtualizado[novaProp] = novosDados[novaProp];
+      }
+
+      usuariosAtualizados.push(usuarioAtualizado);
+    } else {
+      // Se não é o usuário que queremos, mantém como está
+      usuariosAtualizados.push(usuario);
+    }
+  }
+
+  // Salva a lista com o usuário atualizado
+  saveUsers(usuariosAtualizados);
 }
+
+/* Remove um usuário da lista pelo e-mail. */
+export function deleteUser(email) {
+  var usuarios = getUsers();
+  var usuariosRestantes = [];
+
+  // Percorre todos os usuários
+  for (var i = 0; i < usuarios.length; i++) {
+    // Adiciona na lista apenas os usuários que NÃO são o que queremos deletar
+    if (usuarios[i].email !== email) {
+      usuariosRestantes.push(usuarios[i]);
+    }
+  }
+
+  // Salva a lista sem o usuário deletado
+  saveUsers(usuariosRestantes);
+}
+
+/* Exporta as funções genéricas para que outros
+   arquivos possam usá-las para salvar qualquer dado. */
+export { getStorageData, setStorageData };

@@ -32,6 +32,7 @@ Em vez de cada feature chamar `localStorage.getItem()` e `localStorage.setItem()
 Gerencia o sistema de papéis (roles) dos usuários: `admin` e `user`. É responsável por **proteger páginas que só o administrador pode acessar**.
 
 **Roles disponíveis:**
+
 - `user` — Usuário comum (padrão)
 - `admin` — Administrador com acesso ao painel de cadastro de produtos e pedidos
 
@@ -44,12 +45,14 @@ Gerencia o sistema de papéis (roles) dos usuários: `admin` e `user`. É respon
 | `protectAdminPage()`        | Guarda de rota — redireciona para a home se o usuário não for admin          |
 
 **Como funciona o guard (`protectAdminPage`)?**
+
 1. Lê a sessão salva em `localStorage` (`usuarioLogado`).
 2. Extrai o e-mail do usuário logado.
 3. Busca a role dele via `getUserRole`.
 4. Se não for `admin`, exibe um toast de "Acesso Negado" e redireciona para `index.html`.
 
 **Uso típico** (colocar no topo de uma página de admin):
+
 ```js
 import { protectAdminPage } from "../../core/rolesManager.js";
 protectAdminPage();
