@@ -33,22 +33,47 @@ protectAdminPage();
    PARTE 2: MONTAGEM DA PÁGINA (NAVBAR E ABAS)
    -------------------------------------------------- */
 
-/* Preenche as categorias no select do formulário. */
+/* Preenche as categorias no dropdown de radios. */
 function carregarCategoriasNoSelect() {
-  var select     = document.getElementById("categoryId");
+  var containerOpcoes = document.getElementById("category-dropdown-list");
   var categorias = getCategories();
 
-  if (!select) {
+  if (!containerOpcoes) {
     return;
   }
 
-  select.innerHTML = '<option value="">Selecione uma categoria</option>';
+  // Limpa opções anteriores
+  containerOpcoes.innerHTML = "";
 
+  // Cria as opções como radios
   for (var i = 0; i < categorias.length; i++) {
-    select.innerHTML = select.innerHTML +
-      '<option value="' + categorias[i].id + '">' +
+    containerOpcoes.innerHTML = containerOpcoes.innerHTML +
+      '<label class="dropdown-item">' +
+        '<input type="radio" name="categoryRadio" value="' + categorias[i].id + '" data-nome="' + categorias[i].nome + '">' +
         categorias[i].nome +
-      '</option>';
+      '</label>';
+  }
+
+  var header = document.getElementById("category-dropdown-header");
+  
+  // Abre e fecha o dropdown ao clicar no cabeçalho
+  if (header) {
+    header.addEventListener("click", function() {
+      containerOpcoes.classList.toggle("show");
+    });
+  }
+
+  // Captura os cliques nos rádios para atualizar o texto do cabeçalho
+  var radios = document.getElementsByName("categoryRadio");
+  for (var j = 0; j < radios.length; j++) {
+    radios[j].addEventListener("change", function() {
+      var nomeSelecionado = this.getAttribute("data-nome");
+      if (header) {
+        header.innerHTML = nomeSelecionado + " ▼";
+      }
+      // Fecha a lista assim que escolhe
+      containerOpcoes.classList.remove("show");
+    });
   }
 }
 
@@ -156,7 +181,14 @@ function iniciarFormulario() {
     var nome       = document.getElementById("nome").value;
     var preco      = document.getElementById("preco").value;
     var descricao  = document.getElementById("descricao").value;
-    var categoryId = document.getElementById("categoryId").value;
+
+    // Pega o rádio selecionado para a categoria
+    var radioSelecionado = document.querySelector('input[name="categoryRadio"]:checked');
+    if (!radioSelecionado) {
+      showToast("Por favor, selecione uma categoria.", "error");
+      return;
+    }
+    var categoryId = radioSelecionado.value;
 
     // Se não tiver imagem, usa um placeholder genérico
     var imagemFinal = imagemBase64;
@@ -181,6 +213,12 @@ function iniciarFormulario() {
 
     // Limpa o formulário e a tela
     formulario.reset();
+
+    // Reseta o cabeçalho do dropdown
+    var header = document.getElementById("category-dropdown-header");
+    if (header) {
+      header.innerHTML = "Selecione uma categoria ▼";
+    }
 
     var previewImagem = document.getElementById("product-image-preview");
 
