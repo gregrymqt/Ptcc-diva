@@ -10,6 +10,15 @@ import { getStorageData } from "../../../core/storage.js";
 async function renderCheckout() {
   const usuarioLogado = await getStorageData("usuarioLogado");
   if (!usuarioLogado) {
+    const contentDiv = document.getElementById("checkout-content");
+    if (contentDiv) {
+      contentDiv.innerHTML = `
+        <div class="access-denied" style="text-align: center; padding: 5rem 2rem;">
+          <h2 style="font-family: var(--font-heading); color: var(--color-primary); margin-bottom: 1rem;">Acesso Negado</h2>
+          <p style="color: var(--color-text-light);">Redirecionando para o login...</p>
+        </div>
+      `;
+    }
     showToast("Acesso restrito. Faça login para finalizar sua compra.", "error");
     setTimeout(() => {
       window.location.href = "../../auth/login/pages/index.html";

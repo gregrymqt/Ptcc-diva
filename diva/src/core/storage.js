@@ -4,16 +4,16 @@
 const simulateNetworkDelay = () => new Promise(resolve => setTimeout(resolve, 200));
 
 /* GENÉRICOS */
-export async function getStorageData(key) {
+export async function getStorageData(key, defaultValue = null) {
   await simulateNetworkDelay();
   const data = localStorage.getItem(key);
-  if (!data) return null;
+  if (!data) return defaultValue;
   
   try {
     return JSON.parse(data);
   } catch (error) {
     console.error(`Falha crítica ao ler a chave ${key} do Storage.`, error);
-    return null;
+    return defaultValue;
   }
 }
 
@@ -27,8 +27,7 @@ const STORAGE_KEY = "usuarios";
 
 /* PEGAR TODOS USUÁRIOS */
 export async function getUsers() {
-  const users = await getStorageData(STORAGE_KEY);
-  return users || [];
+  return await getStorageData(STORAGE_KEY, []);
 }
 
 /* SALVAR TODOS USUÁRIOS */

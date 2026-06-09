@@ -4,8 +4,7 @@ const CART_KEY = "carrinho";
 
 // Retorna os itens do carrinho
 export async function getCart() {
-  const cart = await getStorageData(CART_KEY);
-  return cart || [];
+  return await getStorageData(CART_KEY, []);
 }
 
 // Adiciona um item ao carrinho

@@ -9,8 +9,7 @@ function generateOrderId() {
 }
 
 export async function getOrders() {
-  const orders = await getStorageData(ORDERS_KEY);
-  return orders || [];
+  return await getStorageData(ORDERS_KEY, []);
 }
 
 export async function createOrder(dadosEntrega, formaPagamento) {
