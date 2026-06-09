@@ -1,0 +1,228 @@
+/* ==========================================================================
+   VARIÁVEIS DE DESIGN SYSTEM (TEMA BEAUTY / DIVA)
+   ========================================================================== */
+:root {
+  --clr-bg: #faf6f5;          /* Fundo suave off-white levemente aquecido */
+  --clr-surface: #ffffff;     /* Superfície pura para o card */
+  --clr-primary: #b34d68;     /* Velvet Rose sofisticado (Cor principal) */
+  --clr-primary-hover: #943a51;
+  --clr-text-main: #2b2325;   /* Espresso escuro para alto contraste acessível */
+  --clr-text-muted: #786d70;  /* Cinza malva para textos secundários */
+  --clr-border: #e6dcda;
+  --clr-error: #d93856;       /* Vermelho suave para validações de erro */
+  --clr-error-bg: #fff5f6;
+  --font-main: 'Montserrat', sans-serif;
+  --radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   RESET E BASE ESTILOS (MOBILE-FIRST DIRECT)
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--clr-bg);
+  color: var(--clr-text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+/* Container de Montagem */
+#app {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  animation: cardFadeIn 0.5s ease-out;
+}
+
+/* ==========================================================================
+   COMPONENTE: LOGIN CARD
+   ========================================================================== */
+.login-card {
+  width: 100%;
+  max-width: 100%; /* Ocupa tudo no mobile */
+  background: var(--clr-surface);
+  padding: 36px 24px;
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(43, 35, 37, 0.04);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--clr-text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.login-header p {
+  font-size: 0.9rem;
+  color: var(--clr-text-muted);
+  line-height: 1.5;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================================================================
+   MICRO-INTERAÇÃO: FLOATING LABELS
+   ========================================================================== */
+.input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 18px 16px 10px 16px; /* Abre espaço interno superior para a label flutuar */
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--clr-text-main);
+  background: transparent;
+  border: 1.5px solid var(--clr-border);
+  border-radius: 12px;
+  outline: none;
+  transition: var(--transition);
+}
+
+/* Rótulo / Label posicionada originalmente em cima do input */
+.input-container label {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  font-size: 0.95rem;
+  color: var(--clr-text-muted);
+  pointer-events: none;
+  transition: var(--transition);
+  transform-origin: left top;
+}
+
+/* Quando o input ganhar foco ou conter texto (placeholder oculto deixa de funcionar) */
+.input-container input:focus,
+.input-container input:not(:placeholder-shown) {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 4px rgba(179, 77, 104, 0.08);
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+  transform: translateY(-8px) scale(0.75);
+  color: var(--clr-primary);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   BOTÕES E ACTIONS
+   ========================================================================== */
+.btn-login {
+  width: 100%;
+  padding: 16px;
+  background-color: var(--clr-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 8px;
+  box-shadow: 0 4px 12px rgba(179, 77, 104, 0.2);
+}
+
+.btn-login:hover {
+  background-color: var(--clr-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(179, 77, 104, 0.3);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 0.9rem;
+  color: var(--clr-text-muted);
+}
+
+.login-footer a {
+  color: var(--clr-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.login-footer a:hover {
+  color: var(--clr-primary-hover);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   ESTADOS DE ERRO (UI/UX FEEDBACK)
+   ========================================================================== */
+.error-message {
+  font-size: 0.8rem;
+  color: var(--clr-error);
+  font-weight: 500;
+  margin-top: 6px;
+  padding-left: 4px;
+  display: block;
+}
+
+.input-container input.input-error {
+  border-color: var(--clr-error) !important;
+  background-color: var(--clr-error-bg);
+}
+
+.input-container input.input-error + label {
+  color: var(--clr-error) !important;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES
+   ========================================================================== */
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES - BREAKPOINTS PROGRESSIVOS (DESKTOP / TABLET)
+   ========================================================================== */
+@media (min-width: 480px) {
+  .login-card {
+    max-width: 420px;
+    padding: 48px 40px;
+    border-radius: 24px;
+  }
+  
+  .login-header h1 {
+    font-size: 1.8rem;
+  }
+}
