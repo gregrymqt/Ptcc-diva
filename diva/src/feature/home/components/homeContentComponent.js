@@ -1,17 +1,13 @@
-import { heroComponent }
-from "./heroComponent.js";
+import { heroComponent } from "./heroComponent.js";
+import { categoryComponent } from "./categoryComponent.js";
+import { VitrineComponent } from "./VitrineComponent.js";
 
-import { categoryComponent }
-from "./categoryComponent.js";
-
-import { featuredProductsComponent }
-from "./featuredProductsComponent.js";
-
-export function homeContentComponent() {
-
+export async function homeContentComponent() {
+    const vitrineHtml = await VitrineComponent();
+    
     return `
         ${heroComponent()}
         ${categoryComponent()}
-        ${featuredProductsComponent()}
+        ${vitrineHtml}
     `;
 }

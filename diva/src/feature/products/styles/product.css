@@ -1,0 +1,230 @@
+/* styles/product.css */
+/* Paleta Velvet Rose: #b34d68 */
+
+.pdp-section {
+  padding: 4rem 2rem;
+  background-color: #fafafa;
+  min-height: calc(100vh - 200px);
+}
+
+.pdp-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+}
+
+@media (min-width: 768px) {
+  .pdp-container {
+    grid-template-columns: 1fr 1fr;
+    padding: 3rem;
+  }
+}
+
+/* Galeria de Imagens */
+.pdp-gallery {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pdp-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: opacity 0.3s ease;
+}
+
+/* Informações do Produto */
+.pdp-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdp-category {
+  font-family: 'Montserrat', sans-serif;
+  color: #b34d68;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.pdp-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  color: #222;
+  margin: 0 0 1rem 0;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.pdp-price {
+  font-size: 1.8rem;
+  color: #111;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.pdp-description-box {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+/* Variações e Swatches */
+.pdp-variations {
+  margin-bottom: 2rem;
+}
+
+.variation-label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+#pdp-selected-color {
+  font-weight: 700;
+  color: #b34d68;
+}
+
+.swatch-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  outline: none;
+}
+
+.swatch:hover {
+  transform: scale(1.1);
+}
+
+.swatch.active {
+  border-color: #333;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
+  transform: scale(1.1);
+}
+
+/* Ações */
+.pdp-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.btn-add-cart {
+  flex-grow: 1;
+  background-color: #b34d68;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.btn-add-cart:hover {
+  background-color: #8c3b51;
+}
+
+.btn-wishlist {
+  background-color: transparent;
+  color: #b34d68;
+  border: 1px solid #b34d68;
+  width: 55px;
+  border-radius: 4px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-wishlist:hover {
+  background-color: #fff0f5;
+  transform: scale(1.05);
+}
+
+/* Accordion */
+.pdp-accordion {
+  border-top: 1px solid #eee;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #eee;
+}
+
+.accordion-header {
+  padding: 1.5rem 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  list-style: none; /* remove seta padrao em alguns browsers */
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.accordion-header::-webkit-details-marker {
+  display: none; /* remove seta no chrome/safari */
+}
+
+.accordion-header::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.accordion-item[open] .accordion-header::after {
+  transform: rotate(45deg);
+}
+
+.accordion-body {
+  padding-bottom: 1.5rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.pdp-error {
+  text-align: center;
+  padding: 5rem;
+}
+
+.btn-voltar {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #b34d68;
+  text-decoration: underline;
+}
