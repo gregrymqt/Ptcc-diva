@@ -1,13 +1,24 @@
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
-body{
-  background:#f8f8f8;
+/* ALTERAÇÃO: Adicionado o comportamento Flexbox no body */
+body {
+  background: #f8f8f8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
+/* ALTERAÇÃO: O main agora estica para segurar o footer no rodapé */
+main {
+  padding: 16px;
+  flex: 1;
+}
+/* ... restante do código permanece igual ... */
 
 .page-header{
 

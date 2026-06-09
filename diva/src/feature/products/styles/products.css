@@ -5,14 +5,23 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-body{
-    background:#f4f4f4;
+/* ALTERAÇÃO: Configura o body para ocupar a tela toda e agir como coluna */
+body {
+    background: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* ADIÇÃO: Força o main a esticar e empurrar o footer para baixo */
+main {
+    flex: 1;
+    padding: 20px; /* Mantém um espaçamento confortável nas laterais */
+}
 
-#products-container{
-    display:grid;
-    gap:16px;
+#products-container {
+    display: grid;
+    gap: 16px;
 }
 
 /* CARD */
