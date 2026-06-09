@@ -77,3 +77,10 @@ export async function getCartTotals() {
     totalValue
   };
 }
+
+// Esvazia o carrinho
+export async function clearCart() {
+  await setStorageData(CART_KEY, []);
+  window.dispatchEvent(new Event('cartUpdated'));
+}
+
