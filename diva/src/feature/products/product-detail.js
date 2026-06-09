@@ -2,6 +2,9 @@ import { navbarComponent } from "../../shared/components/navbar/navbarComponent.
 import { footerComponent } from "../../shared/components/footer/footerComponent.js";
 import { initNavbar } from "../../shared/components/navbar/navbarController.js";
 import { PdpComponent } from "./components/PdpComponent.js";
+import { findProductById } from "./services/productServices.js";
+import { addToCart } from "../cart/services/cartServices.js";
+import { openCartDrawer } from "../cart/components/CartDrawerComponent.js";
 
 async function initPdp() {
   document.getElementById("navbar").innerHTML = navbarComponent();
@@ -27,36 +30,36 @@ function initPdpInteractions() {
   const mainImage = document.getElementById('pdp-main-image');
   const selectedColorName = document.getElementById('pdp-selected-color');
 
-  if (swatches.length === 0 || !mainImage) return;
+  if (swatches.length > 0 && mainImage) {
+    swatches.forEach(swatch => {
+      swatch.addEventListener('click', (e) => {
+        // Remover classe active de todos
+        swatches.forEach(s => s.classList.remove('active'));
+        
+        // Adicionar active no clicado
+        const target = e.currentTarget;
+        target.classList.add('active');
 
-  swatches.forEach(swatch => {
-    swatch.addEventListener('click', (e) => {
-      // Remover classe active de todos
-      swatches.forEach(s => s.classList.remove('active'));
-      
-      // Adicionar active no clicado
-      const target = e.currentTarget;
-      target.classList.add('active');
+        // Trocar imagem (Micro-interação suave)
+        const newImage = target.getAttribute('data-image');
+        const newColorName = target.getAttribute('data-colorname');
 
-      // Trocar imagem (Micro-interação suave)
-      const newImage = target.getAttribute('data-image');
-      const newColorName = target.getAttribute('data-colorname');
-
-      // Efeito de fade out rápido
-      mainImage.style.opacity = 0.5;
-      
-      setTimeout(() => {
-        mainImage.src = newImage;
-        selectedColorName.textContent = newColorName;
-        mainImage.style.opacity = 1;
-      }, 150);
+        // Efeito de fade out rápido
+        mainImage.style.opacity = 0.5;
+        
+        setTimeout(() => {
+          mainImage.src = newImage;
+          selectedColorName.textContent = newColorName;
+          mainImage.style.opacity = 1;
+        }, 150);
+      });
     });
-  });
+  }
 
   // Botão Adicionar à Sacola
   const btnAdd = document.getElementById('btn-add-cart');
   if (btnAdd) {
-    btnAdd.addEventListener('click', () => {
+    btnAdd.addEventListener('click', async () => {
       const activeColor = document.querySelector('.swatch.active')?.getAttribute('data-colorname') || 'Única';
       
       // Feedback visual
@@ -65,8 +68,15 @@ function initPdpInteractions() {
       btnAdd.style.backgroundColor = '#2c2c2c'; // Muda para cor de sucesso (nicho luxo/clean usa preto ou cinza escuro)
       btnAdd.style.color = '#fff';
       
-      // Opcional: Aqui integraria com o carrinho/localStorage
-      console.log(`Adicionado à sacola: Cor ${activeColor}`);
+      // Pegar produto para adicionar
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const product = await findProductById(id);
+
+      if(product) {
+        await addToCart(product, activeColor);
+        openCartDrawer();
+      }
 
       setTimeout(() => {
         btnAdd.textContent = originalText;
