@@ -1,5 +1,5 @@
 import { findUserByEmail, updateUser } from "./storage.js";
-import { showToast } from "../shared/toastComponent.js"; // Ajuste o caminho do toast se necessário
+import { showToast } from "../shared/components/toast/toastComponent.js"; // Ajuste o caminho do toast se necessário
 
 export const ROLES = {
   ADMIN: "admin",

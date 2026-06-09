@@ -1,7 +1,7 @@
-import { createUser, findUserByEmail } from "../../../../core/storage.js";
-import { ROLES } from "../../../../core/rolesManager.js"; // Importando do novo manager que criámos
+import { createUser, findUserByEmail } from "../../../core/storage.js";
+import { ROLES } from "../../../core/rolesManager.js"; // Importando do novo manager que criámos
 
-export class RegistroService {
+export class RegisterService {
   static register(nome, email, senha) {
     // 1. Verifica se o email já está em uso
     const userExists = findUserByEmail(email);

@@ -1,8 +1,8 @@
 import { Product }
-from "../models/productModel.js";
+from "../models/products.js";
 
 import { createProduct }
-from "../services/productService.js";
+from "../services/productServices.js";
 
 import {
   getCategories
@@ -12,7 +12,7 @@ from "../../categories/services/categoryService.js";
 import {
   showToast
 }
-from "../../../shared/components/toast/toastComponent.js";
+from "../../../shared/components/toast/toast.js";
 
 export function initProductForm(formId) {
 

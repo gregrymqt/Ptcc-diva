@@ -1,5 +1,5 @@
 import { Cart } from "../models/cartModel.js";
-import { getProducts } from "../../products/services/productService.js";
+import { getProducts } from "../../products/services/productServices.js";
 
 const STORAGE_KEY = "cart";
 

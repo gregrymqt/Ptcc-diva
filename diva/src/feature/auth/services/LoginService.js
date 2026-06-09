@@ -1,4 +1,4 @@
-import { findUserByEmail } from "../../../../core/storage.js";
+import { findUserByEmail } from "../../../core/storage.js";
 
 export class LoginService {
   

@@ -1,11 +1,11 @@
-import { navbarComponent } from "../../../shared/components/navbar/navbarComponent.js";
-import { footerComponent } from "../../../shared/components/footer/footerComponent.js";
-import { initNavbar } from "../../../shared/components/navbar/navbarController.js";
-import { getCart, getCartTotals } from "../../cart/services/cartServices.js";
-import { CheckoutComponent } from "../components/CheckoutComponent.js";
-import { createOrder } from "../services/checkoutServices.js";
-import { showToast } from "../../../shared/components/toast/toast.js";
-import { getStorageData } from "../../../core/storage.js";
+import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
+import { footerComponent } from "../../shared/components/footer/footerComponent.js";
+import { initNavbar } from "../../shared/components/navbar/navbarController.js";
+import { getCart, getCartTotals } from "../cart/services/cartServices.js";
+import { CheckoutComponent } from "./components/CheckoutComponent.js";
+import { createOrder } from "./services/checkoutServices.js";
+import { showToast } from "../../shared/components/toast/toastComponent.js";
+import { getStorageData } from "../../core/storage.js";
 
 async function renderCheckout() {
   const usuarioLogado = await getStorageData("usuarioLogado");

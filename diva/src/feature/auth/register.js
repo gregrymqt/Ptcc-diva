@@ -1,10 +1,10 @@
-import { RegistroModel } from "./models/RegistroModel.js";
-import { RegistroService } from "./services/RegistroService.js";
-import { RegistroForm } from "./components/RegistroForm.js";
-import { showToast } from "../../../shared/toastComponent.js"; // Verifique o caminho exato no seu projeto
+import { RegisterModel } from "./models/RegisterModel.js";
+import { RegisterService } from "./services/RegisterService.js";
+import { RegisterForm } from "./components/RegisterForm.js";
+import { showToast } from "../../shared/components/toast/toastComponent.js"; // Verifique o caminho exato no seu projeto
 
 // 1. Inicializa e renderiza a interface dinamicamente
-const registroForm = new RegistroForm("#app");
+const registroForm = new RegisterForm("#app");
 registroForm.render();
 
 // 2. Ouve o evento de submissão do formulário
@@ -16,7 +16,7 @@ registroForm.form.addEventListener("submit", (event) => {
   const { nome, email, senha, confirmar } = registroForm.getValues();
 
   // Validação pura de formato e regras locais (Modelo)
-  const validation = RegistroModel.validate(nome, email, senha, confirmar);
+  const validation = RegisterModel.validate(nome, email, senha, confirmar);
   
   if (!validation.isValid) {
     // Exibe todos os erros encontrados na interface
@@ -27,7 +27,7 @@ registroForm.form.addEventListener("submit", (event) => {
   }
 
   // Regra de Negócio: Registo no armazenamento (Serviço)
-  const registoResult = RegistroService.register(nome, email, senha);
+  const registoResult = RegisterService.register(nome, email, senha);
   
   if (!registoResult.success) {
     // Retorna erro caso o email já exista, etc.

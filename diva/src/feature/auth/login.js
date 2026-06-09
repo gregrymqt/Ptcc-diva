@@ -1,7 +1,7 @@
 import { LoginModel } from "./models/LoginModel.js";
 import { LoginService } from "./services/LoginService.js";
 import { LoginForm } from "./components/LoginForm.js";
-import { showToast } from "../../../shared/toastComponent.js"; 
+import { showToast } from "../../shared/components/toast/toastComponent.js"; 
 
 // 1. Inicializa e renderiza a interface dinamicamente
 const loginForm = new LoginForm("#app");
