@@ -10,7 +10,7 @@
    3. Exibir cada categoria na tela
    ================================================ */
 
-import { getCategories }   from "./services/categoryService.js";
+import { getCategories, deleteCategory } from "./services/categoryService.js";
 import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent } from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }      from "../../shared/components/navbar/navbarController.js";
@@ -52,8 +52,22 @@ function exibirCategorias() {
         '<div class="category-content">' +
           '<h3>' + cat.nome + '</h3>' +
           '<p>' + cat.descricao + '</p>' +
+          '<button class="btn-delete-category" data-id="' + cat.id + '">Excluir</button>' +
         '</div>' +
       '</article>';
+  }
+
+  // Captura os cliques dos botões de excluir
+  var btnDeleteElements = document.getElementsByClassName("btn-delete-category");
+  for (var j = 0; j < btnDeleteElements.length; j++) {
+    btnDeleteElements[j].addEventListener("click", function() {
+      var categoryId = this.getAttribute("data-id");
+      var confirmDelete = confirm("Deseja realmente excluir esta categoria?");
+      if (confirmDelete) {
+        deleteCategory(categoryId);
+        exibirCategorias();
+      }
+    });
   }
 }
 
