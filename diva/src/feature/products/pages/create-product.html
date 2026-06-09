@@ -32,7 +32,11 @@
           <input type="text" id="nome" placeholder="Nome do produto" required>
           <input type="number" id="preco" placeholder="Preço" required>
           <textarea id="descricao" placeholder="Descrição" required></textarea>
-          <input type="text" id="imagem" placeholder="URL da imagem principal" required>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="product-image-input" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Imagem do Produto (Max 300KB)</label>
+            <input type="file" id="product-image-input" accept="image/*" required style="width: 100%;">
+            <img id="product-image-preview" src="" style="display: none; max-width: 150px; border-radius: 8px; margin-top: 1rem; border: 1px solid #ddd;">
+          </div>
           <select id="categoryId" required></select>
           <button type="submit" class="btn-admin-submit">Salvar Produto</button>
         </form>
