@@ -7,6 +7,11 @@ export class LoginForm {
    * Injeta o HTML dinamicamente e captura as referências do DOM
    */
   render() {
+    if (!this.container) {
+      console.warn(`Container para LoginForm não encontrado.`);
+      return;
+    }
+    
     this.container.innerHTML = `
       <div class="login-card">
         <div class="login-header">

@@ -7,17 +7,24 @@ import { addToCart } from "../cart/services/cartServices.js";
 import { openCartDrawer } from "../cart/components/CartDrawerComponent.js";
 
 async function initPdp() {
-  document.getElementById("navbar").innerHTML = navbarComponent();
+  const navbarEl = document.getElementById("navbar");
+  if (navbarEl) navbarEl.innerHTML = navbarComponent();
   
   // Loading state
   const contentEl = document.getElementById("content");
+  if (!contentEl) {
+    console.warn("Container #content não encontrado na PDP.");
+    return;
+  }
+  
   contentEl.innerHTML = '<div style="text-align:center; padding: 100px;">Carregando detalhes do produto...</div>';
 
   // Injetar PDP
   const pdpHtml = await PdpComponent();
   contentEl.innerHTML = pdpHtml;
   
-  document.getElementById("footer").innerHTML = footerComponent();
+  const footerEl = document.getElementById("footer");
+  if (footerEl) footerEl.innerHTML = footerComponent();
   
   initNavbar();
   

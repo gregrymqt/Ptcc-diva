@@ -5,12 +5,26 @@ import { getCart, getCartTotals } from "../../cart/services/cartServices.js";
 import { CheckoutComponent } from "../components/CheckoutComponent.js";
 import { createOrder } from "../services/checkoutServices.js";
 import { showToast } from "../../../shared/components/toast/toast.js";
+import { getStorageData } from "../../../core/storage.js";
 
 async function renderCheckout() {
+  const usuarioLogado = await getStorageData("usuarioLogado");
+  if (!usuarioLogado) {
+    showToast("Acesso restrito. Faça login para finalizar sua compra.", "error");
+    setTimeout(() => {
+      window.location.href = "../../auth/login/pages/index.html";
+    }, 2000);
+    return;
+  }
   const cartItems = await getCart();
   const totals = await getCartTotals();
   
   const contentDiv = document.getElementById("checkout-content");
+  if (!contentDiv) {
+    console.warn("Container #checkout-content não encontrado.");
+    return;
+  }
+  
   contentDiv.innerHTML = CheckoutComponent(cartItems, totals);
 
   // Lógica para mostrar/esconder campos do cartão
@@ -96,9 +110,13 @@ async function renderCheckout() {
 
 // Inicialização
 document.addEventListener("DOMContentLoaded", async () => {
-  document.getElementById("navbar").innerHTML = navbarComponent();
-  document.getElementById("footer").innerHTML = footerComponent();
-  initNavbar();
+  const navbarEl = document.getElementById("navbar");
+  if (navbarEl) navbarEl.innerHTML = navbarComponent();
+  
+  const footerEl = document.getElementById("footer");
+  if (footerEl) footerEl.innerHTML = footerComponent();
+  
+  if (navbarEl) initNavbar();
   
   await renderCheckout();
 });

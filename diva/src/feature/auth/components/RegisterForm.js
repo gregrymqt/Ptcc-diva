@@ -4,6 +4,11 @@ export class RegistroForm {
   }
 
   render() {
+    if (!this.container) {
+      console.warn(`Container para RegistroForm não encontrado.`);
+      return;
+    }
+
     this.container.innerHTML = `
       <div class="login-card">
         <div class="login-header">

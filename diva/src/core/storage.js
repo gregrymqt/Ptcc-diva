@@ -7,7 +7,14 @@ const simulateNetworkDelay = () => new Promise(resolve => setTimeout(resolve, 20
 export async function getStorageData(key) {
   await simulateNetworkDelay();
   const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
+  if (!data) return null;
+  
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(`Falha crítica ao ler a chave ${key} do Storage.`, error);
+    return null;
+  }
 }
 
 export async function setStorageData(key, data) {

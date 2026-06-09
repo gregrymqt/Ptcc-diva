@@ -83,6 +83,7 @@ export async function renderCartItems() {
 function attachCartEvents() {
   document.querySelectorAll('.btn-minus').forEach(btn => {
     btn.addEventListener('click', async (e) => {
+      e.target.disabled = true;
       const id = e.target.getAttribute('data-id');
       const color = e.target.getAttribute('data-color');
       const currentQty = parseInt(e.target.nextElementSibling.textContent);
@@ -93,6 +94,8 @@ function attachCartEvents() {
         if (confirm("Deseja remover este item da sacola?")) {
           await removeFromCart(id, color);
           await renderCartItems();
+        } else {
+          e.target.disabled = false;
         }
       }
     });
@@ -100,6 +103,7 @@ function attachCartEvents() {
 
   document.querySelectorAll('.btn-plus').forEach(btn => {
     btn.addEventListener('click', async (e) => {
+      e.target.disabled = true;
       const id = e.target.getAttribute('data-id');
       const color = e.target.getAttribute('data-color');
       const currentQty = parseInt(e.target.previousElementSibling.textContent);
@@ -110,6 +114,7 @@ function attachCartEvents() {
 
   document.querySelectorAll('.btn-remove').forEach(btn => {
     btn.addEventListener('click', async (e) => {
+      e.target.disabled = true;
       const id = e.target.getAttribute('data-id');
       const color = e.target.getAttribute('data-color');
       await removeFromCart(id, color);
