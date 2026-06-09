@@ -76,7 +76,7 @@ export function CheckoutComponent(cartItems, totals) {
             </div>
           </div>
 
-          <button type="submit" class="btn-checkout" ${cartItems.length === 0 ? 'disabled' : ''}>
+          <button type="submit" class="btn-checkout" disabled>
             Finalizar Pedido
           </button>
         </form>

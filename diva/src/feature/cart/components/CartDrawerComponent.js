@@ -39,6 +39,11 @@ export async function renderCartItems() {
   const totals = await getCartTotals();
 
   subtotalEl.textContent = formatPrice(totals.totalValue);
+  
+  const btnCheckout = document.querySelector('#cart-drawer .btn-checkout');
+  if (btnCheckout) {
+    btnCheckout.disabled = cart.length === 0;
+  }
 
   if (cart.length === 0) {
     cartBody.innerHTML = `
@@ -84,6 +89,11 @@ function attachCartEvents() {
       if (currentQty > 1) {
         await updateQuantity(id, color, currentQty - 1);
         await renderCartItems();
+      } else {
+        if (confirm("Deseja remover este item da sacola?")) {
+          await removeFromCart(id, color);
+          await renderCartItems();
+        }
       }
     });
   });

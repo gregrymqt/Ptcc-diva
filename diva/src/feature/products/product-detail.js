@@ -62,10 +62,11 @@ function initPdpInteractions() {
     btnAdd.addEventListener('click', async () => {
       const activeColor = document.querySelector('.swatch.active')?.getAttribute('data-colorname') || 'Única';
       
-      // Feedback visual
+      // Feedback visual inicial
       const originalText = btnAdd.textContent;
-      btnAdd.textContent = 'Adicionado ✔';
-      btnAdd.style.backgroundColor = '#2c2c2c'; // Muda para cor de sucesso (nicho luxo/clean usa preto ou cinza escuro)
+      btnAdd.textContent = 'Adicionando...';
+      btnAdd.disabled = true;
+      btnAdd.style.backgroundColor = '#2c2c2c';
       btnAdd.style.color = '#fff';
       
       // Pegar produto para adicionar
@@ -75,13 +76,17 @@ function initPdpInteractions() {
 
       if(product) {
         await addToCart(product, activeColor);
+        btnAdd.textContent = 'Adicionado ✔';
         openCartDrawer();
+      } else {
+        btnAdd.textContent = 'Erro ao adicionar';
       }
 
       setTimeout(() => {
         btnAdd.textContent = originalText;
         btnAdd.style.backgroundColor = '';
         btnAdd.style.color = '';
+        btnAdd.disabled = false;
       }, 2000);
     });
   }

@@ -29,9 +29,41 @@ async function renderCheckout() {
 
   // Listener para o submit do formulário
   const form = document.getElementById('checkout-form');
+  const btnSubmit = form ? form.querySelector('.btn-checkout') : null;
+  const inputCep = document.getElementById('cep');
+  const inputCcNum = document.getElementById('cc-num');
+
+  // Máscara e Validação de CEP
+  if (inputCep) {
+    inputCep.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, ''); // Remove não números
+      value = value.replace(/^(\d{5})(\d)/, "$1-$2"); // Coloca o hífen
+      e.target.value = value.slice(0, 9); // Limita a 9 caracteres
+
+      // Validação do botão (precisa ter 9 caracteres e carrinho não estar vazio)
+      if (btnSubmit && cartItems.length > 0) {
+        btnSubmit.disabled = e.target.value.length !== 9;
+      }
+    });
+  }
+
+  // Máscara Cartão de Crédito
+  if (inputCcNum) {
+    inputCcNum.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      value = value.replace(/(\d{4})(?=\d)/g, "$1 "); // Adiciona espaço a cada 4 números
+      e.target.value = value.slice(0, 19);
+    });
+  }
+
   if(form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      if (btnSubmit) {
+        btnSubmit.textContent = "Processando seu Pedido...";
+        btnSubmit.disabled = true;
+      }
       
       const formData = new FormData(form);
       const dadosEntrega = {
@@ -53,6 +85,10 @@ async function renderCheckout() {
         }, 2000);
       } catch (error) {
         showToast("Erro ao processar pedido: " + error.message, "error");
+        if (btnSubmit) {
+          btnSubmit.textContent = "Finalizar Pedido";
+          btnSubmit.disabled = false;
+        }
       }
     });
   }
