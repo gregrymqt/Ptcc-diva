@@ -25,10 +25,10 @@ export function categoryFormComponent() {
           '<textarea id="descricao" placeholder="Descreva quais produtos fazem parte desta categoria..." required></textarea>' +
         '</div>' +
 
-        /* Campo da URL da Imagem de Capa */
+        /* Campo de Imagem de Capa (Upload) */
         '<div class="input-group">' +
-          '<label for="imagem">Link da Imagem (Capa)</label>' +
-          '<input type="url" id="imagem" placeholder="https://exemplo.com/imagem.jpg" required>' +
+          '<label for="imagem">Imagem da Categoria (Upload)</label>' +
+          '<input type="file" id="imagem" accept="image/*" required>' +
         '</div>' +
 
         /* Botão de Envio */

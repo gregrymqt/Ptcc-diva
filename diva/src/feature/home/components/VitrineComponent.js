@@ -10,10 +10,10 @@ export async function VitrineComponent() {
 
   // Gera o grid de produtos
   const productsHtml = products.map(product => {
-    // Pegar a imagem da primeira variação para exibir na vitrine
+    // Pegar a imagem da primeira variação para exibir na vitrine, ou usar a imagem base do produto
     const mainImage = product.variacoes && product.variacoes.length > 0 
       ? product.variacoes[0].imagem 
-      : 'https://via.placeholder.com/400x400?text=Sem+Imagem';
+      : (product.imagem || 'https://via.placeholder.com/400x400?text=Sem+Imagem');
 
     const formattedPrice = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.preco);
 
@@ -26,7 +26,7 @@ export async function VitrineComponent() {
           <span class="vitrine-category">${product.categoryName}</span>
           <h3 class="vitrine-title">${product.nome}</h3>
           <p class="vitrine-price">${formattedPrice}</p>
-          <a href="../products/pages/product-detail.html?id=${product.id}" class="btn-detalhes">Ver Detalhes</a>
+          <a href="../../products/pages/product-detail.html?id=${product.id}" class="btn-detalhes">Ver Detalhes</a>
         </div>
       </div>
     `;

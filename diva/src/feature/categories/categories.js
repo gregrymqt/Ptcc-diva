@@ -5,7 +5,7 @@
    Aplicada proteção visual para travar botões administrativos.
    ========================================================= */
 
-import { getCategories, deleteCategory } from "./services/categoryService.js";
+import { getCategories, deleteCategory, updateCategory } from "./services/categoryService.js";
 import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent } from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }      from "../../shared/components/navbar/navbarController.js";
@@ -140,11 +140,35 @@ function exibirCategorias(termoBusca) {
         var categoryId = this.getAttribute("data-id");
         var categoryNome = this.getAttribute("data-nome");
         
-        // Exibe um toast didático para provar o funcionamento na banca
-        showToast("Modo de edição acionado para: " + categoryNome, "info");
-        
-        // Se quiser redirecionar para a página de criação passando o ID, descomente a linha abaixo:
-        // window.location.href = "./create-category.html?edit=" + categoryId;
+        var categorias = getCategories();
+        var categoriaAtual = null;
+        for (var c = 0; c < categorias.length; c++) {
+            if (categorias[c].id == categoryId) {
+                categoriaAtual = categorias[c];
+                break;
+            }
+        }
+
+        if (!categoriaAtual) {
+            showToast("Categoria não encontrada", "error");
+            return;
+        }
+
+        var camposFormulario = [
+            { name: 'nome', label: 'Nome da Categoria', type: 'text' },
+            { name: 'descricao', label: 'Descrição', type: 'text' },
+            { name: 'imagem', label: 'URL da Imagem', type: 'text' }
+        ];
+
+        if (window.exibirModalUpdate) {
+            window.exibirModalUpdate("Editar Categoria: " + categoryNome, categoriaAtual, camposFormulario, function(dadosAtualizados) {
+                updateCategory(categoryId, dadosAtualizados);
+                showToast("Categoria atualizada com sucesso!", "success");
+                exibirCategorias(); // Atualiza a lista na tela
+            });
+        } else {
+            showToast("Componente de modal não encontrado", "error");
+        }
       });
     }
   }

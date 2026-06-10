@@ -288,7 +288,7 @@ function iniciarComportamentosDoFormulario() {
         showToast("Pedido realizado com sucesso!", "success");
 
         setTimeout(function() {
-          window.location.href = "../../../index.html";
+          window.location.href = window.location.origin + "/diva/src/feature/home/pages/home.html";
         }, 2000);
 
       } catch (erro) {

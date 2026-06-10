@@ -16,6 +16,27 @@ import { categoryFormComponent } from "./components/categoryFormComponent.js";
 /* --- PARTE 1: PROTEÇÃO DE ROTA --- */
 protectAdminPage();
 
+// Variável global para guardar a imagem convertida em Base64
+var imagemBase64 = "";
+
+/* --- FUNÇÃO DE UPLOAD DE IMAGEM --- */
+function iniciarUploadDeImagem() {
+  var campoImagem = document.getElementById("imagem");
+
+  if (!campoImagem) return;
+
+  campoImagem.addEventListener("change", function(evento) {
+    var arquivo = evento.target.files[0];
+    if (!arquivo) return;
+
+    var leitor = new FileReader();
+    leitor.onload = function(e) {
+      imagemBase64 = e.target.result;
+    };
+    leitor.readAsDataURL(arquivo);
+  });
+}
+
 /* --- PARTE 2: CONFIGURAÇÃO DO FORMULÁRIO --- */
 function iniciarFormulario() {
   var formulario = document.getElementById("category-form");
@@ -39,12 +60,19 @@ function iniciarFormulario() {
       return;
     }
 
+    // Se não tiver imagem, usa um placeholder genérico
+    var imagemFinal = imagemBase64;
+
+    if (!imagemFinal || imagemFinal === "") {
+      imagemFinal = "https://via.placeholder.com/600x600?text=Sem+Imagem";
+    }
+
     // Estruturação do objeto clássico sem spread operator ou OOP complexa
     var novaCategoria = {
       id: Date.now(),
       nome: campoNome.value,
       descricao: campoDescricao.value,
-      imagem: campoImagem.value
+      imagem: imagemFinal
     };
 
     // Executa a persistência no localStorage por meio do service
@@ -52,6 +80,7 @@ function iniciarFormulario() {
 
     // Reseta todos os campos de forma limpa
     formulario.reset();
+    imagemBase64 = "";
     
     // Alerta visual de sucesso para o administrador
     showToast("Categoria cadastrada com sucesso!", "success");
@@ -72,5 +101,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Vincula as regras lógicas e escutas de eventos ao formulário recém-injetado
+  iniciarUploadDeImagem();
   iniciarFormulario();
 });

@@ -120,8 +120,8 @@ function montarVitrine() {
   for (var i = 0; i < produtos.length; i++) {
     var produto = produtos[i];
 
-    // Tenta pegar a imagem da primeira variação de cor
-    var imagemPrincipal = "https://via.placeholder.com/400x400?text=Sem+Imagem";
+    // Tenta pegar a imagem da primeira variação de cor ou a imagem base do produto
+    var imagemPrincipal = produto.imagem || "https://via.placeholder.com/400x400?text=Sem+Imagem";
 
     if (produto.variacoes && produto.variacoes.length > 0) {
       imagemPrincipal = produto.variacoes[0].imagem;
@@ -136,7 +136,7 @@ function montarVitrine() {
           '<span class="vitrine-category">' + produto.categoryName + '</span>' +
           '<h3 class="vitrine-title">' + produto.nome + '</h3>' +
           '<p class="vitrine-price">' + formatarPreco(produto.preco) + '</p>' +
-          '<a href="../products/pages/product-detail.html?id=' + produto.id + '" class="btn-detalhes">Ver Detalhes</a>' +
+          '<a href="../../products/pages/product-detail.html?id=' + produto.id + '" class="btn-detalhes">Ver Detalhes</a>' +
         '</div>' +
       '</div>';
   }
