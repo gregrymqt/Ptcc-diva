@@ -1,37 +1,25 @@
-/* ================================================
-   CATEGORIES.JS — Página de Listagem de Categorias
-
-   Este arquivo monta a página que lista todas as
-   categorias cadastradas na loja.
-
-   Ele está dividido em 3 partes:
-   1. Montar a navbar e o footer
-   2. Buscar as categorias do localStorage
-   3. Exibir cada categoria na tela
-   ================================================ */
+/* =========================================================
+   CATEGORIES.JS — Página de Listagem de Categorias (Refatorada)
+   
+   Este arquivo monta a página que lista todas as categorias.
+   Aplicada proteção visual para travar botões administrativos.
+   ========================================================= */
 
 import { getCategories, deleteCategory } from "./services/categoryService.js";
 import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent } from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }      from "../../shared/components/navbar/navbarController.js";
 import { getUserRole }     from "../../core/rolesManager.js";
+import { showToast }       from "../../shared/components/toast/toastComponent.js";
 
+// Variável global que armazena a role do usuário logado para uso em toda a página
+var roleUsuarioLogado = "cliente";
 
-/* --------------------------------------------------
-   PARTE 1: MONTAR NAVBAR E FOOTER
-   -------------------------------------------------- */
-document.getElementById("navbar").innerHTML = navbarComponent();
-document.getElementById("footer").innerHTML = footerComponent();
-
-/* --------------------------------------------------
-   CONTROLE DE ACESSO
-   Oculta o botão de "Nova Categoria" se o usuário não for admin.
-   -------------------------------------------------- */
-function verificarPermissaoAdmin() {
+/* Lê a sessão ativa no LocalStorage e armazena a role do usuário */
+function identificarRoleDoUsuario() {
   var sessao = localStorage.getItem("usuarioLogado");
-  var email;
+  var email = "";
 
-  // Tenta ler o e-mail, podendo ser JSON ou texto simples
   if (sessao) {
     try {
       var sessaoParsed = JSON.parse(sessao);
@@ -41,11 +29,24 @@ function verificarPermissaoAdmin() {
     }
   }
 
-  // Busca a role atual usando a função do rolesManager
-  var roleAtual = getUserRole(email);
+  // Busca o nível de acesso real (Ex: "admin" ou "client")
+  roleUsuarioLogado = getUserRole(email);
+}
 
-  // Se não for admin (ou se não estiver logado), esconde o botão
-  if (roleAtual !== "admin") {
+// Executa a leitura da sessão imediatamente
+identificarRoleDoUsuario();
+
+
+/* --------------------------------------------------
+   PARTE 1: MONTAR NAVBAR E FOOTER
+   -------------------------------------------------- */
+document.getElementById("navbar").innerHTML = navbarComponent();
+document.getElementById("footer").innerHTML = footerComponent();
+
+
+/* Oculta o botão superior de "Nova Categoria" se o usuário não for admin */
+function verificarPermissaoBotaoCriar() {
+  if (roleUsuarioLogado !== "admin") {
     var btnNovaCategoria = document.getElementById("btn-nova-categoria");
     if (btnNovaCategoria) {
       btnNovaCategoria.style.display = "none";
@@ -53,21 +54,15 @@ function verificarPermissaoAdmin() {
   }
 }
 
-// Executa a checagem logo que o script carrega
-verificarPermissaoAdmin();
+verificarPermissaoBotaoCriar();
 
 
 /* --------------------------------------------------
    PARTE 2 E 3: BUSCAR CATEGORIAS E EXIBIR NA TELA
-
-   Lê as categorias salvas e insere os cards
-   dentro da div#categories-container.
    -------------------------------------------------- */
 
-/* Monta o HTML de cada categoria e coloca na tela.
-   Aceita um termo de busca opcional para filtrar a lista. */
+/* Monta o HTML de cada categoria e gerencia os botões de controle do Admin */
 function exibirCategorias(termoBusca) {
-  // Se não houver termo, define como texto vazio para facilitar
   if (termoBusca === undefined) {
     termoBusca = "";
   }
@@ -79,49 +74,85 @@ function exibirCategorias(termoBusca) {
     return;
   }
 
-  // Limpa o conteúdo anterior
+  // Limpa o grid de renderização anterior
   container.innerHTML = "";
 
-  // Converte o termo de busca para minúsculas
   var termoMinusculo = termoBusca.toLowerCase();
 
-  // Percorre cada categoria e monta seu card HTML
+  // Percorre o array usando o laço de repetição tradicional for
   for (var i = 0; i < categorias.length; i++) {
     var cat = categorias[i];
-
-    // Verifica se a busca atual está contida no nome da categoria
     var nomeMinusculo = cat.nome.toLowerCase();
+
+    // Filtra pelo termo de busca digitado ou selecionado
     if (nomeMinusculo.indexOf(termoMinusculo) === -1) {
-      // Se não encontrou o texto, pula para o próximo item do loop
       continue;
     }
 
+    // TRAVA DE SEGURANÇA VISUAL: Monta os botões administrativos apenas se for admin
+    var htmlBotoesAdmin = "";
+    if (roleUsuarioLogado === "admin") {
+      htmlBotoesAdmin = 
+        '<div class="category-admin-actions">' +
+          '<button class="btn-edit-category" data-id="' + cat.id + '" data-nome="' + cat.nome + '">' +
+            '<i class="fas fa-edit"></i> Alterar' +
+          '</button>' +
+          '<button class="btn-delete-category" data-id="' + cat.id + '">' +
+            '<i class="fas fa-trash-alt"></i> Excluir' +
+          '</button>' +
+        '</div>';
+    }
+
+    // Concatena o card completo na div container do DOM
     container.innerHTML = container.innerHTML +
       '<article class="category-card">' +
         '<img src="' + cat.imagem + '" alt="' + cat.nome + '">' +
         '<div class="category-content">' +
           '<h3>' + cat.nome + '</h3>' +
           '<p>' + cat.descricao + '</p>' +
-          '<button class="btn-delete-category" data-id="' + cat.id + '">Excluir</button>' +
+          htmlBotoesAdmin + 
         '</div>' +
       '</article>';
   }
 
-  // Captura os cliques dos botões de excluir
-  var btnDeleteElements = document.getElementsByClassName("btn-delete-category");
-  for (var j = 0; j < btnDeleteElements.length; j++) {
-    btnDeleteElements[j].addEventListener("click", function() {
-      var categoryId = this.getAttribute("data-id");
-      var confirmDelete = confirm("Deseja realmente excluir esta categoria?");
-      if (confirmDelete) {
-        deleteCategory(categoryId);
-        exibirCategorias();
-      }
-    });
+  // Atribui os escutadores de evento de clique (Apenas se o usuário logado for admin)
+  if (roleUsuarioLogado === "admin") {
+    
+    // Configuração do evento de Excluir
+    var btnDeleteElements = document.getElementsByClassName("btn-delete-category");
+    for (var j = 0; j < btnDeleteElements.length; j++) {
+      btnDeleteElements[j].addEventListener("click", function() {
+        var categoryId = this.getAttribute("data-id");
+        var confirmDelete = confirm("Deseja realmente excluir esta categoria?");
+        
+        if (confirmDelete) {
+          deleteCategory(categoryId);
+          exibirCategorias(); // Atualiza a lista na tela
+          showToast("Categoria removida com sucesso!", "success");
+        }
+      });
+    }
+
+    // Configuração do evento de Alterar
+    var btnEditElements = document.getElementsByClassName("btn-edit-category");
+    for (var k = 0; k < btnEditElements.length; k++) {
+      btnEditElements[k].addEventListener("click", function() {
+        var categoryId = this.getAttribute("data-id");
+        var categoryNome = this.getAttribute("data-nome");
+        
+        // Exibe um toast didático para provar o funcionamento na banca
+        showToast("Modo de edição acionado para: " + categoryNome, "info");
+        
+        // Se quiser redirecionar para a página de criação passando o ID, descomente a linha abaixo:
+        // window.location.href = "./create-category.html?edit=" + categoryId;
+      });
+    }
   }
 }
 
+// Inicializa a renderização dos cards na tela
 exibirCategorias();
+
 
 /* Monta o HTML do dropdown de filtro de categorias */
 function carregarFiltroDropdown() {
@@ -131,17 +162,16 @@ function carregarFiltroDropdown() {
 
   if (!containerOpcoes || !header) return;
 
-  // Limpa o conteúdo
   containerOpcoes.innerHTML = "";
 
-  // Opção "Todas"
+  // Opção Padrão (Todas)
   containerOpcoes.innerHTML = containerOpcoes.innerHTML +
     '<label class="dropdown-item">' +
       '<input type="radio" name="filterCategoryRadio" value="" data-nome="Todas as categorias" checked>' +
       'Todas as categorias' +
     '</label>';
 
-  // Preenche as outras categorias
+  // Adiciona as categorias dinâmicas no filtro de rádio
   for (var i = 0; i < categorias.length; i++) {
     containerOpcoes.innerHTML = containerOpcoes.innerHTML +
       '<label class="dropdown-item">' +
@@ -150,12 +180,10 @@ function carregarFiltroDropdown() {
       '</label>';
   }
 
-  // Toggle dropdown
   header.addEventListener("click", function() {
     containerOpcoes.classList.toggle("show");
   });
 
-  // Evento change nos radios
   var radios = document.getElementsByName("filterCategoryRadio");
   for (var j = 0; j < radios.length; j++) {
     radios[j].addEventListener("change", function() {
@@ -165,14 +193,11 @@ function carregarFiltroDropdown() {
       header.innerHTML = nomeSelecionado + " ▼";
       containerOpcoes.classList.remove("show");
       
-      // Reutilizamos a função de busca passando o valor do rádio!
       exibirCategorias(valorFiltro);
     });
   }
 }
 
-// Preenche o dropdown de filtro assim que possível
+// Ativa as configurações finais da página
 carregarFiltroDropdown();
-
-// Ativa os comportamentos da navbar (menu mobile, contador)
 initNavbar();

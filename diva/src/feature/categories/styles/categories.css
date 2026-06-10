@@ -201,6 +201,57 @@ main{
   background-color: #c82333;
 }
 
+/* =========================================================
+   CONTROLES ADMINISTRATIVOS DE CATEGORIA (AJUSTE VISUAL)
+   ========================================================= */
+
+.category-admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.btn-edit-category,
+.btn-delete-category {
+  flex: 1;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+/* Botão Alterar - Visual Neutro e Elegante */
+.btn-edit-category {
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1.5px solid #cbd5e1;
+}
+
+.btn-edit-category:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Botão Excluir - Vermelho Semântico Alinhado */
+.btn-delete-category {
+  background-color: #ef4444;
+  color: #ffffff;
+  margin-top: 0; /* Reseta margens antigas chumbadas */
+}
+
+.btn-delete-category:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
 @media(min-width:768px){
 
   #categories-container{

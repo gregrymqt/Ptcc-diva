@@ -128,16 +128,25 @@ export function configurarMenuAutenticacao() {
    ================================================ */
 export function configurarDropdownsAdmin() {
   // 1. Verifica se existe um utilizador logado através do localStorage
-  var usuarioLogado = localStorage.getItem("usuarioLogado");
+  var usuarioLogadoStr = localStorage.getItem("usuarioLogado");
   
   // Se não estiver logado, não há nada a alterar (mantém links normais)
-  if (!usuarioLogado) {
+  if (!usuarioLogadoStr) {
     return;
   }
+
+  var email;
+  var roleAtual;
   
-  // 2. Verifica a "role" do utilizador atual com base no seu identificador (ex: email)
-  // Utilizamos a função importada do sistema de controlo de acessos
-  var roleAtual = getUserRole(usuarioLogado);
+  try {
+    var usuarioParsed = JSON.parse(usuarioLogadoStr);
+    email = usuarioParsed.email || usuarioLogadoStr;
+    // Pega a role da sessão. Se não existir, busca do storage
+    roleAtual = usuarioParsed.role || getUserRole(email);
+  } catch (e) {
+    email = usuarioLogadoStr;
+    roleAtual = getUserRole(email);
+  }
   
   // Se o utilizador não for Administrador, mantemos o comportamento padrão (não há dropdowns)
   if (roleAtual !== "admin") {

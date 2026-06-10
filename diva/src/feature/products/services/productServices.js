@@ -14,62 +14,9 @@ import { getCategories } from "../../categories/services/categoryService.js";
 // Nome da chave onde os produtos ficam salvos no navegador
 var CHAVE_PRODUTOS = "products";
 
-/* Lista de produtos iniciais da loja Diva.
-   São carregados automaticamente se o localStorage
-   estiver vazio (primeira visita do usuário). */
-var produtosIniciais = [
-  {
-    id: 1,
-    nome: "Batom Matte Diva",
-    descricao: "Batom líquido com acabamento super matte e longa duração. Não transfere e possui alta pigmentação.",
-    preco: 49.90,
-    categoryId: 1,
-    ingredientes: "Isododecane, Dimethicone, Trimethylsiloxysilicate, Silica, Polybutene, Macadamia Seed Oil.",
-    modoUso: "Aplique uma camada uniforme sobre os lábios limpos e secos. Aguarde secar.",
-    variacoes: [
-      { cor: "Nude Elegance", hexadecimal: "#e0a899", imagem: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400&auto=format&fit=crop" },
-      { cor: "Bordô Fatal",   hexadecimal: "#801515", imagem: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop" }
-    ]
-  },
-  {
-    id: 2,
-    nome: "Base Líquida Glow Pro",
-    descricao: "Base de cobertura média a alta com efeito luminoso e natural. Contém ácido hialurônico.",
-    preco: 89.90,
-    categoryId: 2,
-    ingredientes: "Water, Cyclopentasiloxane, Titanium Dioxide, Glycerin, Hyaluronic Acid, Niacinamide.",
-    modoUso: "Com um pincel ou esponja, espalhe do centro do rosto para as extremidades.",
-    variacoes: [
-      { cor: "Claro Frio",   hexadecimal: "#fceadd", imagem: "https://images.unsplash.com/photo-1631214500115-598fc2cb8d2d?q=80&w=400&auto=format&fit=crop" },
-      { cor: "Médio Quente", hexadecimal: "#d4a373", imagem: "https://images.unsplash.com/photo-1631214499929-1662921e1022?q=80&w=400&auto=format&fit=crop" }
-    ]
-  },
-  {
-    id: 3,
-    nome: "Blush Cremoso Cheek Tint",
-    descricao: "Blush em creme fácil de esfumar, proporcionando um ar saudável e natural.",
-    preco: 55.00,
-    categoryId: 3,
-    ingredientes: "Caprylic/Capric Triglyceride, Mica, Jojoba Oil, Carnauba Wax.",
-    modoUso: "Aplique com os dedos nas maçãs do rosto dando leves batidinhas.",
-    variacoes: [
-      { cor: "Pêssego", hexadecimal: "#ffbfa8", imagem: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop" },
-      { cor: "Rosado",  hexadecimal: "#e58a9e", imagem: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400&auto=format&fit=crop" }
-    ]
-  },
-  {
-    id: 4,
-    nome: "Paleta de Sombras Midnight",
-    descricao: "Paleta com 9 cores super pigmentadas entre tons opacos e cintilantes.",
-    preco: 129.90,
-    categoryId: 4,
-    ingredientes: "Talc, Mica, Magnesium Stearate, Dimethicone, Iron Oxides.",
-    modoUso: "Utilize pincéis de esfumar e depositar para criar o look desejado.",
-    variacoes: [
-      { cor: "Única", hexadecimal: "#3b3b3b", imagem: "https://images.unsplash.com/photo-1512496015851-a1cbfc3356bc?q=80&w=400&auto=format&fit=crop" }
-    ]
-  }
-];
+/* Lista de produtos iniciais removida para transição aos dados dinâmicos.
+   O array é mantido vazio para evitar erros de referência no sistema. */
+var produtosIniciais = [];
 
 /* Se o localStorage não tiver produtos ainda,
    preenche com os produtos iniciais automaticamente. */

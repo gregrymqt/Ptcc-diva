@@ -1,130 +1,66 @@
-import { Product }
-from "../models/products.js";
+/* =========================================================
+   COMPONENT: productFormComponent.js
+   Descrição: Gera a estrutura HTML limpa e semântica do 
+              formulário de cadastro de produtos.
+   ========================================================= */
 
-import { createProduct }
-from "../services/productServices.js";
+export function productFormComponent() {
+  return (
+    '<form id="product-form" class="admin-product-form">' +
+      '<div class="form-header">' +
+        '<h2>Novo Produto</h2>' +
+        '<p>Preencha os detalhes para publicar na loja virtual.</p>' +
+      '</div>' +
 
-import {
-  getCategories
-}
-from "../../categories/services/categoryService.js";
+      '<div class="form-grid">' +
+        /* Coluna da Esquerda: Upload de Imagem Personalizado */
+        '<div class="form-column image-upload-section">' +
+          '<label class="upload-area" for="product-image-input">' +
+            '<div id="upload-placeholder" class="upload-placeholder">' +
+              '<i class="fas fa-cloud-upload-alt"></i>' +
+              '<span>Toque para subir a foto</span>' +
+              '<small>Formatos aceitos: JPG, PNG (Máx 300KB)</small>' +
+            '</div>' +
+            '<img id="product-image-preview" class="image-preview" src="" style="display:none;">' +
+          '</label>' +
+          '<input type="file" id="product-image-input" accept="image/*" required style="display:none;">' +
+        '</div>' +
 
-import {
-  showToast
-}
-from "../../../shared/components/toast/toast.js";
+        /* Coluna da Direita: Informações de Cadastro */
+        '<div class="form-column details-section">' +
+          '<div class="input-group">' +
+            '<label for="nome">Nome do Produto</label>' +
+            '<input type="text" id="nome" placeholder="Ex: Batom Matte Velvet Rose" required>' +
+          '</div>' +
 
-export function initProductForm(formId) {
+          /* Linha com Preço e Categoria lado a lado */
+          '<div class="input-row">' +
+            '<div class="input-group flex-1">' +
+              '<label for="preco">Preço (R$)</label>' +
+              '<input type="number" id="preco" step="0.01" placeholder="0,00" required>' +
+            '</div>' +
+            
+            '<div class="input-group flex-1">' +
+              '<label>Categoria</label>' +
+              '<div class="custom-dropdown" id="custom-category-dropdown">' +
+                '<div class="dropdown-header" id="category-dropdown-header">Selecione ▼</div>' +
+                '<div class="dropdown-list" id="category-dropdown-list">' +
+                  '' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
 
-  const form =
-    document.getElementById(formId);
+          '<div class="input-group">' +
+            '<label for="descricao">Descrição Detalhada</label>' +
+            '<textarea id="descricao" placeholder="Descreva os principais benefícios, diferenciais e composição..." required></textarea>' +
+          '</div>' +
 
-  const categorySelect =
-    document.getElementById("categoryId");
-
-  const categories =
-    getCategories();
-
-  categorySelect.innerHTML =
-    '<option value="">Selecione uma categoria</option>';
-
-  categories.forEach(category => {
-
-    categorySelect.innerHTML += `
-      <option value="${category.id}">
-        ${category.nome}
-      </option>
-    `;
-
-  });
-
-  const imageInput = document.getElementById("product-image-input");
-  const imagePreview = document.getElementById("product-image-preview");
-  let base64Image = "";
-
-  if (imageInput) {
-    imageInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) {
-        imagePreview.style.display = "none";
-        base64Image = "";
-        return;
-      }
-
-      // Validação de 300KB (300 * 1024 = 307200 bytes)
-      if (file.size > 300 * 1024) {
-        showToast("A imagem deve ter no máximo 300KB para o MVP", "error");
-        imageInput.value = "";
-        imagePreview.style.display = "none";
-        base64Image = "";
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        base64Image = event.target.result;
-        if (imagePreview) {
-          imagePreview.src = base64Image;
-          imagePreview.style.display = "block";
-        }
-      };
-      reader.onerror = () => {
-        showToast("Erro ao ler a imagem", "error");
-        imageInput.value = "";
-        if (imagePreview) imagePreview.style.display = "none";
-        base64Image = "";
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  form.addEventListener(
-    "submit",
-    async event => {
-
-      event.preventDefault();
-
-      const nome =
-        document.getElementById("nome").value;
-
-      const preco =
-        document.getElementById("preco").value;
-
-      const descricao =
-        document.getElementById("descricao").value;
-
-      const imagem = base64Image || 'https://via.placeholder.com/600x600?text=Sem+Imagem';
-
-      const categoryId =
-        Number(
-          document.getElementById("categoryId").value
-        );
-
-      const product =
-        new Product(
-          Date.now(),
-          nome,
-          Number(preco),
-          descricao,
-          imagem,
-          categoryId
-        );
-
-      await createProduct(product);
-
-      form.reset();
-      
-      if (imagePreview) {
-        imagePreview.style.display = "none";
-        imagePreview.src = "";
-      }
-      base64Image = "";
-
-      showToast(
-        "Produto cadastrado com sucesso!", "success"
-      );
-
-    }
+          '<button type="submit" class="btn-save-product">' +
+            '<i class="fas fa-check"></i> Salvar e Publicar Produto' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+    '</form>'
   );
-
 }

@@ -16,10 +16,11 @@ import { protectAdminPage }  from "../../core/rolesManager.js";
 import { navbarComponent }   from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent }   from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }        from "../../shared/components/navbar/navbarController.js";
-import { getCategories }     from "../../categories/services/categoryService.js";
+import { getCategories }     from "../categories/services/categoryService.js";
 import { createProduct }     from "./services/productServices.js";
 import { getOrders }         from "../checkout/services/checkoutServices.js";
 import { showToast }         from "../../shared/components/toast/toastComponent.js";
+import { productFormComponent } from "./components/productFormComponent.js";
 
 
 /* --------------------------------------------------
@@ -114,54 +115,29 @@ function iniciarAbas() {
 var imagemBase64 = "";
 
 /* Configura a pré-visualização da imagem no formulário. */
-function iniciarUploadDeImagem() {
-  var inputImagem   = document.getElementById("product-image-input");
-  var previewImagem = document.getElementById("product-image-preview");
+/* No seu create-product.js, atualize a lógica do preview: */
 
-  if (!inputImagem) {
-    return;
-  }
+function iniciarUploadDeImagem() {
+  var inputImagem = document.getElementById("product-image-input");
+  var previewImagem = document.getElementById("product-image-preview");
+  var placeholder = document.getElementById("upload-placeholder"); // ADICIONADO
+
+  if (!inputImagem) return;
 
   inputImagem.addEventListener("change", function(evento) {
     var arquivo = evento.target.files[0];
+    if (!arquivo) return;
 
-    // Se o usuário cancelou a escolha da imagem
-    if (!arquivo) {
-      previewImagem.style.display = "none";
-      imagemBase64 = "";
-      return;
-    }
-
-    // Validação de segurança: a imagem não pode ser muito grande (300KB)
-    var tamanhoMaximo = 300 * 1024;
-
-    if (arquivo.size > tamanhoMaximo) {
-      showToast("A imagem deve ter no máximo 300KB.", "error");
-      inputImagem.value = "";
-      previewImagem.style.display = "none";
-      imagemBase64 = "";
-      return;
-    }
-
-    // Lê o arquivo e converte para texto (Base64)
     var leitor = new FileReader();
-
-    leitor.onload = function(eventoLeitura) {
-      imagemBase64 = eventoLeitura.target.result;
-
+    leitor.onload = function(e) {
+      imagemBase64 = e.target.result;
+      
       if (previewImagem) {
         previewImagem.src = imagemBase64;
         previewImagem.style.display = "block";
+        if (placeholder) placeholder.style.display = "none"; // ESCONDE O ÍCONE
       }
     };
-
-    leitor.onerror = function() {
-      showToast("Erro ao ler a imagem.", "error");
-      inputImagem.value = "";
-      previewImagem.style.display = "none";
-      imagemBase64 = "";
-    };
-
     leitor.readAsDataURL(arquivo);
   });
 }
@@ -351,6 +327,12 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("navbar").innerHTML = navbarComponent();
   document.getElementById("footer").innerHTML = footerComponent();
   initNavbar();
+
+  // Monta form de produto
+  var formContainer = document.getElementById("product-form-container");
+  if (formContainer) {
+    formContainer.innerHTML = productFormComponent();
+  }
 
   // Configura a tela de criação
   carregarCategoriasNoSelect();

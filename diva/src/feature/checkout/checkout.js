@@ -1,15 +1,9 @@
-/* ================================================
-   CHECKOUT.JS — Página de Finalização de Compra
-
-   Este arquivo é responsável por TUDO que acontece
-   na tela de checkout. Ele está dividido em 5 partes:
-
-   1. Funções do pedido (criar, ler carrinho e salvar no storage)
-   2. Proteção de rota (só usuário logado pode acessar)
-   3. Montar o HTML da tela com o formulário e resumo
-   4. Comportamento do formulário (máscaras e envio)
-   5. Inicialização da página ao carregar
-   ================================================ */
+/* =========================================================
+   CHECKOUT.JS — Página de Finalização de Compra (Refatorada)
+   
+   Garante funcionamento total sem travar ou sumir com estilos.
+   Padrão estrito de "Refatoração Reversa" mantido.
+   ========================================================= */
 
 import { navbarComponent }  from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent }  from "../../shared/components/footer/footerComponent.js";
@@ -17,20 +11,16 @@ import { initNavbar }       from "../../shared/components/navbar/navbarControlle
 import { showToast }        from "../../shared/components/toast/toastComponent.js";
 import { getStorageData, setStorageData } from "../../core/storage.js";
 
-// Nome da chave onde os dados estão salvos no navegador
 var CHAVE_CARRINHO = "carrinho";
 var CHAVE_PEDIDOS  = "pedidos";
 
 /* --------------------------------------------------
    PARTE 1: FUNÇÕES DE LEITURA E PEDIDO
    -------------------------------------------------- */
-
-/* Lê e retorna todos os itens do carrinho direto do localStorage. */
 function pegarCarrinhoLocal() {
   return getStorageData(CHAVE_CARRINHO, []);
 }
 
-/* Calcula o valor total do carrinho usando um laço de repetição tradicional. */
 function calcularTotalLocal() {
   var carrinho = pegarCarrinhoLocal();
   var total = 0;
@@ -41,18 +31,15 @@ function calcularTotalLocal() {
   return total;
 }
 
-/* Limpa o carrinho deletando os itens do localStorage. */
 function limparCarrinhoLocal() {
   setStorageData(CHAVE_CARRINHO, []);
   window.dispatchEvent(new Event("cartUpdated"));
 }
 
-/* Gera um código único para identificar o pedido. */
 function gerarIdDoPedido() {
   return "PED-" + Math.random().toString(36).substr(2, 9).toUpperCase();
 }
 
-/* Cria e salva um novo pedido no localStorage. */
 function criarPedido(dadosEntrega, formaPagamento) {
   var itensDoCarrinho = pegarCarrinhoLocal();
 
@@ -63,7 +50,6 @@ function criarPedido(dadosEntrega, formaPagamento) {
   var valorTotal = calcularTotalLocal();
   var usuarioLogado = getStorageData("usuarioLogado");
 
-  // Monta o objeto estruturado do pedido
   var novoPedido = {
     id:             gerarIdDoPedido(),
     data:           new Date().toISOString(),
@@ -76,22 +62,17 @@ function criarPedido(dadosEntrega, formaPagamento) {
     status:         "Aguardando Envio"
   };
 
-  // Salva na lista global de pedidos do sistema
   var pedidos = getStorageData(CHAVE_PEDIDOS, []);
   pedidos.push(novoPedido);
   setStorageData(CHAVE_PEDIDOS, pedidos);
 
-  // Limpa a sacola para o cliente não comprar repetido
   limparCarrinhoLocal();
-
   return novoPedido;
 }
-
 
 /* --------------------------------------------------
    PARTE 2: PROTEÇÃO DE ROTA
    -------------------------------------------------- */
-
 function verificarLogin() {
   var usuarioLogado = getStorageData("usuarioLogado");
 
@@ -116,11 +97,9 @@ function verificarLogin() {
   return true;
 }
 
-
 /* --------------------------------------------------
    PARTE 3: MONTAR O HTML DA TELA (RENDER)
    -------------------------------------------------- */
-
 function montarHtmlDosItens(itens) {
   if (itens.length === 0) {
     return '<p class="empty-cart-message">Seu carrinho está vazio.</p>';
@@ -133,7 +112,7 @@ function montarHtmlDosItens(itens) {
 
     html = html +
       '<div class="checkout-item">' +
-        '<img src="' + item.imagem + '" alt="' + item.nome + '">' +
+        '<img src="' + item.imagem + '" alt="' + item.nome + '" onerror="this.src=\'https://via.placeholder.com/150?text=Diva+Makeup\'">' +
         '<div class="checkout-item-details">' +
           '<h4>' + item.nome + '</h4>' +
           '<p>Cor: ' + item.corSelecionada + '</p>' +
@@ -210,7 +189,7 @@ function renderizarCheckout() {
               '<input type="text" placeholder="CVV" id="cc-cvv">' +
             '</div>' +
           '</div>' +
-          '<button type="submit" class="btn-checkout" disabled>Finalizar Pedido</button>' +
+          '<button type="submit" class="btn-checkout" disabled><i class="fas fa-lock"></i> Finalizar Pedido</button>' +
         '</form>' +
       '</section>' +
       '<aside class="checkout-summary-section">' +
@@ -238,11 +217,9 @@ function renderizarCheckout() {
   iniciarComportamentosDoFormulario();
 }
 
-
 /* --------------------------------------------------
    PARTE 4: COMPORTAMENTOS E VALIDAÇÃO
    -------------------------------------------------- */
-
 function iniciarComportamentosDoFormulario() {
   var campoCep      = document.getElementById("cep");
   var campoCartao   = document.getElementById("cc-num");
@@ -268,7 +245,6 @@ function iniciarComportamentosDoFormulario() {
       valor = valor.replace(/^(\d{5})(\d)/, "$1-$2");
       this.value = valor.slice(0, 9);
 
-      /* CORREÇÃO: Agora 'itensCarrinho' reflete a leitura direta e correta da chave 'carrinho' */
       if (btnFinalizar && itensCarrinho.length > 0) {
         if (this.value.length === 9) {
           btnFinalizar.disabled = false;
@@ -318,7 +294,7 @@ function iniciarComportamentosDoFormulario() {
       } catch (erro) {
         showToast("Erro ao processar pedido: " + erro.message, "error");
         if (btnFinalizar) {
-          btnFinalizar.textContent = "Finalizar Pedido";
+          btnFinalizar.innerHTML = "<i class='fas fa-lock'></i> Finalizar Pedido";
           btnFinalizar.disabled = false;
         }
       }
@@ -326,11 +302,9 @@ function iniciarComportamentosDoFormulario() {
   }
 }
 
-
 /* --------------------------------------------------
    PARTE 5: INICIALIZAÇÃO
    -------------------------------------------------- */
-
 document.addEventListener("DOMContentLoaded", function() {
   var navbarEl = document.getElementById("navbar");
   if (navbarEl) {

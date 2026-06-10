@@ -39,6 +39,11 @@ export function setUserRole(email, role) {
 /* Retorna qual é a role (tipo) de um usuário pelo e-mail.
    Se o usuário não tiver role definida, retorna "user" por padrão. */
 export function getUserRole(email) {
+  // Verifica se é o administrador padrão (hardcoded)
+  if (email === "admin@divamakeup.com") {
+    return ROLES.ADMIN;
+  }
+
   var usuario = findUserByEmail(email);
 
   // Se não encontrou o usuário, retorna null
@@ -104,6 +109,6 @@ function redirecionarComAviso() {
 
   // Aguarda 2 segundos para o usuário ler o aviso antes de redirecionar
   setTimeout(function() {
-    window.location.href = "/index.html";
+    window.location.href = "../../home/pages/home.html";
   }, 2000);
 }

@@ -27,32 +27,32 @@ var container = document.querySelector("#app");
 // Escreve o HTML do formulário dentro da div #app
 container.innerHTML =
   '<div class="login-card">' +
-    '<div class="login-header">' +
-      '<h1>Seja bem-vinda</h1>' +
-      '<p>Entre para conferir suas linhas de beleza favoritas e gerenciar seus pedidos.</p>' +
-    '</div>' +
+  '<div class="login-header">' +
+  '<h1>Seja bem-vinda</h1>' +
+  '<p>Entre para conferir suas linhas de beleza favoritas e gerenciar seus pedidos.</p>' +
+  '</div>' +
 
-    '<form novalidate>' +
-      '<div class="input-container">' +
-        '<input type="email" id="email" required placeholder=" ">' +
-        '<label for="email">E-mail</label>' +
-        '<span class="error-message" id="email-error"></span>' +
-      '</div>' +
+  '<form novalidate>' +
+  '<div class="input-container">' +
+  '<input type="email" id="email" required placeholder=" ">' +
+  '<label for="email">E-mail</label>' +
+  '<span class="error-message" id="email-error"></span>' +
+  '</div>' +
 
-      '<div class="input-container">' +
-        '<input type="password" id="senha" required placeholder=" ">' +
-        '<label for="senha">Senha</label>' +
-        '<span class="error-message" id="senha-error"></span>' +
-      '</div>' +
+  '<div class="input-container">' +
+  '<input type="password" id="senha" required placeholder=" ">' +
+  '<label for="senha">Senha</label>' +
+  '<span class="error-message" id="senha-error"></span>' +
+  '</div>' +
 
-      '<button class="btn-login" type="submit">' +
-        '<span>Entrar na Conta</span>' +
-      '</button>' +
-    '</form>' +
+  '<button class="btn-login" type="submit">' +
+  '<span>Entrar na Conta</span>' +
+  '</button>' +
+  '</form>' +
 
-    '<div class="login-footer">' +
-      '<p>Não possui conta? <a href="../registro/index.html">Criar minha conta</a></p>' +
-    '</div>' +
+  '<div class="login-footer">' +
+  '<p>Não possui conta? <a href="../registro/index.html">Criar minha conta</a></p>' +
+  '</div>' +
   '</div>';
 
 
@@ -67,8 +67,8 @@ container.innerHTML =
 var formulario = container.querySelector("form");
 var campoEmail = document.getElementById("email");
 var campoSenha = document.getElementById("senha");
-var erroEmail  = document.getElementById("email-error");
-var erroSenha  = document.getElementById("senha-error");
+var erroEmail = document.getElementById("email-error");
+var erroSenha = document.getElementById("senha-error");
 
 
 /* --------------------------------------------------
@@ -78,7 +78,7 @@ var erroSenha  = document.getElementById("senha-error");
    o evento "submit" dispara e este bloco executa.
    -------------------------------------------------- */
 
-formulario.addEventListener("submit", function(evento) {
+formulario.addEventListener("submit", function (evento) {
   // Impede o comportamento padrão do formulário (recarregar a página)
   evento.preventDefault();
 
@@ -117,8 +117,9 @@ formulario.addEventListener("submit", function(evento) {
   showToast("Que bom ter você de volta, " + resultado.usuario.nome + "!");
 
   // Aguarda 1.5 segundos para o usuário ler o aviso antes de redirecionar
-  setTimeout(function() {
-    window.location.href = "../../../index.html";
+  setTimeout(function () {
+    // Redireciona usando a origem da URL para evitar erros de caminho relativo (Erro 404)
+    window.location.href = window.location.origin + "/diva/src/feature/home/pages/home.html";
   }, 1500);
 });
 
@@ -166,6 +167,26 @@ function emailEhValido(email) {
    e verifica se a senha digitada está correta.
    Retorna um objeto indicando sucesso ou falha. */
 function autenticar(email, senha) {
+  // --- ADIÇÃO: Verificação da credencial de Administrador (Hardcoded) ---
+  // Verifica de maneira direta se o e-mail e a senha correspondem ao administrador padrão.
+  // Esta verificação ocorre antes de buscar no localStorage, garantindo o acesso admin para testes.
+  if (email === "admin@divamakeup.com" && senha === "admin123") {
+
+    // Cria um objeto simulando o usuário administrador de acordo com a estrutura do sistema.
+    // O mais importante aqui é definir a propriedade "role" como "admin".
+    var usuarioAdmin = {
+      nome: "Administrador",
+      email: "admin@divamakeup.com",
+      role: "admin"
+    };
+
+    // Retorna o sucesso e entrega os dados do administrador para o fluxo principal.
+    // A função salvarSessao() (já existente no arquivo) se encarregará de salvar 
+    // este objeto na chave 'usuarioLogado' do localStorage sem precisar de mais alterações.
+    return { sucesso: true, usuario: usuarioAdmin };
+  }
+  // --- FIM DA ADIÇÃO ---
+
   // Procura na lista de usuários cadastrados alguém com esse e-mail
   var usuario = findUserByEmail(email);
 

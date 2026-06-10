@@ -195,3 +195,10 @@
 .dropdown-menu.is-open {
     display: block;
 }
+
+/* Abrir o menu ao passar o mouse (desktop) */
+@media (min-width: 768px) {
+    .nav-dropdown-wrapper:hover .dropdown-menu {
+        display: block;
+    }
+}
