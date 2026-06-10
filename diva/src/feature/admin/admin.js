@@ -7,11 +7,14 @@ import { adminListComponent } from "./components/adminListComponent.js";
 import { injetarSidebar } from "../../shared/components/sidebar/sidebarComponent.js";
 import { categoryFormComponent } from "../categories/components/categoryFormComponent.js";
 import { productFormComponent } from "../products/components/productFormComponent.js";
+import { aboutFormComponent } from "../about/components/aboutFormComponent.js";
+import { aboutListComponent } from "../about/components/aboutListComponent.js";
 
 // Importando os Controladores Isolados de cada aba
 import { carregarModuloHome } from "./controllers/adminHomeController.js";
 import { carregarModuloCategorias } from "./controllers/adminCategoriesController.js";
 import { carregarModuloProdutos } from "./controllers/adminProductsController.js";
+import { carregarModuloAbout } from "./controllers/adminAboutController.js";
 
 // 1. Proteger página para garantir que apenas admin acesse
 protectAdminPage();
@@ -25,7 +28,8 @@ initNavbar();
 var itensMenuAdmin = [
     { id: 'view-home', nome: 'Home (Hero)', icone: '🏠', link: '#' },
     { id: 'view-produtos', nome: 'Produtos', icone: '📦', link: '#' },
-    { id: 'view-categorias', nome: 'Categorias', icone: '🏷️', link: '#' }
+    { id: 'view-categorias', nome: 'Categorias', icone: '🏷️', link: '#' },
+    { id: 'view-about', nome: 'Sobre Nós', icone: '🖼️', link: '#' }
 ];
 
 injetarSidebar('admin-sidebar-container', itensMenuAdmin, { tituloMobile: 'Admin Diva' });
@@ -64,6 +68,10 @@ window.mudarViewAdmin = function(idView) {
         titulo = "Gestão de Categorias";
         formHtml = categoryFormComponent();
         listHtml = '<div id="admin-categories-list"></div>';
+    } else if (idView === 'view-about') {
+        titulo = "Imagens da Seção Sobre";
+        formHtml = aboutFormComponent();
+        listHtml = aboutListComponent();
     }
 
     contentArea.innerHTML = 
@@ -83,6 +91,8 @@ window.mudarViewAdmin = function(idView) {
         carregarModuloCategorias();
     } else if (idView === 'view-produtos') {
         carregarModuloProdutos();
+    } else if (idView === 'view-about') {
+        carregarModuloAbout();
     }
 };
 

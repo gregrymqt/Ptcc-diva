@@ -2,12 +2,26 @@
    ABOUTCOMPONENT.JS — Componente da Página Sobre
    ================================================ */
 
+import { getStorageData } from "../../../core/storage.js";
+
 export function aboutComponent() {
+  var aboutImages = getStorageData("aboutImagesConfig");
+  var htmlImages = "";
+
+  if (aboutImages && Array.isArray(aboutImages) && aboutImages.length > 0) {
+    for (var i = 0; i < aboutImages.length; i++) {
+      var img = aboutImages[i];
+      htmlImages += '<img src="' + img.url + '" alt="' + img.alt + '" style="margin-bottom: 1rem;">';
+    }
+  } else {
+    htmlImages = '<img src="../../../../assets/images/about-marca.jpg" alt="Diva Makeup - Nossa História" onerror="this.src=\'https://via.placeholder.com/600x400?text=Diva+Makeup\'">';
+  }
+
   return (
     '<section id="sobre-marca" class="about-section">' +
       '<div class="about-container">' +
         '<div class="about-image">' +
-          '<img src="../../../../assets/images/about-marca.jpg" alt="Diva Makeup - Nossa História" onerror="this.src=\'https://via.placeholder.com/600x400?text=Diva+Makeup\'">' +
+          htmlImages +
         '</div>' +
         '<div class="about-text">' +
           '<h2>Nossa História</h2>' +
