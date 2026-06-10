@@ -11,79 +11,17 @@
 
 import { createUser, findUserByEmail } from "../../core/storage.js";
 import { showToast } from "../../shared/components/toast/toastComponent.js";
+import { RegistroForm } from "./components/RegisterForm.js";
 
 
 /* --------------------------------------------------
-   ETAPA 1: MONTAR O FORMULÁRIO NA TELA
-
-   O arquivo register.html só tem uma <div id="app">
-   vazia. Aqui inserimos o HTML do formulário
-   dentro dela via JavaScript.
+   ETAPA 1 e 2: MONTAR O FORMULÁRIO NA TELA E CAPTURAR REFERÊNCIAS
+   
+   Agora utilizamos o componente RegistroForm para cuidar da renderização.
    -------------------------------------------------- */
+var registroForm = new RegistroForm("#app");
+registroForm.render();
 
-// Pega a div principal da página para colocar o formulário dentro
-var container = document.querySelector("#app");
-
-// Escreve o HTML do formulário dentro da div #app
-container.innerHTML =
-  '<div class="login-card">' +
-    '<div class="login-header">' +
-      '<h1>Criar Conta</h1>' +
-      '<p>Junte-se à Diva e tenha acesso a produtos exclusivos de beleza.</p>' +
-    '</div>' +
-
-    '<form novalidate>' +
-      '<div class="input-container">' +
-        '<input type="text" id="nome" required placeholder=" ">' +
-        '<label for="nome">Nome Completo</label>' +
-        '<span class="error-message" id="nome-error"></span>' +
-      '</div>' +
-
-      '<div class="input-container">' +
-        '<input type="email" id="email" required placeholder=" ">' +
-        '<label for="email">E-mail</label>' +
-        '<span class="error-message" id="email-error"></span>' +
-      '</div>' +
-
-      '<div class="input-container">' +
-        '<input type="password" id="senha" required placeholder=" ">' +
-        '<label for="senha">Senha (Mínimo 6 caracteres)</label>' +
-        '<span class="error-message" id="senha-error"></span>' +
-      '</div>' +
-
-      '<div class="input-container">' +
-        '<input type="password" id="confirmar" required placeholder=" ">' +
-        '<label for="confirmar">Confirmar Senha</label>' +
-        '<span class="error-message" id="confirmar-error"></span>' +
-      '</div>' +
-
-      '<button class="btn-login" type="submit">' +
-        '<span>Registar Conta</span>' +
-      '</button>' +
-    '</form>' +
-
-    '<div class="login-footer">' +
-      '<p>Já possui conta? <a href="../../login/pages/index.html">Entrar agora</a></p>' +
-    '</div>' +
-  '</div>';
-
-
-/* --------------------------------------------------
-   ETAPA 2: GUARDAR AS REFERÊNCIAS DOS CAMPOS
-
-   Após colocar o HTML na tela, buscamos cada
-   elemento do formulário e guardamos em variáveis.
-   -------------------------------------------------- */
-
-var formulario     = container.querySelector("form");
-var campoNome      = document.getElementById("nome");
-var campoEmail     = document.getElementById("email");
-var campoSenha     = document.getElementById("senha");
-var campoConfirmar = document.getElementById("confirmar");
-var erroNome       = document.getElementById("nome-error");
-var erroEmail      = document.getElementById("email-error");
-var erroSenha      = document.getElementById("senha-error");
-var erroConfirmar  = document.getElementById("confirmar-error");
 
 
 /* --------------------------------------------------
@@ -93,18 +31,19 @@ var erroConfirmar  = document.getElementById("confirmar-error");
    o evento "submit" dispara e este bloco executa.
    -------------------------------------------------- */
 
-formulario.addEventListener("submit", function(evento) {
+registroForm.form.addEventListener("submit", function(evento) {
   // Impede o comportamento padrão do formulário (recarregar a página)
   evento.preventDefault();
 
   // Apaga qualquer mensagem de erro da tentativa anterior
-  limparErros();
+  registroForm.clearErrors();
 
   // Lê o que o usuário digitou nos campos
-  var nome      = campoNome.value;
-  var email     = campoEmail.value;
-  var senha     = campoSenha.value;
-  var confirmar = campoConfirmar.value;
+  var valores = registroForm.getValues();
+  var nome      = valores.nome;
+  var email     = valores.email;
+  var senha     = valores.senha;
+  var confirmar = valores.confirmar;
 
   /* --- 3A: VALIDAR OS CAMPOS ---
      Verifica se todos os campos foram preenchidos
@@ -122,7 +61,7 @@ formulario.addEventListener("submit", function(evento) {
   var usuarioExistente = findUserByEmail(email);
 
   if (usuarioExistente) {
-    mostrarErro("email", "Este e-mail já está cadastrado.");
+    registroForm.showError("email", "Este e-mail já está cadastrado.");
     return;
   }
 
@@ -142,11 +81,11 @@ formulario.addEventListener("submit", function(evento) {
 
   // Exibe mensagem de sucesso e limpa o formulário
   showToast("Conta criada com sucesso! Bem-vinda à Diva.");
-  formulario.reset();
+  registroForm.reset();
 
   // Aguarda 1.5 segundos antes de redirecionar para o login
   setTimeout(function() {
-    window.location.href = "../../login/pages/index.html";
+    window.location.href = window.location.origin + "/diva/src/feature/home/pages/home.html";
   }, 1500);
 });
 
@@ -166,39 +105,39 @@ function validarCampos(nome, email, senha, confirmar) {
 
   // Verifica se o nome foi preenchido
   if (nome.trim() === "") {
-    mostrarErro("nome", "O nome é obrigatório");
+    registroForm.showError("nome", "O nome é obrigatório");
     tudoValido = false;
   }
 
   // Verifica se o e-mail foi preenchido e tem formato válido
   if (email.trim() === "") {
-    mostrarErro("email", "O e-mail é obrigatório");
+    registroForm.showError("email", "O e-mail é obrigatório");
     tudoValido = false;
 
   } else if (!emailEhValido(email)) {
     // O campo não está vazio, mas o formato está incorreto
-    mostrarErro("email", "Digite um e-mail válido");
+    registroForm.showError("email", "Digite um e-mail válido");
     tudoValido = false;
   }
 
   // Verifica se a senha foi preenchida e tem pelo menos 6 caracteres
   if (senha.trim() === "") {
-    mostrarErro("senha", "A senha é obrigatória");
+    registroForm.showError("senha", "A senha é obrigatória");
     tudoValido = false;
 
   } else if (senha.length < 6) {
-    mostrarErro("senha", "A senha deve ter no mínimo 6 caracteres");
+    registroForm.showError("senha", "A senha deve ter no mínimo 6 caracteres");
     tudoValido = false;
   }
 
   // Verifica se a confirmação foi preenchida e é igual à senha
   if (confirmar.trim() === "") {
-    mostrarErro("confirmar", "Confirme a sua senha");
+    registroForm.showError("confirmar", "Confirme a sua senha");
     tudoValido = false;
 
   } else if (confirmar !== senha) {
     // As senhas digitadas são diferentes
-    mostrarErro("confirmar", "As senhas não coincidem");
+    registroForm.showError("confirmar", "As senhas não coincidem");
     tudoValido = false;
   }
 
@@ -210,43 +149,4 @@ function validarCampos(nome, email, senha, confirmar) {
 function emailEhValido(email) {
   var padrao = /\S+@\S+\.\S+/;
   return padrao.test(email);
-}
-
-/* Exibe uma mensagem de erro abaixo do campo com problema
-   e adiciona uma borda vermelha para chamar a atenção. */
-function mostrarErro(campo, mensagem) {
-  if (campo === "nome") {
-    erroNome.textContent = mensagem;
-    campoNome.classList.add("input-error");
-    campoNome.focus();
-
-  } else if (campo === "email") {
-    erroEmail.textContent = mensagem;
-    campoEmail.classList.add("input-error");
-    campoEmail.focus();
-
-  } else if (campo === "senha") {
-    erroSenha.textContent = mensagem;
-    campoSenha.classList.add("input-error");
-    campoSenha.focus();
-
-  } else if (campo === "confirmar") {
-    erroConfirmar.textContent = mensagem;
-    campoConfirmar.classList.add("input-error");
-    campoConfirmar.focus();
-  }
-}
-
-/* Apaga todas as mensagens de erro e remove as bordas vermelhas,
-   deixando o formulário limpo para uma nova tentativa. */
-function limparErros() {
-  erroNome.textContent      = "";
-  erroEmail.textContent     = "";
-  erroSenha.textContent     = "";
-  erroConfirmar.textContent = "";
-
-  campoNome.classList.remove("input-error");
-  campoEmail.classList.remove("input-error");
-  campoSenha.classList.remove("input-error");
-  campoConfirmar.classList.remove("input-error");
 }

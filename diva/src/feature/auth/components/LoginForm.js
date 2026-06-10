@@ -11,7 +11,7 @@ export class LoginForm {
       console.warn(`Container para LoginForm não encontrado.`);
       return;
     }
-    
+
     this.container.innerHTML = `
       <div class="login-card">
         <div class="login-header">
@@ -38,7 +38,7 @@ export class LoginForm {
         </form>
 
         <div class="login-footer">
-          <p>Não possui conta? <a href="../registro/index.html">Criar minha conta</a></p>
+          <p>Não possui conta? <a href="../pages/register.html">Criar minha conta</a></p>
         </div>
       </div>
     `;

@@ -148,6 +148,8 @@ export function configurarMenuAutenticacao() {
         
         // Redireciona o utilizador de volta para a página inicial
         window.location.href = "../../home/pages/home.html";
+        showToast("Logout realizado com sucesso!");
+        
       });
     }
   } else {

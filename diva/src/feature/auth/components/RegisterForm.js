@@ -47,7 +47,7 @@ export class RegistroForm {
         </form>
 
         <div class="login-footer">
-          <p>Já possui conta? <a href="../../login/pages/index.html">Entrar agora</a></p>
+          <p>Já possui conta? <a href="../pages/login.html">Entrar agora</a></p>
         </div>
       </div>
     `;
