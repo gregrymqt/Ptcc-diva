@@ -17,34 +17,159 @@ import { getCategories }         from "../categories/services/categoryService.js
 import { getProductsWithCategory } from "../products/services/productServices.js";
 
 
+import { getStorageData }        from "../../core/storage.js";
+
 /* --------------------------------------------------
    PARTE 1: BANNER PRINCIPAL (HERO)
-
-   Monta o HTML do banner de boas-vindas com
-   o slogan da loja e os botões de ação.
    -------------------------------------------------- */
 
-/* Retorna o HTML do banner principal da home. */
 function montarHero() {
-  return (
-    '<section class="hero">' +
-      '<div class="hero-content">' +
-        '<h1>Desperte a <span>diva</span> que vive em você</h1>' +
-        '<p>Produtos premium de maquiagem para realçar sua beleza.</p>' +
-        '<div class="hero-buttons">' +
-          '<a href="../../products/pages/products.html" class="btn-primary">Comprar Agora</a>' +
-          '<a href="#" class="btn-secondary">Conheça a Marca</a>' +
+  var heroSlides = getStorageData('heroConfig');
+  
+  if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
+    heroSlides = [{
+      id: 1,
+      titulo: "Desperte a <span>diva</span> que vive em você",
+      subtitulo: "Produtos premium de maquiagem para realçar sua beleza.",
+      imagem: "../../../assets/images/banner-1.png"
+    }];
+  }
+
+  var htmlSlides = "";
+  var htmlDots = "";
+  var numSlides = heroSlides.length > 3 ? 3 : heroSlides.length;
+
+  for (var i = 0; i < numSlides; i++) {
+    var slide = heroSlides[i];
+    var isActive = i === 0 ? " active" : "";
+    
+    htmlSlides += 
+      '<section class="hero-slide-item' + isActive + '">' +
+        '<div class="hero-content">' +
+          '<h1>' + slide.titulo + '</h1>' +
+          '<p>' + slide.subtitulo + '</p>' +
+          '<div class="hero-buttons">' +
+            '<a href="../../products/pages/products.html" class="btn-primary">Comprar Agora</a>' +
+            '<a href="#" class="btn-secondary">Conheça a Marca</a>' +
+          '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="hero-image">' +
-        '<div class="carousel">' +
-          '<img src="../../../assets/images/banner-1.png" alt="Produtos Diva Makeup">' +
+        '<div class="hero-image">' +
+          '<div class="carousel">' +
+            '<img src="' + slide.imagem + '" alt="Banner Diva Makeup">' +
+          '</div>' +
         '</div>' +
-      '</div>' +
-    '</section>'
-  );
+      '</section>';
+      
+    // Cria um dot para cada slide
+    htmlDots += '<span class="dot' + isActive + '" onclick="window.irParaSlide(' + i + ')"></span>';
+  }
+
+  var botoesNavegacao = "";
+  var dotsNavegacao = "";
+  
+  if (numSlides > 1) {
+    botoesNavegacao = 
+      '<button class="carousel-btn prev-btn" onclick="window.mudarSlide(-1)">&#10094;</button>' +
+      '<button class="carousel-btn next-btn" onclick="window.mudarSlide(1)">&#10095;</button>';
+      
+    dotsNavegacao = '<div class="carousel-dots">' + htmlDots + '</div>';
+  }
+
+  return '<div class="hero-carousel-container">' + htmlSlides + botoesNavegacao + dotsNavegacao + '</div>';
 }
 
+var slideIndex = 0;
+var carouselInterval = null;
+
+function atualizarDots() {
+  var dots = document.getElementsByClassName("dot");
+  for (var i = 0; i < dots.length; i++) {
+    // Remove a classe active de todos
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  // Adiciona a classe active no dot correspondente ao slideAtual
+  if (dots[slideIndex]) {
+    dots[slideIndex].className += " active";
+  }
+}
+
+function mostrarProximoSlide() {
+  var slides = document.getElementsByClassName("hero-slide-item");
+  if (slides.length <= 1) return;
+
+  if (slides[slideIndex]) {
+    slides[slideIndex].className = "hero-slide-item";
+  }
+
+  slideIndex++;
+  if (slideIndex >= slides.length) {
+    slideIndex = 0;
+  }
+
+  if (slides[slideIndex]) {
+    slides[slideIndex].className = "hero-slide-item active";
+  }
+  
+  atualizarDots();
+}
+
+window.mudarSlide = function(n) {
+  var slides = document.getElementsByClassName("hero-slide-item");
+  if (slides.length <= 1) return;
+
+  if (slides[slideIndex]) {
+    slides[slideIndex].className = "hero-slide-item";
+  }
+
+  slideIndex = slideIndex + n;
+  
+  if (slideIndex >= slides.length) {
+    slideIndex = 0;
+  }
+  if (slideIndex < 0) {
+    slideIndex = slides.length - 1;
+  }
+
+  if (slides[slideIndex]) {
+    slides[slideIndex].className = "hero-slide-item active";
+  }
+
+  atualizarDots();
+
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+    carouselInterval = setInterval(mostrarProximoSlide, 5000);
+  }
+};
+
+window.irParaSlide = function(index) {
+  var slides = document.getElementsByClassName("hero-slide-item");
+  if (slides.length <= 1) return;
+
+  if (slides[slideIndex]) {
+    slides[slideIndex].className = "hero-slide-item";
+  }
+
+  slideIndex = index;
+
+  if (slides[slideIndex]) {
+    slides[slideIndex].className = "hero-slide-item active";
+  }
+
+  atualizarDots();
+
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+    carouselInterval = setInterval(mostrarProximoSlide, 5000);
+  }
+};
+
+function iniciarCarousel() {
+  var slides = document.getElementsByClassName("hero-slide-item");
+  if (slides.length > 1) {
+    carouselInterval = setInterval(mostrarProximoSlide, 5000);
+  }
+}
 
 /* --------------------------------------------------
    PARTE 2: SEÇÃO DE CATEGORIAS
@@ -175,6 +300,9 @@ function inicializarHome() {
 
   // Ativa os comportamentos da navbar (menu mobile, contador do carrinho)
   initNavbar();
+
+  // Iniciar o carousel
+  iniciarCarousel();
 }
 
 // Executa a inicialização assim que o arquivo é carregado

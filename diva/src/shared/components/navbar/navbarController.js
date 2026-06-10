@@ -94,14 +94,49 @@ export function configurarMenuAutenticacao() {
   }
   
   // Verifica no localStorage se existe um utilizador logado
-  var usuarioLogado = localStorage.getItem("usuarioLogado");
+  var usuarioLogadoStr = localStorage.getItem("usuarioLogado");
   
-  if (usuarioLogado) {
+  if (usuarioLogadoStr) {
     // Utilizador está logado
-    // Injeta o link de Sair dentro do contentor
-    authContainer.innerHTML = '<a href="#" id="navbar-logout-btn">Sair</a>';
     
-    // Captura o link recém-criado e adiciona a ação de clique
+    // Obter email para verificar role
+    var email;
+    try {
+      var usuarioParsed = JSON.parse(usuarioLogadoStr);
+      email = usuarioParsed.email || usuarioLogadoStr;
+    } catch (e) {
+      email = usuarioLogadoStr;
+    }
+
+    var role = getUserRole(email);
+
+    if (role === "admin") {
+      // Injeta o Dropdown para Admin
+      authContainer.innerHTML = 
+        '<div class="nav-dropdown-wrapper">' +
+          '<a href="#" class="dropdown-trigger" id="navbar-admin-trigger">Admin ▾</a>' +
+          '<div class="dropdown-menu" id="navbar-admin-menu">' +
+            '<a href="../../admin/pages/admin.html">Painel Admin</a>' +
+            '<a href="#" id="navbar-logout-btn">Sair</a>' +
+          '</div>' +
+        '</div>';
+
+      // Configura toggle do dropdown
+      var triggerAdmin = document.getElementById("navbar-admin-trigger");
+      var menuAdmin = document.getElementById("navbar-admin-menu");
+      
+      if (triggerAdmin && menuAdmin) {
+        triggerAdmin.addEventListener("click", function(e) {
+          e.preventDefault();
+          menuAdmin.classList.toggle("is-open");
+        });
+      }
+    } else {
+      // Injeta apenas o link de Sair para usuário comum
+      authContainer.innerHTML = '<a href="#" id="navbar-logout-btn">Sair</a>';
+    }
+    
+    // Captura o link de Sair e adiciona a ação de clique
     var btnLogout = document.getElementById("navbar-logout-btn");
     if (btnLogout) {
       btnLogout.addEventListener("click", function(e) {

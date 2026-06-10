@@ -137,14 +137,39 @@
    === ESTILO DO HERO                    ===
    ========================================= */
 
-.hero {
-  display: flex;
+.hero-carousel-container {
+  width: 100%;
+  max-width: 1200px; /* Prende as setas perto do conteúdo em telas grandes */
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero-slide-item {
+  display: none;
   flex-direction: column;
   padding: 4rem 2rem;
   background-color: #ffffff;
   gap: 2rem;
   align-items: center;
   text-align: center;
+  /* Nova animação super fluida (Fade + Movimento) */
+  animation: smoothFadeSlide 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.hero-slide-item.active {
+  display: flex;
+}
+
+/* Nova regra de animação */
+@keyframes smoothFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateX(30px); /* Começa levemente arrastado para a direita */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); /* Desliza suavemente para a posição original */
+  }
 }
 
 .hero-content {
@@ -153,23 +178,25 @@
   gap: 1.5rem;
 }
 
-.hero h1 {
+/* Corrigido o seletor para garantir a aplicação da fonte Montserrat */
+.hero-slide-item h1 {
   font-size: 2.5rem;
   color: #222;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif !important;
   line-height: 1.2;
   margin: 0;
 }
 
-.hero h1 span {
+.hero-slide-item h1 span {
   color: #b34d68;
 }
 
-.hero p {
+.hero-slide-item p {
   font-size: 1.1rem;
   color: #555;
   line-height: 1.5;
   margin: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .hero-buttons {
@@ -188,6 +215,7 @@
   font-size: 0.9rem;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .btn-primary {
@@ -219,23 +247,80 @@
   max-width: 500px;
 }
 
+/* Acabamento premium na imagem */
 .carousel {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .carousel img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1;
   display: block;
   object-fit: cover;
 }
 
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(179, 77, 104, 0.7);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-btn:hover {
+  background-color: rgba(179, 77, 104, 1);
+}
+
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
+/* Indicadores de Slide (Dots) */
+.carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-dots .dot {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  background-color: #d3d3d3;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-dots .dot.active, .carousel-dots .dot:hover {
+  background-color: #b34d68;
+  transform: scale(1.2);
+}
+
 /* Tablet e Desktop */
 @media (min-width: 768px) {
-  .hero {
+  .hero-slide-item {
     flex-direction: row;
     text-align: left;
     padding: 6rem 2rem;
@@ -254,6 +339,15 @@
 
   .hero-image {
     flex: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .prev-btn {
+    left: -60px; /* Joga 60px para fora do limite esquerdo */
+  }
+  .next-btn {
+    right: -60px; /* Joga 60px para fora do limite direito */
   }
 }
 
