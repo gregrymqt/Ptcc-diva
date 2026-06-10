@@ -21,8 +21,6 @@ export function initNavbar() {
   // Configura a autenticação (Entrar / Sair)
   configurarMenuAutenticacao();
 
-  // Configura os Dropdowns dinâmicos para administradores
-  configurarDropdownsAdmin();
 
   // Pega os elementos do menu hambúrguer (versão mobile)
   var toggle = document.getElementById("menuToggle");
@@ -156,83 +154,5 @@ export function configurarMenuAutenticacao() {
     // Utilizador NÃO está logado
     // Injeta o link de Entrar que redireciona para a página de Login
     authContainer.innerHTML = '<a href="../../auth/pages/login.html" id="navbar-login-btn">Entrar</a>';
-  }
-}
-
-/* ================================================
-   Configuração de Dropdowns para Administradores
-   Transforma links normais em dropdowns apenas para admins
-   ================================================ */
-export function configurarDropdownsAdmin() {
-  // 1. Verifica se existe um utilizador logado através do localStorage
-  var usuarioLogadoStr = localStorage.getItem("usuarioLogado");
-  
-  // Se não estiver logado, não há nada a alterar (mantém links normais)
-  if (!usuarioLogadoStr) {
-    return;
-  }
-
-  var email;
-  var roleAtual;
-  
-  try {
-    var usuarioParsed = JSON.parse(usuarioLogadoStr);
-    email = usuarioParsed.email || usuarioLogadoStr;
-    // Pega a role da sessão. Se não existir, busca do storage
-    roleAtual = usuarioParsed.role || getUserRole(email);
-  } catch (e) {
-    email = usuarioLogadoStr;
-    roleAtual = getUserRole(email);
-  }
-  
-  // Se o utilizador não for Administrador, mantemos o comportamento padrão (não há dropdowns)
-  if (roleAtual !== "admin") {
-    return;
-  }
-  
-  // 3. Captura os contêineres HTML que preparámos no componente da Navbar
-  var containerProdutos = document.getElementById("nav-item-products");
-  var containerCategorias = document.getElementById("nav-item-categories");
-  
-  // 4. Injeta o novo HTML com os gatilhos e os sub-menus de Produtos
-  if (containerProdutos) {
-    containerProdutos.innerHTML = 
-      '<a href="#" class="dropdown-trigger" id="trigger-products">Produtos ▾</a>' +
-      '<div class="dropdown-menu" id="menu-products">' +
-        '<a href="../../products/pages/products.html">Ver Produtos</a>' +
-        '<a href="../../products/pages/create-product.html">Cadastrar Produto</a>' +
-      '</div>';
-      
-    // Adiciona evento de clique para abrir/fechar este menu
-    var triggerProducts = document.getElementById("trigger-products");
-    var menuProducts = document.getElementById("menu-products");
-    
-    if (triggerProducts && menuProducts) {
-      triggerProducts.addEventListener("click", function(e) {
-        e.preventDefault(); // Impede salto da página para o topo
-        menuProducts.classList.toggle("is-open"); // Adiciona ou remove a classe que mostra o menu
-      });
-    }
-  }
-  
-  // 5. Injeta o novo HTML com os gatilhos e os sub-menus de Categorias
-  if (containerCategorias) {
-    containerCategorias.innerHTML = 
-      '<a href="#" class="dropdown-trigger" id="trigger-categories">Categorias ▾</a>' +
-      '<div class="dropdown-menu" id="menu-categories">' +
-        '<a href="../../categories/pages/categories.html">Ver Categorias</a>' +
-        '<a href="../../categories/pages/create-category.html">Cadastrar Categoria</a>' +
-      '</div>';
-      
-    // Adiciona evento de clique para abrir/fechar este menu
-    var triggerCategories = document.getElementById("trigger-categories");
-    var menuCategories = document.getElementById("menu-categories");
-    
-    if (triggerCategories && menuCategories) {
-      triggerCategories.addEventListener("click", function(e) {
-        e.preventDefault(); // Impede salto da página para o topo
-        menuCategories.classList.toggle("is-open"); // Adiciona ou remove a classe que mostra o menu
-      });
-    }
   }
 }

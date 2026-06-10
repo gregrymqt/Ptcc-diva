@@ -50,7 +50,7 @@ function montarHero() {
           '<p>' + slide.subtitulo + '</p>' +
           '<div class="hero-buttons">' +
             '<a href="../../products/pages/products.html" class="btn-primary">Comprar Agora</a>' +
-            '<a href="#" class="btn-secondary">Conheça a Marca</a>' +
+            '<a href="../../about/pages/about.html" class="btn-secondary">Conheça a Marca</a>' +
           '</div>' +
         '</div>' +
         '<div class="hero-image">' +

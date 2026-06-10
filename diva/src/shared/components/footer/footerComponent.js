@@ -18,8 +18,8 @@ export function footerComponent() {
 
         '<div class="footer__links">' +
           '<h3>Institucional</h3>' +
-          '<a href="#">Sobre</a>' +
-          '<a href="#">Contato</a>' +
+          '<a href="../../about/pages/about.html">Sobre</a>' +
+          '<a href="../../about/pages/about.html#contato">Contato</a>' +
         '</div>' +
 
         '<div class="footer__copyright">' +

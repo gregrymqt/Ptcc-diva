@@ -1,0 +1,156 @@
+/* ================================================
+   ABOUT.CSS — Estilos da Página Sobre Nós
+   ================================================ */
+
+/* Variáveis Globais */
+:root {
+  --velvet-rose: #b34d68;
+  --velvet-rose-hover: #9c435a;
+  --light-gray: #f5f5f5;
+  --text-dark: #333333;
+  --text-muted: #666666;
+  --border-color: #dddddd;
+  --font-main: 'Montserrat', sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  margin: 0;
+  padding: 0;
+  color: var(--text-dark);
+  background-color: var(--light-gray);
+}
+
+/* ================================================
+   SEÇÃO: SOBRE A MARCA
+   ================================================ */
+.about-section {
+  padding: 4rem 2rem;
+  background-color: #ffffff;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* Mobile-first: empilhado */
+  gap: 2rem;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.about-text h2 {
+  color: var(--velvet-rose);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-text p {
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* ================================================
+   SEÇÃO: CONTATO
+   ================================================ */
+.contact-section {
+  padding: 4rem 2rem;
+  background-color: var(--light-gray);
+}
+
+.contact-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-container h2 {
+  color: var(--velvet-rose);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.contact-container p {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--velvet-rose);
+  box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.2);
+}
+
+.btn-submit {
+  display: inline-block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--velvet-rose);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: var(--velvet-rose-hover);
+  transform: translateY(-2px);
+}
+
+/* ================================================
+   MEDIA QUERIES (DESKTOP)
+   ================================================ */
+@media (min-width: 768px) {
+  .about-container {
+    flex-direction: row; /* Desktop: lado a lado */
+    align-items: center;
+  }
+  
+  .about-image,
+  .about-text {
+    flex: 1;
+  }
+}

@@ -1,0 +1,207 @@
+/* src/shared/components/sidebar/sidebar.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Variáveis de estilo - Identidade visual "Velvet Rose" */
+:root {
+  --sidebar-font: 'Montserrat', sans-serif;
+  --sidebar-primary: #b34d68; /* Velvet Rose */
+  --sidebar-primary-hover: rgba(179, 77, 104, 0.1);
+  --sidebar-text: #333333;
+  --sidebar-bg: #ffffff;
+  --sidebar-overlay: rgba(0, 0, 0, 0.5);
+  --sidebar-width: 280px;
+}
+
+/* ==================================================
+   MOBILE FIRST (Padrão)
+================================================== */
+
+/* Header Mobile (Fixo no topo) */
+.sidebar-mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background-color: var(--sidebar-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  font-family: var(--sidebar-font);
+}
+
+.sidebar-mobile-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--sidebar-primary);
+  margin: 0;
+}
+
+.sidebar-hamburger-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay Escuro */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--sidebar-overlay);
+  z-index: 999;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Sidebar Off-Canvas */
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: -100%; /* Escondida inicialmente */
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--sidebar-bg);
+  z-index: 1000;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--sidebar-font);
+  overflow-y: auto;
+}
+
+.sidebar-container.active {
+  left: 0; /* Aparece quando .active é aplicada */
+}
+
+/* Cabeçalho interno da Sidebar (Apenas Mobile) */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.sidebar-brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sidebar-primary);
+}
+
+.sidebar-close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Navegação e Links */
+.sidebar-nav {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--sidebar-text);
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px; /* Cantos arredondados */
+  transition: all 0.2s ease;
+}
+
+.sidebar-link-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Efeito Hover nos links */
+.sidebar-link:hover {
+  background-color: var(--sidebar-primary-hover);
+  color: var(--sidebar-primary);
+}
+
+.sidebar-link:hover .sidebar-link-icon {
+  color: var(--sidebar-primary);
+}
+
+/* Link Ativo */
+.sidebar-link.active {
+  background-color: var(--sidebar-primary);
+  color: #ffffff;
+}
+
+.sidebar-link.active .sidebar-link-icon {
+  color: #ffffff;
+}
+
+/* ==================================================
+   DESKTOP (Telas maiores que 1024px)
+================================================== */
+@media (min-width: 1024px) {
+  /* Some com o Header Mobile e Overlay */
+  .sidebar-mobile-header,
+  .sidebar-overlay,
+  .sidebar-overlay.active {
+    display: none;
+  }
+
+  /* Some com o botão de fechar (pois a sidebar será fixa) */
+  .sidebar-close-btn {
+    display: none;
+  }
+
+  /* Sidebar fixa à esquerda */
+  .sidebar-container {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    flex-shrink: 0;
+    box-shadow: 1px 0 5px rgba(0,0,0,0.05);
+    border-right: 1px solid #eeeeee;
+    transition: none; /* Remove transição desnecessária */
+  }
+
+  /* Layout principal configurado como Flexbox */
+  .layout-com-sidebar {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Todo o resto do conteúdo deve ocupar o espaço restante */
+  .layout-com-sidebar > *:not(.sidebar-container):not(.sidebar-mobile-header):not(.sidebar-overlay) {
+    flex-grow: 1;
+    overflow-x: hidden;
+  }
+}

@@ -12,13 +12,19 @@
     
     <!-- Estilo específico da página admin -->
     <link rel="stylesheet" href="../styles/admin.css">
+    <link rel="stylesheet" href="../../../shared/components/sidebar/sidebar.css">
+    <link rel="stylesheet" href="../../products/styles/create-product.css">
+    <link rel="stylesheet" href="../../categories/styles/create-category.css">
     <link rel="stylesheet" href="../../../shared/components/modal/updateModal.css">
     <link rel="stylesheet" href="../../cart/styles/cart.css">
 </head>
 <body>
     <div id="navbar"></div>
 
-    <div id="admin-content"></div>
+    <main id="admin-layout" class="admin-layout">
+        <aside id="admin-sidebar-container"></aside>
+        <section id="admin-main-content"></section>
+    </main>
 
     <div id="footer"></div>
 
