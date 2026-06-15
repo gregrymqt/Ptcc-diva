@@ -1,59 +1,37 @@
 export function favoriteComponent(products) {
 
     if (!products.length) {
-
-        return `
-            <section class="empty-state">
-
-                <h2>Nenhum favorito encontrado</h2>
-
-                <p>
-                    Adicione produtos aos favoritos para vê-los aqui.
-                </p>
-
-            </section>
-        `;
+        return '<section class="empty-state">\n' +
+               '    <h2>Nenhum favorito encontrado</h2>\n' +
+               '    <p>\n' +
+               '        Adicione produtos aos favoritos para vê-los aqui.\n' +
+               '    </p>\n' +
+               '</section>';
     }
 
-    return `
-        <section class="favorites-section">
+    var htmlCards = "";
+    
+    for (var i = 0; i < products.length; i++) {
+        var product = products[i];
+        htmlCards += '<article class="favorite-card">\n' +
+                     '    <img src="' + product.imagem + '" alt="' + product.nome + '">\n' +
+                     '    <div class="favorite-info">\n' +
+                     '        <h3>' + product.nome + '</h3>\n' +
+                     '        <p>' + product.descricao + '</p>\n' +
+                     '        <span>\n' +
+                     '            R$ ' + Number(product.preco).toFixed(2) + '\n' +
+                     '        </span>\n' +
+                     '        <button class="remove-favorite-btn" data-id="' + product.id + '">\n' +
+                     '            Remover\n' +
+                     '        </button>\n' +
+                     '    </div>\n' +
+                     '</article>\n';
+    }
 
-            <h1>Meus Favoritos</h1>
-
-            <div class="favorites-grid">
-
-                ${products.map(product => `
-                    <article class="favorite-card">
-
-                        <img
-                            src="${product.imagem}"
-                            alt="${product.nome}"
-                        >
-
-                        <div class="favorite-info">
-
-                            <h3>${product.nome}</h3>
-
-                            <p>${product.descricao}</p>
-
-                            <span>
-                                R$ ${Number(product.preco).toFixed(2)}
-                            </span>
-
-                            <button
-                                class="remove-favorite-btn"
-                                data-id="${product.id}"
-                            >
-                                Remover
-                            </button>
-
-                        </div>
-
-                    </article>
-                `).join("")}
-
-            </div>
-
-        </section>
-    `;
+    return '<section class="favorites-section">\n' +
+           '    <h1>Meus Favoritos</h1>\n' +
+           '    <div class="favorites-grid">\n' +
+           '        ' + htmlCards + '\n' +
+           '    </div>\n' +
+           '</section>';
 }

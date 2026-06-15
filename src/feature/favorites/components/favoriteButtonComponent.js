@@ -6,18 +6,14 @@ export function favoriteButtonComponent(
   productId
 ) {
 
-  return `
+  var icon = "🤍";
+  
+  if (isFavorite(productId)) {
+    icon = "❤️";
+  }
 
-    <button
-      class="favorite-btn"
-      data-product-id="${productId}"
-    >
-      ${isFavorite(productId)
-        ? "❤️"
-        : "🤍"
-      }
-    </button>
-
-  `;
+  return '<button class="favorite-btn" data-product-id="' + productId + '">\n' +
+         '  ' + icon + '\n' +
+         '</button>';
 
 }

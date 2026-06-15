@@ -22,16 +22,18 @@ export function initFavoriteEvents() {
   // Coloca um listener no documento inteiro
   document.addEventListener("click", function(evento) {
 
-    // Verifica se o clique foi dentro de um botão com a classe "favorite-btn"
-    var botao = evento.target.closest(".favorite-btn");
+    var botaoFav = evento.target.closest(".favorite-btn");
+    var botaoRemove = evento.target.closest(".remove-favorite-btn");
 
-    // Se o clique não foi num botão de favorito, ignora
-    if (!botao) {
+    var produtoId = null;
+
+    if (botaoFav) {
+      produtoId = Number(botaoFav.dataset.productId);
+    } else if (botaoRemove) {
+      produtoId = Number(botaoRemove.dataset.id);
+    } else {
       return;
     }
-
-    // Lê o ID do produto guardado no atributo data-product-id do botão
-    var produtoId = Number(botao.dataset.productId);
 
     // Alterna o favorito e recebe o resultado (true = adicionou, false = removeu)
     var foiAdicionado = toggleFavorite(produtoId);

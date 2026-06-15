@@ -19,7 +19,7 @@ document.getElementById("navbar").innerHTML =
 document.getElementById("footer").innerHTML =
   footerComponent();
 
-const favoriteProducts =
+var favoriteProducts =
   getFavoriteProducts();
 
 document.getElementById("favorites-content").innerHTML =
