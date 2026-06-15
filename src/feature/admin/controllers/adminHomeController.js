@@ -2,6 +2,7 @@ import { setStorageData, getStorageData } from "../../../core/storage.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { homeFormComponent } from "../../home/components/homeFormComponent.js";
 import { homeListComponent } from "../../home/components/homeListComponent.js";
+import { homeAdminSlideComponent, homeImagePreviewComponent } from "../../home/components/homeAdminSlideComponent.js";
 
 export function carregarModuloHome() {
     var formContainer = document.getElementById("admin-home-form-container");
@@ -38,7 +39,7 @@ function inicializarLogicaHome() {
             var reader = new FileReader();
             reader.onload = function(e) {
                 base64Image = e.target.result;
-                imagePreview.innerHTML = '<img src="' + base64Image + '" alt="Preview do Banner">';
+                imagePreview.innerHTML = homeImagePreviewComponent(base64Image);
             };
             reader.readAsDataURL(file);
         }
@@ -108,17 +109,7 @@ function renderizarSlidesAdmin() {
     var htmlList = "";
     for (var i = 0; i < heroSlides.length; i++) {
         var slide = heroSlides[i];
-        htmlList += '<div class="admin-slide-card">' +
-            '<img src="' + (slide.imagem || 'https://via.placeholder.com/100x100?text=Sem+Imagem') + '" alt="' + slide.titulo + '">' +
-            '<div class="admin-slide-info">' +
-                '<h3>' + slide.titulo + '</h3>' +
-                '<p>' + slide.subtitulo + '</p>' +
-            '</div>' +
-            '<div class="admin-slide-actions">' +
-                '<button onclick="window.abrirModalEdicaoSlide(' + slide.id + ')" class="btn-edit">Editar</button>' +
-                '<button onclick="window.excluirSlideAdmin(' + slide.id + ')" class="btn-delete">Excluir</button>' +
-            '</div>' +
-        '</div>';
+        htmlList += homeAdminSlideComponent(slide);
     }
     
     adminSlidesList.innerHTML = htmlList;

@@ -4,6 +4,7 @@
 
 import { setStorageData, getStorageData } from "../../../core/storage.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
+import { aboutAdminCardComponent, aboutImagePreviewComponent } from "../../about/components/aboutAdminCardComponent.js";
 
 export function carregarModuloAbout() {
     inicializarLogicaAbout();
@@ -26,7 +27,7 @@ function inicializarLogicaAbout() {
             var reader = new FileReader();
             reader.onload = function(e) {
                 base64Image = e.target.result;
-                imagePreview.innerHTML = '<img src="' + base64Image + '" alt="Preview" style="max-width:200px; border-radius:8px; margin-top:10px;">';
+                imagePreview.innerHTML = aboutImagePreviewComponent(base64Image);
             };
             reader.readAsDataURL(file);
         }
@@ -86,15 +87,7 @@ function renderizarImagensAbout() {
     var htmlList = "";
     for (var i = 0; i < aboutImages.length; i++) {
         var img = aboutImages[i];
-        htmlList += '<div class="admin-slide-card" style="display:flex; align-items:center; gap:15px; margin-bottom:15px; padding:15px; border:1px solid #ddd; border-radius:8px;">' +
-            '<img src="' + img.url + '" alt="' + img.alt + '" style="width:100px; height:100px; object-fit:cover; border-radius:8px;">' +
-            '<div class="admin-slide-info" style="flex:1;">' +
-                '<h3>' + img.alt + '</h3>' +
-            '</div>' +
-            '<div class="admin-slide-actions">' +
-                '<button onclick="window.excluirImagemAbout(' + img.id + ')" class="btn-delete" style="background-color:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:4px; cursor:pointer;">Excluir</button>' +
-            '</div>' +
-        '</div>';
+        htmlList += aboutAdminCardComponent(img);
     }
     
     adminAboutList.innerHTML = htmlList;

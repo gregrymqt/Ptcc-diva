@@ -3,6 +3,7 @@ import { getProductsWithCategory, createProduct, deleteProduct } from "../../pro
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { productAdminListComponent } from "../../products/components/productAdminListComponent.js";
 import { productFormComponent } from "../../products/components/productFormComponent.js";
+import { productAdminDropdownItemComponent } from "../../products/components/productAdminDropdownComponent.js";
 
 export function carregarModuloProdutos() {
     var formContainer = document.getElementById("admin-product-form-container");
@@ -21,7 +22,7 @@ export function carregarModuloProdutos() {
         var categorias = getCategories();
         var htmlCategorias = "";
         for (var i = 0; i < categorias.length; i++) {
-            htmlCategorias += '<div class="dropdown-item" data-id="' + categorias[i].id + '">' + categorias[i].nome + '</div>';
+            htmlCategorias += productAdminDropdownItemComponent(categorias[i]);
         }
         categoryDropdownList.innerHTML = htmlCategorias;
 
