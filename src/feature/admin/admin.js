@@ -54,8 +54,8 @@ window.mudarViewAdmin = function(idView) {
 
     if (idView === 'view-home') {
         titulo = "Configurações da Home (Hero)";
-        formHtml = "<p>O componente de formulário da home foi removido para refatoração.</p>";
-        listHtml = "<p>O componente de listagem da home foi removido para refatoração.</p>";
+        formHtml = '<div id="admin-home-form-container"></div>';
+        listHtml = '<div id="admin-home-list-container"></div>';
     } else if (idView === 'view-produtos') {
         titulo = "Gestão de Produtos";
         formHtml = '<div id="admin-product-form-container"></div>';

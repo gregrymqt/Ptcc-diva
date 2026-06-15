@@ -1,7 +1,20 @@
 import { setStorageData, getStorageData } from "../../../core/storage.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
+import { homeFormComponent } from "../../home/components/homeFormComponent.js";
+import { homeListComponent } from "../../home/components/homeListComponent.js";
 
 export function carregarModuloHome() {
+    var formContainer = document.getElementById("admin-home-form-container");
+    var listContainer = document.getElementById("admin-home-list-container");
+    
+    if (formContainer) {
+        formContainer.innerHTML = homeFormComponent();
+    }
+    
+    if (listContainer) {
+        listContainer.innerHTML = homeListComponent();
+    }
+
     inicializarLogicaHome();
     carregarConfiguracoes();
 }
@@ -10,6 +23,8 @@ function inicializarLogicaHome() {
     var heroForm = document.getElementById("hero-form");
     var inputTitle = document.getElementById("hero-title");
     var inputSubtitle = document.getElementById("hero-subtitle");
+    var inputButtonText = document.getElementById("hero-button-text");
+    var inputButtonLink = document.getElementById("hero-button-link");
     var inputImage = document.getElementById("hero-image");
     var imagePreview = document.getElementById("image-preview");
 
@@ -34,6 +49,8 @@ function inicializarLogicaHome() {
 
         var tituloValor = inputTitle.value.trim();
         var subtituloValor = inputSubtitle.value.trim();
+        var botaoTextoValor = inputButtonText ? inputButtonText.value.trim() : "";
+        var botaoLinkValor = inputButtonLink ? inputButtonLink.value.trim() : "";
 
         if (!tituloValor || !subtituloValor) {
             showToast("Por favor, preencha o título e o subtítulo.", 3000, "error");
@@ -54,6 +71,8 @@ function inicializarLogicaHome() {
             id: new Date().getTime(),
             titulo: tituloValor,
             subtitulo: subtituloValor,
+            textoBotao: botaoTextoValor,
+            linkBotao: botaoLinkValor,
             imagem: base64Image
         };
 
@@ -137,7 +156,9 @@ window.abrirModalEdicaoSlide = function(id) {
     if (slideAtual) {
         var camposFormulario = [
             { name: "titulo", label: "Título", type: "text" },
-            { name: "subtitulo", label: "Subtítulo", type: "text" }
+            { name: "subtitulo", label: "Subtítulo", type: "text" },
+            { name: "textoBotao", label: "Texto do Botão", type: "text" },
+            { name: "linkBotao", label: "Link do Botão", type: "text" }
         ];
         
         if (window.exibirModalUpdate) {
@@ -147,6 +168,8 @@ window.abrirModalEdicaoSlide = function(id) {
                     if (heroSlidesAtuais[j].id === id) {
                         heroSlidesAtuais[j].titulo = dadosAtualizados.titulo;
                         heroSlidesAtuais[j].subtitulo = dadosAtualizados.subtitulo;
+                        heroSlidesAtuais[j].textoBotao = dadosAtualizados.textoBotao;
+                        heroSlidesAtuais[j].linkBotao = dadosAtualizados.linkBotao;
                         break;
                     }
                 }
