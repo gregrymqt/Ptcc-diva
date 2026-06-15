@@ -1,65 +1,56 @@
 import { getStorageData } from "../../../core/storage.js";
 
 export function heroComponent() {
-    var heroConfig = getStorageData('heroConfig');
-    var titulo = "Desperte a <span>diva</span> que vive em você";
-    var subtitulo = "Produtos premium de maquiagem para realçar sua beleza.";
-    var imagem = "../../../assets/images/banner-1.png";
+  var heroSlides = getStorageData('heroConfig');
+  
+  if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
+    heroSlides = [{
+      id: 1,
+      titulo: "Desperte a <span>diva</span> que vive em você",
+      subtitulo: "Produtos premium de maquiagem para realçar sua beleza.",
+      imagem: "../../../assets/images/banner-1.png"
+    }];
+  }
 
-    if (heroConfig) {
-        if (heroConfig.titulo) {
-            titulo = heroConfig.titulo;
-        }
-        if (heroConfig.subtitulo) {
-            subtitulo = heroConfig.subtitulo;
-        }
-        if (heroConfig.imagem) {
-            imagem = heroConfig.imagem;
-        }
-    }
+  var htmlSlides = "";
+  var htmlDots = "";
+  var numSlides = heroSlides.length > 3 ? 3 : heroSlides.length;
 
-    return `
-        <section class="hero">
+  for (var i = 0; i < numSlides; i++) {
+    var slide = heroSlides[i];
+    var isActive = i === 0 ? " active" : "";
+    
+    htmlSlides += 
+      '<section class="hero-slide-item' + isActive + '">' +
+        '<div class="hero-content">' +
+          '<h1>' + slide.titulo + '</h1>' +
+          '<p>' + slide.subtitulo + '</p>' +
+          '<div class="hero-buttons">' +
+            '<a href="../../products/pages/products.html" class="btn-primary">Comprar Agora</a>' +
+            '<a href="../../about/pages/about.html" class="btn-secondary">Conheça a Marca</a>' +
+          '</div>' +
+        '</div>' +
+        '<div class="hero-image">' +
+          '<div class="carousel">' +
+            '<img src="' + slide.imagem + '" alt="Banner Diva Makeup">' +
+          '</div>' +
+        '</div>' +
+      '</section>';
+      
+    // Cria um dot para cada slide
+    htmlDots += '<span class="dot' + isActive + '" onclick="window.irParaSlide(' + i + ')"></span>';
+  }
 
-            <div class="hero-content">
+  var botoesNavegacao = "";
+  var dotsNavegacao = "";
+  
+  if (numSlides > 1) {
+    botoesNavegacao = 
+      '<button class="carousel-btn prev-btn" onclick="window.mudarSlide(-1)">&#10094;</button>' +
+      '<button class="carousel-btn next-btn" onclick="window.mudarSlide(1)">&#10095;</button>';
+      
+    dotsNavegacao = '<div class="carousel-dots">' + htmlDots + '</div>';
+  }
 
-                <h1>
-                    ${titulo}
-                </h1>
-
-                <p>
-                    ${subtitulo}
-                </p>
-
-                <div class="hero-buttons">
-
-                    <a href="../../products/pages/products.html"
-                       class="btn-primary">
-                        Comprar Agora
-                    </a>
-
-                    <a href="#"
-                       class="btn-secondary">
-                        Conheça a Marca
-                    </a>
-
-                </div>
-
-            </div>
-
-            <div class="hero-image">
-
-                <div class="carousel">
-
-                    <img
-                        src="${imagem}"
-                        alt="Produtos Diva Makeup"
-                    >
-
-                </div>
-
-            </div>
-
-        </section>
-    `;
+  return '<div class="hero-carousel-container">' + htmlSlides + botoesNavegacao + dotsNavegacao + '</div>';
 }

@@ -2,7 +2,7 @@ import { setStorageData, getStorageData } from "../../../core/storage.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { homeFormComponent } from "../../home/components/homeFormComponent.js";
 import { homeListComponent } from "../../home/components/homeListComponent.js";
-import { homeAdminSlideComponent, homeImagePreviewComponent } from "../../home/components/homeAdminSlideComponent.js";
+import { homeAdminSlideComponent, homeImagePreviewComponent, homeEmptySlidesComponent } from "../../home/components/homeAdminSlideComponent.js";
 
 export function carregarModuloHome() {
     var formContainer = document.getElementById("admin-home-form-container");
@@ -69,7 +69,7 @@ function inicializarLogicaHome() {
         }
 
         var novoSlide = {
-            id: new Date().getTime(),
+            id: Date.now(),
             titulo: tituloValor,
             subtitulo: subtituloValor,
             textoBotao: botaoTextoValor,
@@ -102,7 +102,7 @@ function renderizarSlidesAdmin() {
     if (!adminSlidesList) return;
     
     if (heroSlides.length === 0) {
-        adminSlidesList.innerHTML = "<p>Nenhum slide cadastrado.</p>";
+        adminSlidesList.innerHTML = homeEmptySlidesComponent();
         return;
     }
 

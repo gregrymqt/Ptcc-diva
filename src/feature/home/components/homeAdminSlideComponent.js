@@ -17,3 +17,7 @@ export function homeAdminSlideComponent(slide) {
 export function homeImagePreviewComponent(base64Image) {
     return '<img src="' + base64Image + '" alt="Preview do Banner">';
 }
+
+export function homeEmptySlidesComponent() {
+    return '<p>Nenhum slide cadastrado.</p>';
+}
