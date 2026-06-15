@@ -10,7 +10,7 @@ export function categoryAdminListComponent(categorias) {
             '<td><img src="' + (cat.imagem || 'https://via.placeholder.com/50') + '" width="50" height="50"></td>' +
             '<td>' + cat.nome + '</td>' +
             '<td>' +
-                '<button onclick="window.excluirCategoriaAdmin(' + cat.id + ')" class="btn-delete">Deletar</button>' +
+                '<button data-id="' + cat.id + '" class="btn-delete btn-delete-category">Deletar</button>' +
             '</td>' +
         '</tr>';
     }

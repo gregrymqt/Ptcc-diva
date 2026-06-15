@@ -5,7 +5,7 @@ export function aboutAdminCardComponent(img) {
             '<h3>' + img.alt + '</h3>' +
         '</div>' +
         '<div class="admin-slide-actions">' +
-            '<button onclick="window.excluirImagemAbout(' + img.id + ')" class="btn-delete" style="background-color:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:4px; cursor:pointer;">Excluir</button>' +
+            '<button data-id="' + img.id + '" class="btn-delete btn-delete-about" style="background-color:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:4px; cursor:pointer;">Excluir</button>' +
         '</div>' +
     '</div>';
 }

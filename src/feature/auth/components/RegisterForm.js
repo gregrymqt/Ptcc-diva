@@ -5,54 +5,46 @@ export class RegistroForm {
 
   render() {
     if (!this.container) {
-      console.warn(`Container para RegistroForm não encontrado.`);
+      console.warn("Container para RegistroForm não encontrado.");
       return;
     }
 
-    this.container.innerHTML = `
-      <div class="login-card">
-        <div class="login-header">
-          <h1>Criar Conta</h1>
-          <p>Junte-se à Diva e tenha acesso a produtos exclusivos de beleza.</p>
-        </div>
+    this.container.innerHTML = 
+      '<div class="login-card">' +
+        '<div class="login-header">' +
+          '<h1>Criar Conta</h1>' +
+          '<p>Junte-se à Diva e tenha acesso a produtos exclusivos de beleza.</p>' +
+        '</div>' +
+        '<form novalidate>' +
+          '<div class="input-container">' +
+            '<input type="text" id="nome" required placeholder=" ">' +
+            '<label for="nome">Nome Completo</label>' +
+            '<span class="error-message" id="nome-error"></span>' +
+          '</div>' +
+          '<div class="input-container">' +
+            '<input type="email" id="email" required placeholder=" ">' +
+            '<label for="email">E-mail</label>' +
+            '<span class="error-message" id="email-error"></span>' +
+          '</div>' +
+          '<div class="input-container">' +
+            '<input type="password" id="senha" required placeholder=" ">' +
+            '<label for="senha">Senha (Mínimo 6 caracteres)</label>' +
+            '<span class="error-message" id="senha-error"></span>' +
+          '</div>' +
+          '<div class="input-container">' +
+            '<input type="password" id="confirmar" required placeholder=" ">' +
+            '<label for="confirmar">Confirmar Senha</label>' +
+            '<span class="error-message" id="confirmar-error"></span>' +
+          '</div>' +
+          '<button class="btn-login" type="submit">' +
+            '<span>Registar Conta</span>' +
+          '</button>' +
+        '</form>' +
+        '<div class="login-footer">' +
+          '<p>Já possui conta? <a href="../pages/login.html">Entrar agora</a></p>' +
+        '</div>' +
+      '</div>';
 
-        <form novalidate>
-          <div class="input-container">
-            <input type="text" id="nome" required placeholder=" ">
-            <label for="nome">Nome Completo</label>
-            <span class="error-message" id="nome-error"></span>
-          </div>
-
-          <div class="input-container">
-            <input type="email" id="email" required placeholder=" ">
-            <label for="email">E-mail</label>
-            <span class="error-message" id="email-error"></span>
-          </div>
-
-          <div class="input-container">
-            <input type="password" id="senha" required placeholder=" ">
-            <label for="senha">Senha (Mínimo 6 caracteres)</label>
-            <span class="error-message" id="senha-error"></span>
-          </div>
-
-          <div class="input-container">
-            <input type="password" id="confirmar" required placeholder=" ">
-            <label for="confirmar">Confirmar Senha</label>
-            <span class="error-message" id="confirmar-error"></span>
-          </div>
-
-          <button class="btn-login" type="submit">
-            <span>Registar Conta</span>
-          </button>
-        </form>
-
-        <div class="login-footer">
-          <p>Já possui conta? <a href="../pages/login.html">Entrar agora</a></p>
-        </div>
-      </div>
-    `;
-
-    // Mapeamento dos elementos no DOM
     this.form = this.container.querySelector("form");
     this.inputs = {
       nome: this.container.querySelector("#nome"),
@@ -78,10 +70,12 @@ export class RegistroForm {
   }
 
   clearErrors() {
-    Object.keys(this.errors).forEach(key => {
-      this.errors[key].textContent = "";
-      this.inputs[key].classList.remove("input-error");
-    });
+    var chaves = ["nome", "email", "senha", "confirmar"];
+    for (var i = 0; i < chaves.length; i++) {
+      var chave = chaves[i];
+      this.errors[chave].textContent = "";
+      this.inputs[chave].classList.remove("input-error");
+    }
   }
 
   showError(field, message) {

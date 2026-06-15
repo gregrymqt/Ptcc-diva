@@ -8,42 +8,36 @@ export class LoginForm {
    */
   render() {
     if (!this.container) {
-      console.warn(`Container para LoginForm não encontrado.`);
+      console.warn("Container para LoginForm não encontrado.");
       return;
     }
 
-    this.container.innerHTML = `
-      <div class="login-card">
-        <div class="login-header">
-          <h1>Seja bem-vinda</h1>
-          <p>Entre para conferir suas linhas de beleza favoritas e gerenciar seus pedidos.</p>
-        </div>
+    this.container.innerHTML = 
+      '<div class="login-card">' +
+        '<div class="login-header">' +
+          '<h1>Seja bem-vinda</h1>' +
+          '<p>Entre para conferir suas linhas de beleza favoritas e gerenciar seus pedidos.</p>' +
+        '</div>' +
+        '<form novalidate>' +
+          '<div class="input-container">' +
+            '<input type="email" id="email" required placeholder=" ">' +
+            '<label for="email">E-mail</label>' +
+            '<span class="error-message" id="email-error"></span>' +
+          '</div>' +
+          '<div class="input-container">' +
+            '<input type="password" id="senha" required placeholder=" ">' +
+            '<label for="senha">Senha</label>' +
+            '<span class="error-message" id="senha-error"></span>' +
+          '</div>' +
+          '<button class="btn-login" type="submit">' +
+            '<span>Entrar na Conta</span>' +
+          '</button>' +
+        '</form>' +
+        '<div class="login-footer">' +
+          '<p>Não possui conta? <a href="../pages/register.html">Criar minha conta</a></p>' +
+        '</div>' +
+      '</div>';
 
-        <form novalidate>
-          <div class="input-container">
-            <input type="email" id="email" required placeholder=" ">
-            <label for="email">E-mail</label>
-            <span class="error-message" id="email-error"></span>
-          </div>
-
-          <div class="input-container">
-            <input type="password" id="senha" required placeholder=" ">
-            <label for="senha">Senha</label>
-            <span class="error-message" id="senha-error"></span>
-          </div>
-
-          <button class="btn-login" type="submit">
-            <span>Entrar na Conta</span>
-          </button>
-        </form>
-
-        <div class="login-footer">
-          <p>Não possui conta? <a href="../pages/register.html">Criar minha conta</a></p>
-        </div>
-      </div>
-    `;
-
-    // Mapeamento dos elementos logo após o HTML ser acoplado ao DOM
     this.form = this.container.querySelector("form");
     this.emailInput = this.container.querySelector("#email");
     this.senhaInput = this.container.querySelector("#senha");

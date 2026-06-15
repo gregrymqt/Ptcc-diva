@@ -19,7 +19,6 @@ document.getElementById("footer").innerHTML = footerComponent();
 
 
 
-
 /* --------------------------------------------------
    PARTE 2 E 3: BUSCAR CATEGORIAS E EXIBIR NA TELA
    -------------------------------------------------- */
@@ -51,7 +50,6 @@ function exibirCategorias(termoBusca) {
     if (nomeMinusculo.indexOf(termoMinusculo) === -1) {
       continue;
     }
-
 
 
     // Concatena o card completo na div container do DOM
