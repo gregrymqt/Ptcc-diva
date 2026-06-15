@@ -2,7 +2,7 @@
    ADMINABOUTCONTROLLER.JS — Controller de Imagens About
    ================================================ */
 
-import { getAboutImagesConfig, setAboutImagesConfig } from "../../about/services/aboutService.js";
+import { getAboutImagesConfig, addAboutImage, updateAboutImage, deleteAboutImage } from "../../about/services/aboutService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { aboutAdminCardComponent, aboutImagePreviewComponent } from "../../about/components/aboutAdminCardComponent.js";
 
@@ -25,26 +25,22 @@ export function carregarModuloAbout() {
                 
                 if (window.exibirModalDelete) {
                     window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover esta imagem permanentemente?", function(objetoConfirmado) {
-                        for (var i = 0; i < aboutImages.length; i++) {
-                            if (aboutImages[i].id == objetoConfirmado.id) {
-                                aboutImages.splice(i, 1);
-                                break;
-                            }
+                        try {
+                            deleteAboutImage(objetoConfirmado.id);
+                            showToast("Imagem excluída com sucesso!", 3000);
+                            renderizarImagensAbout();
+                        } catch (erro) {
+                            showToast(erro.message, 3000, "error");
                         }
-                        setAboutImagesConfig(aboutImages);
-                        showToast("Imagem excluída com sucesso!", 3000);
-                        renderizarImagensAbout();
                     });
                 } else if (confirm("Tem certeza que deseja excluir esta imagem?")) {
-                    for (var i = 0; i < aboutImages.length; i++) {
-                        if (aboutImages[i].id == idItem) {
-                            aboutImages.splice(i, 1);
-                            break;
-                        }
+                    try {
+                        deleteAboutImage(idItem);
+                        showToast("Imagem excluída com sucesso!", 3000);
+                        renderizarImagensAbout();
+                    } catch (erro) {
+                        showToast(erro.message, 3000, "error");
                     }
-                    setAboutImagesConfig(aboutImages);
-                    showToast("Imagem excluída com sucesso!", 3000);
-                    renderizarImagensAbout();
                 }
             }
             
@@ -65,16 +61,13 @@ export function carregarModuloAbout() {
                 
                 if (window.exibirModalUpdate) {
                     window.exibirModalUpdate("Editar Imagem", itemParaEditar, camposConfig, function(objetoAtualizado) {
-                        for (var m = 0; m < aboutImagesEdit.length; m++) {
-                            if (aboutImagesEdit[m].id == objetoAtualizado.id) {
-                                aboutImagesEdit[m].alt = objetoAtualizado.alt;
-                                aboutImagesEdit[m].url = objetoAtualizado.url;
-                                break;
-                            }
+                        try {
+                            updateAboutImage(objetoAtualizado.id, objetoAtualizado);
+                            showToast("Imagem atualizada com sucesso!", 3000);
+                            renderizarImagensAbout();
+                        } catch (erro) {
+                            showToast(erro.message, 3000, "error");
                         }
-                        setAboutImagesConfig(aboutImagesEdit);
-                        showToast("Imagem atualizada com sucesso!", 3000);
-                        renderizarImagensAbout();
                     });
                 }
             }
@@ -111,35 +104,17 @@ function inicializarLogicaAbout() {
 
         var altValor = inputAlt.value.trim();
 
-        if (!base64Image) {
-            showToast("Por favor, selecione uma imagem.", 3000, "error");
-            return;
+        try {
+            addAboutImage(altValor, base64Image);
+            showToast("Imagem adicionada com sucesso!", 3000);
+            
+            aboutForm.reset();
+            base64Image = null;
+            imagePreview.innerHTML = "";
+            renderizarImagensAbout();
+        } catch (erro) {
+            showToast(erro.message, 4000, "error");
         }
-
-        var aboutImages = getAboutImagesConfig();
-        if (!aboutImages || !Array.isArray(aboutImages)) {
-            aboutImages = [];
-        }
-
-        if (aboutImages.length >= 1) {
-            showToast("O limite máximo é de 1 imagem para o Sobre Nós. Exclua a imagem atual para adicionar uma nova.", 4000, "error");
-            return;
-        }
-
-        var novaImagem = {
-            id: new Date().getTime(),
-            alt: altValor || "Imagem da seção Sobre Nós",
-            url: base64Image
-        };
-
-        aboutImages.push(novaImagem);
-        setAboutImagesConfig(aboutImages);
-        showToast("Imagem adicionada com sucesso!", 3000);
-
-        aboutForm.reset();
-        base64Image = null;
-        imagePreview.innerHTML = "";
-        renderizarImagensAbout();
     });
 }
 

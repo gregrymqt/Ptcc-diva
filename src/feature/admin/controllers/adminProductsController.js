@@ -86,17 +86,21 @@ export function carregarModuloProdutos() {
                 ingredientes: ingredientes
             };
 
-            createProduct(product);
-            showToast("Produto salvo!", 3000);
-            form.reset();
-            imgPreview.style.display = "none";
-            imgPreview.src = "";
-            if (uploadPlaceholder) uploadPlaceholder.style.display = "flex";
-            categoryDropdownHeader.textContent = "Selecione ▼";
-            selectedCategoryId = null;
-            base64ProductImage = null;
+            try {
+                createProduct(product);
+                showToast("Produto salvo!", 3000);
+                form.reset();
+                imgPreview.style.display = "none";
+                imgPreview.src = "";
+                if (uploadPlaceholder) uploadPlaceholder.style.display = "flex";
+                categoryDropdownHeader.textContent = "Selecione ▼";
+                selectedCategoryId = null;
+                base64ProductImage = null;
 
-            renderizarListaProdutos();
+                renderizarListaProdutos();
+            } catch (erro) {
+                showToast(erro.message, 3000, "error");
+            }
         });
     }
 
@@ -144,9 +148,13 @@ export function carregarModuloProdutos() {
                 
                 if (window.exibirModalUpdate) {
                     window.exibirModalUpdate("Editar Produto", itemParaEditar, camposConfig, function(objetoAtualizado) {
-                        updateProduct(objetoAtualizado.id, objetoAtualizado);
-                        showToast("Produto atualizado com sucesso!", 3000);
-                        renderizarListaProdutos();
+                        try {
+                            updateProduct(objetoAtualizado.id, objetoAtualizado);
+                            showToast("Produto atualizado com sucesso!", 3000);
+                            renderizarListaProdutos();
+                        } catch (erro) {
+                            showToast(erro.message, 3000, "error");
+                        }
                     });
                 }
             }

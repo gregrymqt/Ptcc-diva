@@ -27,19 +27,27 @@ export function carregarModuloCategorias() {
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function (evt) {
-                    var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: evt.target.result };
+                    try {
+                        var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: evt.target.result };
+                        createCategory(category);
+                        showToast("Categoria cadastrada!", 3000);
+                        form.reset();
+                        renderizarListaCategorias();
+                    } catch (erro) {
+                        showToast(erro.message, 3000, "error");
+                    }
+                };
+                reader.readAsDataURL(file);
+            } else {
+                try {
+                    var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: "" };
                     createCategory(category);
                     showToast("Categoria cadastrada!", 3000);
                     form.reset();
                     renderizarListaCategorias();
-                };
-                reader.readAsDataURL(file);
-            } else {
-                var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: "" };
-                createCategory(category);
-                showToast("Categoria cadastrada!", 3000);
-                form.reset();
-                renderizarListaCategorias();
+                } catch (erro) {
+                    showToast(erro.message, 3000, "error");
+                }
             }
         });
     }
@@ -85,9 +93,13 @@ export function carregarModuloCategorias() {
 
                 if (window.exibirModalUpdate) {
                     window.exibirModalUpdate("Editar Categoria", itemParaEditar, camposConfig, function (objetoAtualizado) {
-                        updateCategory(objetoAtualizado.id, objetoAtualizado);
-                        showToast("Categoria atualizada com sucesso!", 3000);
-                        renderizarListaCategorias();
+                        try {
+                            updateCategory(objetoAtualizado.id, objetoAtualizado);
+                            showToast("Categoria atualizada com sucesso!", 3000);
+                            renderizarListaCategorias();
+                        } catch (erro) {
+                            showToast(erro.message, 3000, "error");
+                        }
                     });
                 }
             }

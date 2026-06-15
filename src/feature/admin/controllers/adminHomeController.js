@@ -1,4 +1,4 @@
-import { getHeroConfig, setHeroConfig } from "../../home/services/heroService.js";
+import { getHeroConfig, addHeroSlide, updateHeroSlide, deleteHeroSlide } from "../../home/services/heroService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { homeFormComponent } from "../../home/components/homeFormComponent.js";
 import { homeListComponent } from "../../home/components/homeListComponent.js";
@@ -33,26 +33,22 @@ export function carregarModuloHome() {
                 
                 if (window.exibirModalDelete) {
                     window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover este slide permanentemente?", function(objetoConfirmado) {
-                        for (var i = 0; i < heroSlides.length; i++) {
-                            if (heroSlides[i].id == objetoConfirmado.id) {
-                                heroSlides.splice(i, 1);
-                                break;
-                            }
+                        try {
+                            deleteHeroSlide(objetoConfirmado.id);
+                            showToast("Slide excluído com sucesso!", 3000);
+                            renderizarSlidesAdmin();
+                        } catch (erro) {
+                            showToast(erro.message, 3000, "error");
                         }
-                        setHeroConfig(heroSlides);
-                        showToast("Slide excluído com sucesso!", 3000);
-                        renderizarSlidesAdmin();
                     });
                 } else if (confirm("Tem certeza que deseja excluir este slide?")) {
-                    for (var i = 0; i < heroSlides.length; i++) {
-                        if (heroSlides[i].id == idItem) {
-                            heroSlides.splice(i, 1);
-                            break;
-                        }
+                    try {
+                        deleteHeroSlide(idItem);
+                        showToast("Slide excluído com sucesso!", 3000);
+                        renderizarSlidesAdmin();
+                    } catch (erro) {
+                        showToast(erro.message, 3000, "error");
                     }
-                    setHeroConfig(heroSlides);
-                    showToast("Slide excluído com sucesso!", 3000);
-                    renderizarSlidesAdmin();
                 }
             }
             
@@ -75,18 +71,13 @@ export function carregarModuloHome() {
                 
                 if (window.exibirModalUpdate) {
                     window.exibirModalUpdate("Editar Slide", itemParaEditar, camposConfig, function(objetoAtualizado) {
-                        for (var m = 0; m < heroSlidesEdit.length; m++) {
-                            if (heroSlidesEdit[m].id == objetoAtualizado.id) {
-                                heroSlidesEdit[m].titulo = objetoAtualizado.titulo;
-                                heroSlidesEdit[m].subtitulo = objetoAtualizado.subtitulo;
-                                heroSlidesEdit[m].textoBotao = objetoAtualizado.textoBotao;
-                                heroSlidesEdit[m].linkBotao = objetoAtualizado.linkBotao;
-                                break;
-                            }
+                        try {
+                            updateHeroSlide(objetoAtualizado.id, objetoAtualizado);
+                            showToast("Slide atualizado com sucesso!", 3000);
+                            renderizarSlidesAdmin();
+                        } catch (erro) {
+                            showToast(erro.message, 3000, "error");
                         }
-                        setHeroConfig(heroSlidesEdit);
-                        showToast("Slide atualizado com sucesso!", 3000);
-                        renderizarSlidesAdmin();
                     });
                 }
             }
@@ -129,23 +120,7 @@ function inicializarLogicaHome() {
         var botaoTextoValor = inputButtonText ? inputButtonText.value.trim() : "";
         var botaoLinkValor = inputButtonLink ? inputButtonLink.value.trim() : "";
 
-        if (!tituloValor || !subtituloValor) {
-            showToast("Por favor, preencha o título e o subtítulo.", 3000, "error");
-            return;
-        }
-
-        var heroSlides = getHeroConfig();
-        if (!heroSlides || !Array.isArray(heroSlides)) {
-            heroSlides = [];
-        }
-
-        if (heroSlides.length >= 3) {
-            showToast("O limite máximo é de 3 slides.", 3000, "error");
-            return;
-        }
-
         var novoSlide = {
-            id: Date.now(),
             titulo: tituloValor,
             subtitulo: subtituloValor,
             textoBotao: botaoTextoValor,
@@ -153,14 +128,17 @@ function inicializarLogicaHome() {
             imagem: base64Image
         };
 
-        heroSlides.push(novoSlide);
-        setHeroConfig(heroSlides);
-        showToast("Slide adicionado com sucesso!", 3000);
-
-        heroForm.reset();
-        base64Image = null;
-        imagePreview.innerHTML = "";
-        renderizarSlidesAdmin();
+        try {
+            addHeroSlide(novoSlide);
+            showToast("Slide adicionado com sucesso!", 3000);
+            
+            heroForm.reset();
+            base64Image = null;
+            imagePreview.innerHTML = "";
+            renderizarSlidesAdmin();
+        } catch (erro) {
+            showToast(erro.message, 3000, "error");
+        }
     });
 }
 

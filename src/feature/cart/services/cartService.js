@@ -1,145 +1,89 @@
-import { Cart } from "../models/cartModel.js";
-import { getProducts } from "../../products/services/productServices.js";
+import { getStorageData, setStorageData } from "../../../core/storage.js";
 
-const STORAGE_KEY = "carrinho";
+var CHAVE_CARRINHO = "carrinho";
 
-export function getCartItems() {
-
-  const cart = localStorage.getItem(STORAGE_KEY);
-
-  return cart ? JSON.parse(cart) : [];
-
+export function getCart() {
+    return getStorageData(CHAVE_CARRINHO, []);
 }
 
-function saveCart(cart) {
+export function addToCart(produto, quantidade) {
+    var cart = getCart();
+    var encontrado = false;
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(cart)
-  );
+    for (var i = 0; i < cart.length; i++) {
+        if (cart[i].id == produto.id) {
+            cart[i].quantidade += quantidade;
+            encontrado = true;
+            break;
+        }
+    }
 
+    if (!encontrado) {
+        var novoItem = {};
+        for (var prop in produto) {
+            if (produto.hasOwnProperty(prop)) {
+                novoItem[prop] = produto[prop];
+            }
+        }
+        novoItem.quantidade = quantidade;
+        cart.push(novoItem);
+    }
+
+    setStorageData(CHAVE_CARRINHO, cart);
 }
 
-export function findCartItemById(id) {
+export function updateCartQuantity(produtoId, novaQuantidade) {
+    var cart = getCart();
 
-  return getCartItems().find(
-    item => item.id === Number(id)
-  );
+    for (var i = 0; i < cart.length; i++) {
+        if (cart[i].id == produtoId) {
+            if (novaQuantidade <= 0) {
+                cart.splice(i, 1);
+            } else {
+                cart[i].quantidade = novaQuantidade;
+            }
+            break;
+        }
+    }
 
+    setStorageData(CHAVE_CARRINHO, cart);
 }
 
-export function addToCart(productId) {
+export function removeFromCart(produtoId) {
+    var cart = getCart();
 
-  const cart = getCartItems();
+    for (var i = 0; i < cart.length; i++) {
+        if (cart[i].id == produtoId) {
+            cart.splice(i, 1);
+            break;
+        }
+    }
 
-  const existingItem = cart.find(
-    item => item.productId === Number(productId)
-  );
-
-  if (existingItem) {
-
-    existingItem.quantidade++;
-
-  } else {
-
-    const newItem = new Cart(
-      Date.now(),
-      Number(productId),
-      1
-    );
-
-    cart.push(newItem);
-
-  }
-
-  saveCart(cart);
-
-}
-
-export function increaseQuantity(cartItemId) {
-
-  const cart = getCartItems();
-
-  const item = cart.find(
-    item => item.id === Number(cartItemId)
-  );
-
-  if (!item) return;
-
-  item.quantidade++;
-
-  saveCart(cart);
-
-}
-
-export function decreaseQuantity(cartItemId) {
-
-  const cart = getCartItems();
-
-  const item = cart.find(
-    item => item.id === Number(cartItemId)
-  );
-
-  if (!item) return;
-
-  if (item.quantidade > 1) {
-
-    item.quantidade--;
-
-  } else {
-
-    const updatedCart = cart.filter(
-      item => item.id !== Number(cartItemId)
-    );
-
-    saveCart(updatedCart);
-
-    return;
-
-  }
-
-  saveCart(cart);
-
-}
-
-export function removeCartItem(cartItemId) {
-
-  const cart = getCartItems();
-
-  const updatedCart = cart.filter(
-    item => item.id !== Number(cartItemId)
-  );
-
-  saveCart(updatedCart);
-
+    setStorageData(CHAVE_CARRINHO, cart);
 }
 
 export function clearCart() {
-
-  localStorage.removeItem(STORAGE_KEY);
-
+    setStorageData(CHAVE_CARRINHO, []);
 }
 
-export function getCartProducts() {
+export function getCartTotal() {
+    var cart = getCart();
+    var total = 0;
 
-  const cart = getCartItems();
+    for (var i = 0; i < cart.length; i++) {
+        total += cart[i].preco * cart[i].quantidade;
+    }
 
-  const products = getProducts();
+    return total;
+}
 
-  return cart.map(cartItem => {
+export function getCartCount() {
+    var cart = getCart();
+    var count = 0;
 
-    const product = products.find(
-      product => product.id === cartItem.productId
-    );
+    for (var i = 0; i < cart.length; i++) {
+        count += cart[i].quantidade;
+    }
 
-    return {
-      ...cartItem,
-      nome: product?.nome,
-      preco: product?.preco,
-      descricao: product?.descricao,
-      imagem: product?.imagem
-    };
-
-  });
-
+    return count;
 }
