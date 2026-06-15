@@ -1,7 +1,14 @@
 import { getCategories, createCategory, deleteCategory } from "../../categories/services/categoryService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
+import { categoryAdminListComponent } from "../../categories/components/categoryAdminListComponent.js";
+import { categoryFormComponent } from "../../categories/components/categoryFormComponent.js";
 
 export function carregarModuloCategorias() {
+    var formContainer = document.getElementById("admin-category-form-container");
+    if (formContainer) {
+        formContainer.innerHTML = categoryFormComponent();
+    }
+
     var form = document.getElementById("category-form");
     if (form) {
         form.addEventListener("submit", function(e) {
@@ -45,24 +52,7 @@ function renderizarListaCategorias() {
     var listContainer = document.getElementById("admin-categories-list");
     if (!listContainer) return;
     
-    if (categorias.length === 0) {
-        listContainer.innerHTML = "<p style='color:#666;'>Nenhuma categoria cadastrada.</p>";
-        return;
-    }
-    
-    var html = '<table class="admin-table"><thead><tr><th>Imagem</th><th>Nome</th><th>Ações</th></tr></thead><tbody>';
-    for (var i = 0; i < categorias.length; i++) {
-        var cat = categorias[i];
-        html += '<tr>' +
-            '<td><img src="' + (cat.imagem || 'https://via.placeholder.com/50') + '" width="50" height="50"></td>' +
-            '<td>' + cat.nome + '</td>' +
-            '<td>' +
-                '<button onclick="window.excluirCategoriaAdmin(' + cat.id + ')" class="btn-delete">Deletar</button>' +
-            '</td>' +
-        '</tr>';
-    }
-    html += '</tbody></table>';
-    listContainer.innerHTML = html;
+    listContainer.innerHTML = categoryAdminListComponent(categorias);
 }
 
 window.excluirCategoriaAdmin = function(id) {

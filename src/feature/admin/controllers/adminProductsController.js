@@ -1,8 +1,15 @@
 import { getCategories } from "../../categories/services/categoryService.js";
 import { getProductsWithCategory, createProduct, deleteProduct } from "../../products/services/productServices.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
+import { productAdminListComponent } from "../../products/components/productAdminListComponent.js";
+import { productFormComponent } from "../../products/components/productFormComponent.js";
 
 export function carregarModuloProdutos() {
+    var formContainer = document.getElementById("admin-product-form-container");
+    if (formContainer) {
+        formContainer.innerHTML = productFormComponent();
+    }
+
     var form = document.getElementById("product-form");
     
     // Configurar Dropdown Customizado de Categorias
@@ -96,26 +103,7 @@ function renderizarListaProdutos() {
     var listContainer = document.getElementById("admin-products-list");
     if (!listContainer) return;
     
-    if (produtos.length === 0) {
-        listContainer.innerHTML = "<p style='color:#666;'>Nenhum produto cadastrado.</p>";
-        return;
-    }
-    
-    var html = '<table class="admin-table"><thead><tr><th>Imagem</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Ações</th></tr></thead><tbody>';
-    for (var i = 0; i < produtos.length; i++) {
-        var p = produtos[i];
-        html += '<tr>' +
-            '<td><img src="' + (p.imagem || 'https://via.placeholder.com/50') + '" width="50" height="50"></td>' +
-            '<td>' + p.nome + '</td>' +
-            '<td>' + p.categoryName + '</td>' +
-            '<td>R$ ' + parseFloat(p.preco).toFixed(2).replace('.', ',') + '</td>' +
-            '<td>' +
-                '<button onclick="window.excluirProdutoAdmin(' + p.id + ')" class="btn-delete">Deletar</button>' +
-            '</td>' +
-        '</tr>';
-    }
-    html += '</tbody></table>';
-    listContainer.innerHTML = html;
+    listContainer.innerHTML = productAdminListComponent(produtos);
 }
 
 window.excluirProdutoAdmin = function(id) {

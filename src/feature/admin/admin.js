@@ -2,11 +2,7 @@ import { protectAdminPage } from "../../core/rolesManager.js";
 import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent } from "../../shared/components/footer/footerComponent.js";
 import { initNavbar } from "../../shared/components/navbar/navbarController.js";
-import { adminFormComponent } from "./components/adminFormComponent.js";
-import { adminListComponent } from "./components/adminListComponent.js";
 import { injetarSidebar } from "../../shared/components/sidebar/sidebarComponent.js";
-import { categoryFormComponent } from "../categories/components/categoryFormComponent.js";
-import { productFormComponent } from "../products/components/productFormComponent.js";
 import { aboutFormComponent } from "../about/components/aboutFormComponent.js";
 import { aboutListComponent } from "../about/components/aboutListComponent.js";
 
@@ -58,15 +54,15 @@ window.mudarViewAdmin = function(idView) {
 
     if (idView === 'view-home') {
         titulo = "Configurações da Home (Hero)";
-        formHtml = adminFormComponent();
-        listHtml = adminListComponent();
+        formHtml = "<p>O componente de formulário da home foi removido para refatoração.</p>";
+        listHtml = "<p>O componente de listagem da home foi removido para refatoração.</p>";
     } else if (idView === 'view-produtos') {
         titulo = "Gestão de Produtos";
-        formHtml = productFormComponent();
+        formHtml = '<div id="admin-product-form-container"></div>';
         listHtml = '<div id="admin-products-list"></div>';
     } else if (idView === 'view-categorias') {
         titulo = "Gestão de Categorias";
-        formHtml = categoryFormComponent();
+        formHtml = '<div id="admin-category-form-container"></div>';
         listHtml = '<div id="admin-categories-list"></div>';
     } else if (idView === 'view-about') {
         titulo = "Imagens da Seção Sobre";
