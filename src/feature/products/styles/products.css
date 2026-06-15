@@ -198,41 +198,4 @@ main {
     }
 
 }
-
-/* =========================================================
-   CONTROLES ADMINISTRATIVOS DE PRODUTOS
-   ========================================================= */
-.product-admin-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 0 16px 16px;
-}
-
-.btn-edit-product {
-    flex: 1;
-    border: 1.5px solid #cbd5e1;
-    background-color: #f1f5f9;
-    color: #334155;
-    padding: 12px;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-}
-
-.btn-edit-product:hover {
-    background-color: #e2e8f0;
-    color: #1e293b;
-}
-
-@media(min-width: 480px) {
-    .product-admin-actions {
-        flex-direction: row;
-    }
-}
+
