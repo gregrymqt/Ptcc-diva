@@ -1,4 +1,4 @@
-import { setStorageData, getStorageData } from "../../../core/storage.js";
+import { getHeroConfig, setHeroConfig } from "../../home/services/heroService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { homeFormComponent } from "../../home/components/homeFormComponent.js";
 import { homeListComponent } from "../../home/components/homeListComponent.js";
@@ -23,7 +23,7 @@ export function carregarModuloHome() {
             
             if (elementoClicado.classList.contains("btn-delete-slide")) {
                 var idItem = elementoClicado.getAttribute("data-id");
-                var heroSlides = getStorageData("heroConfig");
+                var heroSlides = getHeroConfig();
                 if (!heroSlides || !Array.isArray(heroSlides)) heroSlides = [];
                 
                 var itemParaExcluir = null;
@@ -39,7 +39,7 @@ export function carregarModuloHome() {
                                 break;
                             }
                         }
-                        setStorageData("heroConfig", heroSlides);
+                        setHeroConfig(heroSlides);
                         showToast("Slide excluído com sucesso!", 3000);
                         renderizarSlidesAdmin();
                     });
@@ -50,7 +50,7 @@ export function carregarModuloHome() {
                             break;
                         }
                     }
-                    setStorageData("heroConfig", heroSlides);
+                    setHeroConfig(heroSlides);
                     showToast("Slide excluído com sucesso!", 3000);
                     renderizarSlidesAdmin();
                 }
@@ -58,7 +58,7 @@ export function carregarModuloHome() {
             
             if (elementoClicado.classList.contains("btn-edit-slide")) {
                 var idItemEdit = elementoClicado.getAttribute("data-id");
-                var heroSlidesEdit = getStorageData("heroConfig");
+                var heroSlidesEdit = getHeroConfig();
                 if (!heroSlidesEdit || !Array.isArray(heroSlidesEdit)) heroSlidesEdit = [];
                 
                 var itemParaEditar = null;
@@ -84,7 +84,7 @@ export function carregarModuloHome() {
                                 break;
                             }
                         }
-                        setStorageData("heroConfig", heroSlidesEdit);
+                        setHeroConfig(heroSlidesEdit);
                         showToast("Slide atualizado com sucesso!", 3000);
                         renderizarSlidesAdmin();
                     });
@@ -134,7 +134,7 @@ function inicializarLogicaHome() {
             return;
         }
 
-        var heroSlides = getStorageData("heroConfig");
+        var heroSlides = getHeroConfig();
         if (!heroSlides || !Array.isArray(heroSlides)) {
             heroSlides = [];
         }
@@ -154,7 +154,7 @@ function inicializarLogicaHome() {
         };
 
         heroSlides.push(novoSlide);
-        setStorageData("heroConfig", heroSlides);
+        setHeroConfig(heroSlides);
         showToast("Slide adicionado com sucesso!", 3000);
 
         heroForm.reset();
@@ -169,7 +169,7 @@ function carregarConfiguracoes() {
 }
 
 function renderizarSlidesAdmin() {
-    var heroSlides = getStorageData("heroConfig");
+    var heroSlides = getHeroConfig();
     if (!heroSlides || !Array.isArray(heroSlides)) {
         heroSlides = [];
     }

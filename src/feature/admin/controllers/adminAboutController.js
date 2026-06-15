@@ -2,7 +2,7 @@
    ADMINABOUTCONTROLLER.JS — Controller de Imagens About
    ================================================ */
 
-import { setStorageData, getStorageData } from "../../../core/storage.js";
+import { getAboutImagesConfig, setAboutImagesConfig } from "../../about/services/aboutService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { aboutAdminCardComponent, aboutImagePreviewComponent } from "../../about/components/aboutAdminCardComponent.js";
 
@@ -15,7 +15,7 @@ export function carregarModuloAbout() {
             
             if (elementoClicado.classList.contains("btn-delete-about")) {
                 var idItem = elementoClicado.getAttribute("data-id");
-                var aboutImages = getStorageData("aboutImagesConfig");
+                var aboutImages = getAboutImagesConfig();
                 if (!aboutImages || !Array.isArray(aboutImages)) aboutImages = [];
                 
                 var itemParaExcluir = null;
@@ -31,7 +31,7 @@ export function carregarModuloAbout() {
                                 break;
                             }
                         }
-                        setStorageData("aboutImagesConfig", aboutImages);
+                        setAboutImagesConfig(aboutImages);
                         showToast("Imagem excluída com sucesso!", 3000);
                         renderizarImagensAbout();
                     });
@@ -42,7 +42,7 @@ export function carregarModuloAbout() {
                             break;
                         }
                     }
-                    setStorageData("aboutImagesConfig", aboutImages);
+                    setAboutImagesConfig(aboutImages);
                     showToast("Imagem excluída com sucesso!", 3000);
                     renderizarImagensAbout();
                 }
@@ -50,7 +50,7 @@ export function carregarModuloAbout() {
             
             if (elementoClicado.classList.contains("btn-edit-about")) {
                 var idItemEdit = elementoClicado.getAttribute("data-id");
-                var aboutImagesEdit = getStorageData("aboutImagesConfig");
+                var aboutImagesEdit = getAboutImagesConfig();
                 if (!aboutImagesEdit || !Array.isArray(aboutImagesEdit)) aboutImagesEdit = [];
                 
                 var itemParaEditar = null;
@@ -72,7 +72,7 @@ export function carregarModuloAbout() {
                                 break;
                             }
                         }
-                        setStorageData("aboutImagesConfig", aboutImagesEdit);
+                        setAboutImagesConfig(aboutImagesEdit);
                         showToast("Imagem atualizada com sucesso!", 3000);
                         renderizarImagensAbout();
                     });
@@ -116,7 +116,7 @@ function inicializarLogicaAbout() {
             return;
         }
 
-        var aboutImages = getStorageData("aboutImagesConfig");
+        var aboutImages = getAboutImagesConfig();
         if (!aboutImages || !Array.isArray(aboutImages)) {
             aboutImages = [];
         }
@@ -133,7 +133,7 @@ function inicializarLogicaAbout() {
         };
 
         aboutImages.push(novaImagem);
-        setStorageData("aboutImagesConfig", aboutImages);
+        setAboutImagesConfig(aboutImages);
         showToast("Imagem adicionada com sucesso!", 3000);
 
         aboutForm.reset();
@@ -144,7 +144,7 @@ function inicializarLogicaAbout() {
 }
 
 function renderizarImagensAbout() {
-    var aboutImages = getStorageData("aboutImagesConfig");
+    var aboutImages = getAboutImagesConfig();
     if (!aboutImages || !Array.isArray(aboutImages)) {
         aboutImages = [];
     }
