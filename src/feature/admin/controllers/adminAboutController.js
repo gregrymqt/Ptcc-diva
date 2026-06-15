@@ -8,6 +8,79 @@ import { aboutAdminCardComponent, aboutImagePreviewComponent } from "../../about
 
 export function carregarModuloAbout() {
     inicializarLogicaAbout();
+    var adminAboutList = document.getElementById("admin-about-list");
+    if (adminAboutList) {
+        adminAboutList.addEventListener("click", function(event) {
+            var elementoClicado = event.target;
+            
+            if (elementoClicado.classList.contains("btn-delete-about")) {
+                var idItem = elementoClicado.getAttribute("data-id");
+                var aboutImages = getStorageData("aboutImagesConfig");
+                if (!aboutImages || !Array.isArray(aboutImages)) aboutImages = [];
+                
+                var itemParaExcluir = null;
+                for (var k = 0; k < aboutImages.length; k++) {
+                    if (aboutImages[k].id == idItem) { itemParaExcluir = aboutImages[k]; break; }
+                }
+                
+                if (window.exibirModalDelete) {
+                    window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover esta imagem permanentemente?", function(objetoConfirmado) {
+                        for (var i = 0; i < aboutImages.length; i++) {
+                            if (aboutImages[i].id == objetoConfirmado.id) {
+                                aboutImages.splice(i, 1);
+                                break;
+                            }
+                        }
+                        setStorageData("aboutImagesConfig", aboutImages);
+                        showToast("Imagem excluída com sucesso!", 3000);
+                        renderizarImagensAbout();
+                    });
+                } else if (confirm("Tem certeza que deseja excluir esta imagem?")) {
+                    for (var i = 0; i < aboutImages.length; i++) {
+                        if (aboutImages[i].id == idItem) {
+                            aboutImages.splice(i, 1);
+                            break;
+                        }
+                    }
+                    setStorageData("aboutImagesConfig", aboutImages);
+                    showToast("Imagem excluída com sucesso!", 3000);
+                    renderizarImagensAbout();
+                }
+            }
+            
+            if (elementoClicado.classList.contains("btn-edit-about")) {
+                var idItemEdit = elementoClicado.getAttribute("data-id");
+                var aboutImagesEdit = getStorageData("aboutImagesConfig");
+                if (!aboutImagesEdit || !Array.isArray(aboutImagesEdit)) aboutImagesEdit = [];
+                
+                var itemParaEditar = null;
+                for (var j = 0; j < aboutImagesEdit.length; j++) {
+                    if (aboutImagesEdit[j].id == idItemEdit) { itemParaEditar = aboutImagesEdit[j]; break; }
+                }
+                
+                var camposConfig = [
+                    { name: "alt", label: "Texto Alternativo (Alt)", type: "text" },
+                    { name: "url", label: "URL da Imagem", type: "text" }
+                ];
+                
+                if (window.exibirModalUpdate) {
+                    window.exibirModalUpdate("Editar Imagem", itemParaEditar, camposConfig, function(objetoAtualizado) {
+                        for (var m = 0; m < aboutImagesEdit.length; m++) {
+                            if (aboutImagesEdit[m].id == objetoAtualizado.id) {
+                                aboutImagesEdit[m].alt = objetoAtualizado.alt;
+                                aboutImagesEdit[m].url = objetoAtualizado.url;
+                                break;
+                            }
+                        }
+                        setStorageData("aboutImagesConfig", aboutImagesEdit);
+                        showToast("Imagem atualizada com sucesso!", 3000);
+                        renderizarImagensAbout();
+                    });
+                }
+            }
+        });
+    }
+
     renderizarImagensAbout();
 }
 
@@ -93,19 +166,4 @@ function renderizarImagensAbout() {
     adminAboutList.innerHTML = htmlList;
 }
 
-window.excluirImagemAbout = function(id) {
-    var aboutImages = getStorageData("aboutImagesConfig");
-    if (!aboutImages || !Array.isArray(aboutImages)) return;
-    
-    if (confirm("Tem certeza que deseja excluir esta imagem?")) {
-        for (var i = 0; i < aboutImages.length; i++) {
-            if (aboutImages[i].id === id) {
-                aboutImages.splice(i, 1);
-                break;
-            }
-        }
-        setStorageData("aboutImagesConfig", aboutImages);
-        showToast("Imagem excluída com sucesso!", 3000);
-        renderizarImagensAbout();
-    }
-};
+

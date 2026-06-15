@@ -8,8 +8,8 @@ export function homeAdminSlideComponent(slide) {
             '<p>' + slide.subtitulo + '</p>' +
         '</div>' +
         '<div class="admin-slide-actions">' +
-            '<button onclick="window.abrirModalEdicaoSlide(' + slide.id + ')" class="btn-edit">Editar</button>' +
-            '<button onclick="window.excluirSlideAdmin(' + slide.id + ')" class="btn-delete">Excluir</button>' +
+            '<button data-id="' + slide.id + '" class="btn-edit btn-edit-slide">Editar</button>' +
+            '<button data-id="' + slide.id + '" class="btn-delete btn-delete-slide">Excluir</button>' +
         '</div>' +
     '</div>';
 }

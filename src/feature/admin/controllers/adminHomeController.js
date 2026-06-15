@@ -17,6 +17,82 @@ export function carregarModuloHome() {
     }
 
     inicializarLogicaHome();
+    if (listContainer) {
+        listContainer.addEventListener("click", function(event) {
+            var elementoClicado = event.target;
+            
+            if (elementoClicado.classList.contains("btn-delete-slide")) {
+                var idItem = elementoClicado.getAttribute("data-id");
+                var heroSlides = getStorageData("heroConfig");
+                if (!heroSlides || !Array.isArray(heroSlides)) heroSlides = [];
+                
+                var itemParaExcluir = null;
+                for (var k = 0; k < heroSlides.length; k++) {
+                    if (heroSlides[k].id == idItem) { itemParaExcluir = heroSlides[k]; break; }
+                }
+                
+                if (window.exibirModalDelete) {
+                    window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover este slide permanentemente?", function(objetoConfirmado) {
+                        for (var i = 0; i < heroSlides.length; i++) {
+                            if (heroSlides[i].id == objetoConfirmado.id) {
+                                heroSlides.splice(i, 1);
+                                break;
+                            }
+                        }
+                        setStorageData("heroConfig", heroSlides);
+                        showToast("Slide excluído com sucesso!", 3000);
+                        renderizarSlidesAdmin();
+                    });
+                } else if (confirm("Tem certeza que deseja excluir este slide?")) {
+                    for (var i = 0; i < heroSlides.length; i++) {
+                        if (heroSlides[i].id == idItem) {
+                            heroSlides.splice(i, 1);
+                            break;
+                        }
+                    }
+                    setStorageData("heroConfig", heroSlides);
+                    showToast("Slide excluído com sucesso!", 3000);
+                    renderizarSlidesAdmin();
+                }
+            }
+            
+            if (elementoClicado.classList.contains("btn-edit-slide")) {
+                var idItemEdit = elementoClicado.getAttribute("data-id");
+                var heroSlidesEdit = getStorageData("heroConfig");
+                if (!heroSlidesEdit || !Array.isArray(heroSlidesEdit)) heroSlidesEdit = [];
+                
+                var itemParaEditar = null;
+                for (var j = 0; j < heroSlidesEdit.length; j++) {
+                    if (heroSlidesEdit[j].id == idItemEdit) { itemParaEditar = heroSlidesEdit[j]; break; }
+                }
+                
+                var camposConfig = [
+                    { name: "titulo", label: "Título", type: "text" },
+                    { name: "subtitulo", label: "Subtítulo", type: "text" },
+                    { name: "textoBotao", label: "Texto do Botão", type: "text" },
+                    { name: "linkBotao", label: "Link do Botão", type: "text" }
+                ];
+                
+                if (window.exibirModalUpdate) {
+                    window.exibirModalUpdate("Editar Slide", itemParaEditar, camposConfig, function(objetoAtualizado) {
+                        for (var m = 0; m < heroSlidesEdit.length; m++) {
+                            if (heroSlidesEdit[m].id == objetoAtualizado.id) {
+                                heroSlidesEdit[m].titulo = objetoAtualizado.titulo;
+                                heroSlidesEdit[m].subtitulo = objetoAtualizado.subtitulo;
+                                heroSlidesEdit[m].textoBotao = objetoAtualizado.textoBotao;
+                                heroSlidesEdit[m].linkBotao = objetoAtualizado.linkBotao;
+                                break;
+                            }
+                        }
+                        setStorageData("heroConfig", heroSlidesEdit);
+                        showToast("Slide atualizado com sucesso!", 3000);
+                        renderizarSlidesAdmin();
+                    });
+                }
+            }
+        });
+    }
+
     carregarConfiguracoes();
 }
 
@@ -115,59 +191,4 @@ function renderizarSlidesAdmin() {
     adminSlidesList.innerHTML = htmlList;
 }
 
-window.excluirSlideAdmin = function(id) {
-    var heroSlides = getStorageData("heroConfig");
-    if (!heroSlides || !Array.isArray(heroSlides)) return;
-    
-    if (confirm("Tem certeza que deseja excluir este slide?")) {
-        for (var i = 0; i < heroSlides.length; i++) {
-            if (heroSlides[i].id === id) {
-                heroSlides.splice(i, 1);
-                break;
-            }
-        }
-        setStorageData("heroConfig", heroSlides);
-        showToast("Slide excluído com sucesso!", 3000);
-        renderizarSlidesAdmin();
-    }
-};
 
-window.abrirModalEdicaoSlide = function(id) {
-    var heroSlides = getStorageData("heroConfig");
-    if (!heroSlides || !Array.isArray(heroSlides)) return;
-    
-    var slideAtual = null;
-    for (var i = 0; i < heroSlides.length; i++) {
-        if (heroSlides[i].id === id) {
-            slideAtual = heroSlides[i];
-            break;
-        }
-    }
-    
-    if (slideAtual) {
-        var camposFormulario = [
-            { name: "titulo", label: "Título", type: "text" },
-            { name: "subtitulo", label: "Subtítulo", type: "text" },
-            { name: "textoBotao", label: "Texto do Botão", type: "text" },
-            { name: "linkBotao", label: "Link do Botão", type: "text" }
-        ];
-        
-        if (window.exibirModalUpdate) {
-            window.exibirModalUpdate("Editar Slide", slideAtual, camposFormulario, function(dadosAtualizados) {
-                var heroSlidesAtuais = getStorageData("heroConfig");
-                for (var j = 0; j < heroSlidesAtuais.length; j++) {
-                    if (heroSlidesAtuais[j].id === id) {
-                        heroSlidesAtuais[j].titulo = dadosAtualizados.titulo;
-                        heroSlidesAtuais[j].subtitulo = dadosAtualizados.subtitulo;
-                        heroSlidesAtuais[j].textoBotao = dadosAtualizados.textoBotao;
-                        heroSlidesAtuais[j].linkBotao = dadosAtualizados.linkBotao;
-                        break;
-                    }
-                }
-                setStorageData("heroConfig", heroSlidesAtuais);
-                showToast("Slide atualizado com sucesso!", 3000);
-                renderizarSlidesAdmin();
-            });
-        }
-    }
-};

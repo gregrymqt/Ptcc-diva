@@ -1,5 +1,5 @@
 import { getCategories } from "../../categories/services/categoryService.js";
-import { getProductsWithCategory, createProduct, deleteProduct } from "../../products/services/productServices.js";
+import { getProductsWithCategory, createProduct, deleteProduct, updateProduct } from "../../products/services/productServices.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { productAdminListComponent } from "../../products/components/productAdminListComponent.js";
 import { productFormComponent } from "../../products/components/productFormComponent.js";
@@ -100,6 +100,59 @@ export function carregarModuloProdutos() {
         });
     }
 
+    var listContainer = document.getElementById("admin-products-list");
+    if (listContainer) {
+        listContainer.addEventListener("click", function(event) {
+            var elementoClicado = event.target;
+            
+            if (elementoClicado.classList.contains("btn-delete-product")) {
+                var idItem = elementoClicado.getAttribute("data-id");
+                var produtos = getProductsWithCategory();
+                var itemParaExcluir = null;
+                for (var k = 0; k < produtos.length; k++) {
+                    if (produtos[k].id == idItem) { itemParaExcluir = produtos[k]; break; }
+                }
+                
+                if (window.exibirModalDelete) {
+                    window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover este produto permanentemente?", function(objetoConfirmado) {
+                        deleteProduct(objetoConfirmado.id);
+                        showToast("Produto excluído!", 3000);
+                        renderizarListaProdutos();
+                    });
+                } else if (confirm("Tem certeza que deseja excluir este produto?")) {
+                    deleteProduct(idItem);
+                    showToast("Produto excluído!", 3000);
+                    renderizarListaProdutos();
+                }
+            }
+            
+            if (elementoClicado.classList.contains("btn-edit-product")) {
+                var idItemEdit = elementoClicado.getAttribute("data-id");
+                var produtosEdit = getProductsWithCategory();
+                var itemParaEditar = null;
+                for (var j = 0; j < produtosEdit.length; j++) {
+                    if (produtosEdit[j].id == idItemEdit) { itemParaEditar = produtosEdit[j]; break; }
+                }
+                
+                var camposConfig = [
+                    { name: "nome", label: "Nome do Produto", type: "text" },
+                    { name: "preco", label: "Preço", type: "number" },
+                    { name: "descricao", label: "Descrição", type: "text" },
+                    { name: "modoUso", label: "Modo de Uso", type: "text" },
+                    { name: "ingredientes", label: "Ingredientes", type: "text" }
+                ];
+                
+                if (window.exibirModalUpdate) {
+                    window.exibirModalUpdate("Editar Produto", itemParaEditar, camposConfig, function(objetoAtualizado) {
+                        updateProduct(objetoAtualizado.id, objetoAtualizado);
+                        showToast("Produto atualizado com sucesso!", 3000);
+                        renderizarListaProdutos();
+                    });
+                }
+            }
+        });
+    }
+
     renderizarListaProdutos();
 }
 
@@ -111,10 +164,4 @@ function renderizarListaProdutos() {
     listContainer.innerHTML = productAdminListComponent(produtos);
 }
 
-window.excluirProdutoAdmin = function(id) {
-    if (confirm("Tem certeza que deseja excluir este produto?")) {
-        deleteProduct(id);
-        showToast("Produto excluído!", 3000);
-        renderizarListaProdutos();
-    }
-};
+

@@ -132,3 +132,16 @@
     background-color: #b34d68;
     color: #fff;
 }
+
+/* Estilos adicionais para suporte a exclusão e textos dinâmicos */
+.diva-modal-btn-delete {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.diva-modal-text {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.5;
+    margin: 0;
+}

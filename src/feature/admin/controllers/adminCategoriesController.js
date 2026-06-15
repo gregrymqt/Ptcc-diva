@@ -1,4 +1,4 @@
-import { getCategories, createCategory, deleteCategory } from "../../categories/services/categoryService.js";
+import { getCategories, createCategory, deleteCategory, updateCategory } from "../../categories/services/categoryService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { categoryAdminListComponent } from "../../categories/components/categoryAdminListComponent.js";
 import { categoryFormComponent } from "../../categories/components/categoryFormComponent.js";
@@ -44,6 +44,56 @@ export function carregarModuloCategorias() {
         });
     }
 
+    var listContainer = document.getElementById("admin-categories-list");
+    if (listContainer) {
+        listContainer.addEventListener("click", function(event) {
+            var elementoClicado = event.target;
+            
+            if (elementoClicado.classList.contains("btn-delete-category")) {
+                var idItem = elementoClicado.getAttribute("data-id");
+                var categorias = getCategories();
+                var itemParaExcluir = null;
+                for (var k = 0; k < categorias.length; k++) {
+                    if (categorias[k].id == idItem) { itemParaExcluir = categorias[k]; break; }
+                }
+                
+                if (window.exibirModalDelete) {
+                    window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover esta categoria permanentemente?", function(objetoConfirmado) {
+                        deleteCategory(objetoConfirmado.id);
+                        showToast("Categoria excluída!", 3000);
+                        renderizarListaCategorias();
+                    });
+                } else if (confirm("Tem certeza que deseja excluir esta categoria?")) {
+                    deleteCategory(idItem);
+                    showToast("Categoria excluída!", 3000);
+                    renderizarListaCategorias();
+                }
+            }
+            
+            if (elementoClicado.classList.contains("btn-edit-category")) {
+                var idItemEdit = elementoClicado.getAttribute("data-id");
+                var categoriasEdit = getCategories();
+                var itemParaEditar = null;
+                for (var j = 0; j < categoriasEdit.length; j++) {
+                    if (categoriasEdit[j].id == idItemEdit) { itemParaEditar = categoriasEdit[j]; break; }
+                }
+                
+                var camposConfig = [
+                    { name: "nome", label: "Nome da Categoria", type: "text" },
+                    { name: "descricao", label: "Descrição", type: "text" }
+                ];
+                
+                if (window.exibirModalUpdate) {
+                    window.exibirModalUpdate("Editar Categoria", itemParaEditar, camposConfig, function(objetoAtualizado) {
+                        updateCategory(objetoAtualizado.id, objetoAtualizado);
+                        showToast("Categoria atualizada com sucesso!", 3000);
+                        renderizarListaCategorias();
+                    });
+                }
+            }
+        });
+    }
+
     renderizarListaCategorias();
 }
 
@@ -55,10 +105,4 @@ function renderizarListaCategorias() {
     listContainer.innerHTML = categoryAdminListComponent(categorias);
 }
 
-window.excluirCategoriaAdmin = function(id) {
-    if (confirm("Tem certeza que deseja excluir esta categoria?")) {
-        deleteCategory(id);
-        showToast("Categoria excluída!", 3000);
-        renderizarListaCategorias();
-    }
-};
+

@@ -12,6 +12,7 @@ export function productAdminListComponent(produtos) {
             '<td>' + (p.categoryName || 'Sem Categoria') + '</td>' +
             '<td>R$ ' + parseFloat(p.preco).toFixed(2).replace('.', ',') + '</td>' +
             '<td>' +
+                '<button data-id="' + p.id + '" class="btn-edit btn-edit-product" style="margin-right: 8px;">Editar</button>' +
                 '<button data-id="' + p.id + '" class="btn-delete btn-delete-product">Deletar</button>' +
             '</td>' +
         '</tr>';
