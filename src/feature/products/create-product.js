@@ -154,9 +154,11 @@ function iniciarFormulario() {
     evento.preventDefault();
 
     // Lê todos os dados preenchidos
-    var nome       = document.getElementById("nome").value;
-    var preco      = document.getElementById("preco").value;
-    var descricao  = document.getElementById("descricao").value;
+    var nome         = document.getElementById("nome").value;
+    var preco        = document.getElementById("preco").value;
+    var descricao    = document.getElementById("descricao").value;
+    var modoUso      = document.getElementById("modoUso") ? document.getElementById("modoUso").value : "";
+    var ingredientes = document.getElementById("ingredientes") ? document.getElementById("ingredientes").value : "";
 
     // Pega o rádio selecionado para a categoria
     var radioSelecionado = document.querySelector('input[name="categoryRadio"]:checked');
@@ -175,13 +177,15 @@ function iniciarFormulario() {
 
     // Monta o objeto do produto
     var novoProduto = {
-      id:         Date.now(), // Será substituído pelo service
-      nome:       nome,
-      preco:      Number(preco),
-      descricao:  descricao,
-      imagem:     imagemFinal,
-      categoryId: Number(categoryId),
-      variacoes:  [] // Por padrão, cria sem variações (MVP)
+      id:           Date.now(), // Será substituído pelo service
+      nome:         nome,
+      preco:        Number(preco),
+      descricao:    descricao,
+      imagem:       imagemFinal,
+      categoryId:   Number(categoryId),
+      variacoes:    [], // Por padrão, cria sem variações (MVP)
+      modoUso:      modoUso,
+      ingredientes: ingredientes
     };
 
     // Salva o produto

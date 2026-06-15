@@ -6,7 +6,9 @@ export class Product {
     preco,
     descricao,
     imagem,
-    categoryId
+    categoryId,
+    modoUso,
+    ingredientes
   ) {
 
     this.id = id;
@@ -15,6 +17,8 @@ export class Product {
     this.descricao = descricao;
     this.imagem = imagem;
     this.categoryId = categoryId;
+    this.modoUso = modoUso;
+    this.ingredientes = ingredientes;
   }
 
 }
