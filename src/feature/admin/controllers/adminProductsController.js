@@ -68,9 +68,11 @@ export function carregarModuloProdutos() {
             var nome = document.getElementById("nome").value.trim();
             var preco = parseFloat(document.getElementById("preco").value);
             var desc = document.getElementById("descricao").value.trim();
+            var modoUso = document.getElementById("modoUso") ? document.getElementById("modoUso").value.trim() : "";
+            var ingredientes = document.getElementById("ingredientes") ? document.getElementById("ingredientes").value.trim() : "";
 
             if (!nome || isNaN(preco) || !desc || !selectedCategoryId) {
-                showToast("Preencha todos os campos, incluindo a categoria.", 3000, "error");
+                showToast("Preencha todos os campos obrigatórios, incluindo a categoria.", 3000);
                 return;
             }
 
@@ -79,7 +81,9 @@ export function carregarModuloProdutos() {
                 preco: preco,
                 descricao: desc,
                 categoryId: selectedCategoryId,
-                imagem: base64ProductImage || ""
+                imagem: base64ProductImage || "",
+                modoUso: modoUso,
+                ingredientes: ingredientes
             };
 
             createProduct(product);
