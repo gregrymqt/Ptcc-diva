@@ -1,36 +1,53 @@
-export function renderCategories(
-  categories,
-  containerId
-) {
+import {
+  getCategories
+} from "../../categories/services/categoryService.js";
 
-  const container =
-    document.getElementById(containerId);
+export function categoryComponent() {
 
-  container.innerHTML = "";
+  const categories = getCategories();
 
-  categories.forEach(category => {
+  if (categories.length === 0) {
 
-    container.innerHTML += `
+    return `
+      <section class="categories-section">
 
-      <article class="category-card">
+        <h2>Categorias</h2>
 
-        <img
-          src="${category.imagem}"
-          alt="${category.nome}"
-        >
+        <p>
+          Nenhuma categoria cadastrada.
+        </p>
 
-        <div class="category-content">
-
-          <h3>${category.nome}</h3>
-
-          <p>${category.descricao}</p>
-
-        </div>
-
-      </article>
-
+      </section>
     `;
 
-  });
+  }
 
+  return `
+    <section class="categories-section">
+
+      <h2>Categorias</h2>
+
+      <div class="categories-grid">
+
+        ${categories.map(category => `
+
+          <div class="category-card">
+
+            <img
+              src="${category.imagem}"
+              alt="${category.nome}"
+            >
+
+            <h3>${category.nome}</h3>
+
+            <p>${category.descricao}</p>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
 }
