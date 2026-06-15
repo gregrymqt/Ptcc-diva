@@ -1,7 +1,7 @@
 import { Cart } from "../models/cartModel.js";
 import { getProducts } from "../../products/services/productServices.js";
 
-const STORAGE_KEY = "cart";
+const STORAGE_KEY = "carrinho";
 
 export function getCartItems() {
 

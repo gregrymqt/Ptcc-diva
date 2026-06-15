@@ -14,16 +14,17 @@
 import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent }  from "../../shared/components/footer/footerComponent.js";
 import { showToast }        from "../../shared/components/toast/toastComponent.js";
+import { cartComponent }    from "./components/cartComponent.js";
 
 
 /* --------------------------------------------------
    PARTE 1: FUNÇÕES DO CARRINHO
    Lêem e salvam os dados do carrinho no localStorage.
-   A chave usada é "cart".
+   A chave usada é "carrinho".
    -------------------------------------------------- */
 
 // Nome da chave onde o carrinho fica salvo no navegador
-var CHAVE_CARRINHO = "cart";
+var CHAVE_CARRINHO = "carrinho";
 
 /* Lê e retorna todos os itens do carrinho.
    Se não houver nada salvo, retorna uma lista vazia. */
@@ -127,53 +128,13 @@ function render() {
   // Pega os itens atuais do carrinho
   var itens = pegarItensDoCarrinho();
 
-  // Se o carrinho estiver vazio, mostra mensagem
-  if (itens.length === 0) {
-    document.querySelector("#cart-container").innerHTML =
-      '<section class="cart">' +
-        '<h2>Carrinho</h2>' +
-        '<p>Seu carrinho está vazio.</p>' +
-      '</section>';
+  // Chama o componente que monta o HTML do carrinho
+  document.querySelector("#cart-container").innerHTML = cartComponent(itens);
 
+  // Se o carrinho estiver vazio, não precisamos iniciar eventos de botões que não existem
+  if (itens.length === 0) {
     return;
   }
-
-  // Calcula o total para exibir no final
-  var total = calcularTotal(itens);
-
-  // Monta o HTML de cada item da lista
-  var htmlItens = "";
-
-  for (var i = 0; i < itens.length; i++) {
-    var item = itens[i];
-
-    htmlItens = htmlItens +
-      '<article class="cart-item">' +
-        '<img src="' + item.imagem + '" alt="' + item.nome + '" class="cart-item-image">' +
-        '<div class="cart-item-content">' +
-          '<h3>' + item.nome + '</h3>' +
-          '<p>R$ ' + (item.preco * item.quantidade).toFixed(2) + '</p>' +
-          '<div class="cart-item-actions">' +
-            '<button class="decrease-quantity" data-id="' + item.id + '">-</button>' +
-            '<span>' + item.quantidade + '</span>' +
-            '<button class="increase-quantity" data-id="' + item.id + '">+</button>' +
-          '</div>' +
-          '<button class="remove-cart-item" data-id="' + item.id + '">Remover</button>' +
-        '</div>' +
-      '</article>';
-  }
-
-  // Monta o HTML completo da seção do carrinho
-  document.querySelector("#cart-container").innerHTML =
-    '<section class="cart">' +
-      '<h2>Meu Carrinho</h2>' +
-      '<div class="cart-list">' +
-        htmlItens +
-      '</div>' +
-      '<div class="cart-total">' +
-        '<h3>Total: R$ ' + total.toFixed(2) + '</h3>' +
-      '</div>' +
-    '</section>';
 
   // Registra os eventos dos botões após o HTML ser inserido
   iniciarEventos();
