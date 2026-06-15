@@ -1,91 +1,67 @@
-const STORAGE_KEY = "categories";
+import { getStorageData, setStorageData } from "../../../core/storage.js";
 
 /* PEGAR TODAS CATEGORIAS */
 export function getCategories() {
-
-    const categories =
-        localStorage.getItem(STORAGE_KEY);
-
-    return categories
-        ? JSON.parse(categories)
-        : [];
-
+    return getStorageData("categories", []);
 }
 
 /* SALVAR TODAS CATEGORIAS */
 function saveCategories(categories) {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(categories)
-    );
-
+    setStorageData("categories", categories);
 }
 
 /* CRIAR CATEGORIA */
 export function createCategory(category) {
+    if (!category || !category.nome || category.nome.trim() === "") {
+        throw new Error("O nome da categoria não pode ser nulo ou vazio.");
+    }
 
-    const categories =
-        getCategories();
-
+    var categories = getCategories();
     categories.push(category);
-
     saveCategories(categories);
-
 }
 
 /* BUSCAR CATEGORIA POR ID */
 export function findCategoryById(id) {
+    var categories = getCategories();
 
-    const categories =
-        getCategories();
+    for (var i = 0; i < categories.length; i++) {
+        if (categories[i].id === id) {
+            return categories[i];
+        }
+    }
 
-    return categories.find(
-        category => category.id === id
-    );
-
+    return null;
 }
 
 /* ATUALIZAR CATEGORIA */
-export function updateCategory(
-    id,
-    updatedData
-) {
+export function updateCategory(id, updatedData) {
+    var categories = getCategories();
 
-    const categories =
-        getCategories();
-
-    const updatedCategories =
-        categories.map(category => {
-
-            if (category.id === id) {
-
-                return {
-                    ...category,
-                    ...updatedData
-                };
-
+    for (var i = 0; i < categories.length; i++) {
+        if (categories[i].id === id) {
+            for (var key in updatedData) {
+                if (updatedData.hasOwnProperty(key)) {
+                    categories[i][key] = updatedData[key];
+                }
             }
+            break;
+        }
+    }
 
-            return category;
-
-        });
-
-    saveCategories(updatedCategories);
-
+    saveCategories(categories);
 }
 
 /* DELETAR CATEGORIA */
 export function deleteCategory(id) {
+    var categories = getCategories();
+    var filteredCategories = [];
 
-    const categories =
-        getCategories();
-
-    const filteredCategories =
-        categories.filter(
-            category => category.id !== id
-        );
+    for (var i = 0; i < categories.length; i++) {
+        if (categories[i].id !== id) {
+            filteredCategories.push(categories[i]);
+        }
+    }
 
     saveCategories(filteredCategories);
-
 }

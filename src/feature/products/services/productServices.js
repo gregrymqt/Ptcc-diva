@@ -9,6 +9,7 @@
    iniciais para a loja não aparecer vazia.
    ================================================ */
 
+import { getStorageData, setStorageData } from "../../../core/storage.js";
 import { getCategories } from "../../categories/services/categoryService.js";
 
 // Nome da chave onde os produtos ficam salvos no navegador
@@ -21,8 +22,9 @@ var produtosIniciais = [];
 /* Se o localStorage não tiver produtos ainda,
    preenche com os produtos iniciais automaticamente. */
 function carregarProdutosIniciais() {
-  if (!localStorage.getItem(CHAVE_PRODUTOS)) {
-    localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtosIniciais));
+  var data = getStorageData(CHAVE_PRODUTOS, []);
+  if (data.length === 0) {
+    setStorageData(CHAVE_PRODUTOS, produtosIniciais);
   }
 }
 
@@ -36,24 +38,22 @@ carregarProdutosIniciais();
 
 /* Retorna a lista completa de produtos do localStorage. */
 export function getProducts() {
-  var dados = localStorage.getItem(CHAVE_PRODUTOS);
-
-  if (!dados) {
-    return [];
-  }
-
-  return JSON.parse(dados);
+  return getStorageData(CHAVE_PRODUTOS, []);
 }
 
 /* Salva a lista completa de produtos no localStorage.
    Função interna — usada pelas funções abaixo. */
 function salvarProdutos(produtos) {
-  localStorage.setItem(CHAVE_PRODUTOS, JSON.stringify(produtos));
+  setStorageData(CHAVE_PRODUTOS, produtos);
 }
 
 /* Cria e salva um novo produto no localStorage.
    Gera um ID único baseado no maior ID existente. */
 export function createProduct(produto) {
+  if (!produto || !produto.nome || produto.nome.trim() === "" || produto.preco <= 0) {
+    throw new Error("Dados inválidos");
+  }
+
   var produtos = getProducts();
 
   // Calcula o próximo ID disponível
