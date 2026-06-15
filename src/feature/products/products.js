@@ -14,7 +14,7 @@
 import { getProductsWithCategory } from "./services/productServices.js";
 import { initFavoriteEvents }      from "../favorites/favoriteEvents.js";
 import { isFavorite }              from "../favorites/services/favoriteService.js";
-import { addToCart }               from "../cart/components/CartDrawerComponent.js";
+import { addToCart }               from "../cart/services/cartDrawerService.js";
 import { openCartDrawer }          from "../cart/components/CartDrawerComponent.js";
 import { showToast }               from "../../shared/components/toast/toastComponent.js";
 import { navbarComponent }         from "../../shared/components/navbar/navbarComponent.js";

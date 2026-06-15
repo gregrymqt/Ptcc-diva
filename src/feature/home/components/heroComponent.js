@@ -1,7 +1,7 @@
-import { getStorageData } from "../../../core/storage.js";
+import { getHeroConfig } from "../services/heroService.js";
 
 export function heroComponent() {
-  var heroSlides = getStorageData('heroConfig');
+  var heroSlides = getHeroConfig();
   
   if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
     heroSlides = [{

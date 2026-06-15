@@ -2,10 +2,10 @@
    ABOUTCOMPONENT.JS — Componente da Página Sobre
    ================================================ */
 
-import { getStorageData } from "../../../core/storage.js";
+import { getAboutImagesConfig } from "../services/aboutService.js";
 
 export function aboutComponent() {
-  var aboutImages = getStorageData("aboutImagesConfig");
+  var aboutImages = getAboutImagesConfig();
   var htmlImages = "";
 
   if (aboutImages && Array.isArray(aboutImages) && aboutImages.length > 0) {

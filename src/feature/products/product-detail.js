@@ -16,7 +16,7 @@ import { navbarComponent }   from "../../shared/components/navbar/navbarComponen
 import { footerComponent }   from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }        from "../../shared/components/navbar/navbarController.js";
 import { findProductById }   from "./services/productServices.js";
-import { addToCart }         from "../cart/components/CartDrawerComponent.js";
+import { addToCart }         from "../cart/services/cartDrawerService.js";
 import { openCartDrawer }    from "../cart/components/CartDrawerComponent.js";
 import { productDetailComponent } from "./components/productDetailComponent.js";
 
