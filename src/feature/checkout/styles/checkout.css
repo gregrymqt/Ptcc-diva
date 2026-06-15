@@ -1,11 +1,11 @@
 /* =========================================================
    ESTILOS DA TELA DE CHECKOUT (checkout.css)
-   Foco: UI/UX de Alta Conversão, Mobile-First e Simetria
-   Paleta Adotada: Velvet Rose (#b34d68)
+   Foco: UI/UX de Alta ConversÃ£o, Mobile-First e Simetria
+   Paleta Adotada: Velvet Rose (var(--color-primary))
    ========================================================= */
 
 :root {
-  --color-primary: #b34d68;
+  --color-primary: var(--color-primary);
   --color-primary-dark: #923a52;
   --color-background-light: #faf8f5;
   --color-background: #ffffff;
@@ -15,7 +15,7 @@
   --font-family-base: 'Montserrat', sans-serif;
 }
 
-/* Força a tipografia Montserrat em absolutamente tudo para evitar Times New Roman */
+/* ForÃ§a a tipografia Montserrat em absolutamente tudo para evitar Times New Roman */
 .checkout-main,
 .checkout-main *,
 .checkout-main input,
@@ -43,7 +43,7 @@
   text-align: center;
 }
 
-/* Layout Flexível Baseado em Linhas/Colunas */
+/* Layout FlexÃ­vel Baseado em Linhas/Colunas */
 .checkout-layout {
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@
 }
 
 /* =========================================================
-   COLUNA 1: FORMULÁRIO DE ENTREGA E PAGAMENTO
+   COLUNA 1: FORMULÃRIO DE ENTREGA E PAGAMENTO
    ========================================================= */
 .checkout-form-section {
   flex: 1.6;
@@ -112,7 +112,7 @@
   text-align: left;
 }
 
-/* Estilização Completa e Visível dos Inputs */
+/* EstilizaÃ§Ã£o Completa e VisÃ­vel dos Inputs */
 .input-wrapper input,
 .credit-card-fields input {
   width: 100%;
@@ -133,7 +133,7 @@
   background-color: #ffffff;
 }
 
-/* Seção de Opções de Pagamento */
+/* SeÃ§Ã£o de OpÃ§Ãµes de Pagamento */
 .payment-title {
   margin-top: 35px;
 }
@@ -182,7 +182,7 @@
   color: var(--color-text-dark);
 }
 
-/* Campos de Cartão de Crédito */
+/* Campos de CartÃ£o de CrÃ©dito */
 .credit-card-fields {
   margin-bottom: 25px;
   padding: 20px;
@@ -202,7 +202,7 @@
   margin-bottom: 0;
 }
 
-/* Botão de Checkout de Alta Conversão */
+/* BotÃ£o de Checkout de Alta ConversÃ£o */
 .btn-checkout {
   width: 100%;
   padding: 16px;
@@ -289,7 +289,7 @@
   align-items: center;
 }
 
-/* Força a imagem a ficar perfeita mesmo se o link quebrar */
+/* ForÃ§a a imagem a ficar perfeita mesmo se o link quebrar */
 .checkout-item img {
   width: 65px;
   height: 65px;

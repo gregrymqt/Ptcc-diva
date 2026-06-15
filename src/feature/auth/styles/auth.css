@@ -1,15 +1,15 @@
 /* ==========================================================================
-   VARIÁVEIS DE DESIGN SYSTEM (TEMA BEAUTY / DIVA)
+   VARIÃVEIS DE DESIGN SYSTEM (TEMA BEAUTY / DIVA)
    ========================================================================== */
 :root {
   --clr-bg: #faf6f5;          /* Fundo suave off-white levemente aquecido */
-  --clr-surface: #ffffff;     /* Superfície pura para o card */
-  --clr-primary: #b34d68;     /* Velvet Rose sofisticado (Cor principal) */
+  --clr-surface: #ffffff;     /* SuperfÃ­cie pura para o card */
+  --clr-primary: var(--color-primary);     /* Velvet Rose sofisticado (Cor principal) */
   --clr-primary-hover: #943a51;
-  --clr-text-main: #2b2325;   /* Espresso escuro para alto contraste acessível */
-  --clr-text-muted: #786d70;  /* Cinza malva para textos secundários */
+  --clr-text-main: #2b2325;   /* Espresso escuro para alto contraste acessÃ­vel */
+  --clr-text-muted: #786d70;  /* Cinza malva para textos secundÃ¡rios */
   --clr-border: #e6dcda;
-  --clr-error: #d93856;       /* Vermelho suave para validações de erro */
+  --clr-error: #d93856;       /* Vermelho suave para validaÃ§Ãµes de erro */
   --clr-error-bg: #fff5f6;
   --font-main: 'Montserrat', sans-serif;
   --radius: 16px;
@@ -27,15 +27,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-body {
-  min-height: 100vh;
-  background-color: var(--clr-bg);
-  color: var(--clr-text-main);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-}
 
 /* Container de Montagem */
 #app {
@@ -83,7 +74,7 @@ form {
 }
 
 /* ==========================================================================
-   MICRO-INTERAÇÃO: FLOATING LABELS
+   MICRO-INTERAÃ‡ÃƒO: FLOATING LABELS
    ========================================================================== */
 .input-container {
   position: relative;
@@ -93,7 +84,7 @@ form {
 
 .input-container input {
   width: 100%;
-  padding: 18px 16px 10px 16px; /* Abre espaço interno superior para a label flutuar */
+  padding: 18px 16px 10px 16px; /* Abre espaÃ§o interno superior para a label flutuar */
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--clr-text-main);
@@ -104,7 +95,7 @@ form {
   transition: var(--transition);
 }
 
-/* Rótulo / Label posicionada originalmente em cima do input */
+/* RÃ³tulo / Label posicionada originalmente em cima do input */
 .input-container label {
   position: absolute;
   left: 16px;
@@ -131,7 +122,7 @@ form {
 }
 
 /* ==========================================================================
-   BOTÕES E ACTIONS
+   BOTÃ•ES E ACTIONS
    ========================================================================== */
 .btn-login {
   width: 100%;
@@ -199,7 +190,7 @@ form {
 }
 
 /* ==========================================================================
-   ANIMAÇÕES
+   ANIMAÃ‡Ã•ES
    ========================================================================== */
 @keyframes cardFadeIn {
   from {

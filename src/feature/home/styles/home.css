@@ -1,5 +1,5 @@
 /* styles/home.css */
-/* Paleta Velvet Rose: #b34d68 */
+/* Paleta Velvet Rose: var(--color-primary) */
 
 .vitrine-section {
   padding: 4rem 2rem;
@@ -55,7 +55,7 @@
 .vitrine-image-container {
   position: relative;
   width: 100%;
-  padding-top: 100%; /* Mantém aspecto quadrado 1:1 */
+  padding-top: 100%; /* MantÃ©m aspecto quadrado 1:1 */
   background-color: #f0f0f0;
   overflow: hidden;
 }
@@ -83,7 +83,7 @@
 
 .vitrine-category {
   font-size: 0.75rem;
-  color: #b34d68;
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.5rem;
@@ -109,8 +109,8 @@
   display: block;
   text-align: center;
   background-color: transparent;
-  color: #b34d68;
-  border: 1px solid #b34d68;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
   padding: 0.75rem;
   text-decoration: none;
   font-weight: 600;
@@ -122,7 +122,7 @@
 }
 
 .btn-detalhes:hover {
-  background-color: #b34d68;
+  background-color: var(--color-primary);
   color: #ffffff;
 }
 
@@ -139,7 +139,7 @@
 
 .hero-carousel-container {
   width: 100%;
-  max-width: 1200px; /* Prende as setas perto do conteúdo em telas grandes */
+  max-width: 1200px; /* Prende as setas perto do conteÃºdo em telas grandes */
   margin: 0 auto;
   position: relative;
 }
@@ -152,7 +152,7 @@
   gap: 2rem;
   align-items: center;
   text-align: center;
-  /* Nova animação super fluida (Fade + Movimento) */
+  /* Nova animaÃ§Ã£o super fluida (Fade + Movimento) */
   animation: smoothFadeSlide 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
@@ -160,15 +160,15 @@
   display: flex;
 }
 
-/* Nova regra de animação */
+/* Nova regra de animaÃ§Ã£o */
 @keyframes smoothFadeSlide {
   from {
     opacity: 0;
-    transform: translateX(30px); /* Começa levemente arrastado para a direita */
+    transform: translateX(30px); /* ComeÃ§a levemente arrastado para a direita */
   }
   to {
     opacity: 1;
-    transform: translateX(0); /* Desliza suavemente para a posição original */
+    transform: translateX(0); /* Desliza suavemente para a posiÃ§Ã£o original */
   }
 }
 
@@ -178,7 +178,7 @@
   gap: 1.5rem;
 }
 
-/* Corrigido o seletor para garantir a aplicação da fonte Montserrat */
+/* Corrigido o seletor para garantir a aplicaÃ§Ã£o da fonte Montserrat */
 .hero-slide-item h1 {
   font-size: 2.5rem;
   color: #222;
@@ -188,7 +188,7 @@
 }
 
 .hero-slide-item h1 span {
-  color: #b34d68;
+  color: var(--color-primary);
 }
 
 .hero-slide-item p {
@@ -219,9 +219,9 @@
 }
 
 .btn-primary {
-  background-color: #b34d68;
+  background-color: var(--color-primary);
   color: #ffffff;
-  border: 1px solid #b34d68;
+  border: 1px solid var(--color-primary);
 }
 
 .btn-primary:hover {
@@ -232,12 +232,12 @@
 
 .btn-secondary {
   background-color: transparent;
-  color: #b34d68;
-  border: 1px solid #b34d68;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .btn-secondary:hover {
-  background-color: #b34d68;
+  background-color: var(--color-primary);
   color: #ffffff;
   transform: translateY(-2px);
 }
@@ -314,7 +314,7 @@
 }
 
 .carousel-dots .dot.active, .carousel-dots .dot:hover {
-  background-color: #b34d68;
+  background-color: var(--color-primary);
   transform: scale(1.2);
 }
 
@@ -352,7 +352,7 @@
 }
 
 /* =========================================
-   === ESTILOS DE SEÇÃO COMPARTILHADOS   ===
+   === ESTILOS DE SEÃ‡ÃƒO COMPARTILHADOS   ===
    ========================================= */
 
 .categories-section, .featured-products {
@@ -493,7 +493,7 @@
   color: #666;
   margin: 0 1.5rem 1rem 1.5rem;
   line-height: 1.4;
-  flex-grow: 1; /* Garante que os cards fiquem do mesmo tamanho e empurrem o preço pra baixo */
+  flex-grow: 1; /* Garante que os cards fiquem do mesmo tamanho e empurrem o preÃ§o pra baixo */
 }
 
 .product-card span {

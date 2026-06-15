@@ -5,20 +5,14 @@
   font-family: sans-serif;
 }
 
-/* ALTERAÇÃO: Adicionado o comportamento Flexbox no body */
-body {
-  background: #f8f8f8;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+/* ALTERAÃ‡ÃƒO: Adicionado o comportamento Flexbox no body */
 
-/* ALTERAÇÃO: O main agora estica para segurar o footer no rodapé */
+/* ALTERAÃ‡ÃƒO: O main agora estica para segurar o footer no rodapÃ© */
 main {
   padding: 16px;
   flex: 1;
 }
-/* ... restante do código permanece igual ... */
+/* ... restante do cÃ³digo permanece igual ... */
 
 .page-header{
 

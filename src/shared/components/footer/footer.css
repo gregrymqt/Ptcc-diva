@@ -21,7 +21,7 @@
 }
 
 .footer__brand h2 {
-    color: #b34d68; /* Velvet Rose */
+    color: var(--color-primary); /* Velvet Rose */
     font-size: 1.8rem;
     margin-bottom: 1rem;
     letter-spacing: 1px;
@@ -57,7 +57,7 @@
 }
 
 .footer__links a:hover {
-    color: #b34d68;
+    color: var(--color-primary);
 }
 
 .footer__copyright {
@@ -87,10 +87,10 @@
         align-items: flex-start;
     }
 
-    /* Manter o copyright centralizado e abaixo das colunas caso vire um grid global, ou apenas deixá-lo no fim */
-    /* Como o footer__container usa flex-direction row com space-between, o copyright entraria na mesma linha se estiver dentro do container de cima, mas como é o último elemento, convém alterar o layout.
-       Uma abordagem melhor é ter a parte superior (brand e links) numa linha, e o copyright embaixo.
-       A estrutura HTML atual deixa tudo no footer__container. Então precisamos de um flex-wrap. */
+    /* Manter o copyright centralizado e abaixo das colunas caso vire um grid global, ou apenas deixÃ¡-lo no fim */
+    /* Como o footer__container usa flex-direction row com space-between, o copyright entraria na mesma linha se estiver dentro do container de cima, mas como Ã© o Ãºltimo elemento, convÃ©m alterar o layout.
+       Uma abordagem melhor Ã© ter a parte superior (brand e links) numa linha, e o copyright embaixo.
+       A estrutura HTML atual deixa tudo no footer__container. EntÃ£o precisamos de um flex-wrap. */
     .footer__container {
         flex-wrap: wrap;
     }

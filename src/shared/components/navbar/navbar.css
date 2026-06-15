@@ -179,15 +179,15 @@
     }
 }
 
-.dropdown-menu a {
+.navbar__menu .dropdown-menu a {
     display: block;
     padding: 0.6rem 1rem;
-    font-size: 0.95rem !important;
-    color: #555 !important;
+    font-size: 0.95rem;
+    color: #555;
 }
 
-.dropdown-menu a:hover {
-    color: #b34d68 !important;
+.navbar__menu .dropdown-menu a:hover {
+    color: var(--color-primary);
     background-color: #fcf8f9;
 }
 

@@ -5,18 +5,12 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-/* ALTERAÇÃO: Configura o body para ocupar a tela toda e agir como coluna */
-body {
-    background: #f4f4f4;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+/* ALTERAÃ‡ÃƒO: Configura o body para ocupar a tela toda e agir como coluna */
 
-/* ADIÇÃO: Força o main a esticar e empurrar o footer para baixo */
+/* ADIÃ‡ÃƒO: ForÃ§a o main a esticar e empurrar o footer para baixo */
 main {
     flex: 1;
-    padding: 20px; /* Mantém um espaçamento confortável nas laterais */
+    padding: 20px; /* MantÃ©m um espaÃ§amento confortÃ¡vel nas laterais */
 }
 
 #products-container {

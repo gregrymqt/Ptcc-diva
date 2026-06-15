@@ -1,5 +1,5 @@
 /* styles/product.css */
-/* Paleta Velvet Rose: #b34d68 */
+/* Paleta Velvet Rose: var(--color-primary) */
 
 .pdp-section {
   padding: 4rem 2rem;
@@ -44,7 +44,7 @@
   transition: opacity 0.3s ease;
 }
 
-/* Informações do Produto */
+/* InformaÃ§Ãµes do Produto */
 .pdp-details {
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@
 
 .pdp-category {
   font-family: 'Montserrat', sans-serif;
-  color: #b34d68;
+  color: var(--color-primary);
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 2px;
@@ -83,7 +83,7 @@
   font-size: 1rem;
 }
 
-/* Variações e Swatches */
+/* VariaÃ§Ãµes e Swatches */
 .pdp-variations {
   margin-bottom: 2rem;
 }
@@ -97,7 +97,7 @@
 
 #pdp-selected-color {
   font-weight: 700;
-  color: #b34d68;
+  color: var(--color-primary);
 }
 
 .swatch-container {
@@ -107,8 +107,8 @@
 }
 
 .swatch {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -127,7 +127,7 @@
   transform: scale(1.1);
 }
 
-/* Ações */
+/* AÃ§Ãµes */
 .pdp-actions {
   display: flex;
   gap: 1rem;
@@ -136,7 +136,7 @@
 
 .btn-add-cart {
   flex-grow: 1;
-  background-color: #b34d68;
+  background-color: var(--color-primary);
   color: #fff;
   border: none;
   padding: 1rem;
@@ -156,8 +156,8 @@
 
 .btn-wishlist {
   background-color: transparent;
-  color: #b34d68;
-  border: 1px solid #b34d68;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
   width: 55px;
   border-radius: 4px;
   font-size: 1.5rem;
@@ -211,12 +211,7 @@
   transform: rotate(45deg);
 }
 
-.accordion-body {
-  padding-bottom: 1.5rem;
-  color: #666;
-  line-height: 1.6;
-}
-
+.accordion-
 .pdp-error {
   text-align: center;
   padding: 5rem;
@@ -225,6 +220,6 @@
 .btn-voltar {
   display: inline-block;
   margin-top: 1rem;
-  color: #b34d68;
+  color: var(--color-primary);
   text-decoration: underline;
 }
