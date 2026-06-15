@@ -10,6 +10,7 @@ import { footerComponent }  from "../../shared/components/footer/footerComponent
 import { initNavbar }       from "../../shared/components/navbar/navbarController.js";
 import { showToast }        from "../../shared/components/toast/toastComponent.js";
 import { getStorageData, setStorageData } from "../../core/storage.js";
+import { CheckoutComponent } from "./components/CheckoutComponent.js";
 
 var CHAVE_CARRINHO = "carrinho";
 var CHAVE_PEDIDOS  = "pedidos";
@@ -19,6 +20,10 @@ var CHAVE_PEDIDOS  = "pedidos";
    -------------------------------------------------- */
 function pegarCarrinhoLocal() {
   return getStorageData(CHAVE_CARRINHO, []);
+}
+
+export function getOrders() {
+  return getStorageData(CHAVE_PEDIDOS, []);
 }
 
 function calcularTotalLocal() {
@@ -100,32 +105,6 @@ function verificarLogin() {
 /* --------------------------------------------------
    PARTE 3: MONTAR O HTML DA TELA (RENDER)
    -------------------------------------------------- */
-function montarHtmlDosItens(itens) {
-  if (itens.length === 0) {
-    return '<p class="empty-cart-message">Seu carrinho está vazio.</p>';
-  }
-
-  var html = "";
-  for (var i = 0; i < itens.length; i++) {
-    var item = itens[i];
-    var precoTotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
-
-    html = html +
-      '<div class="checkout-item">' +
-        '<img src="' + item.imagem + '" alt="' + item.nome + '" onerror="this.src=\'https://via.placeholder.com/150?text=Diva+Makeup\'">' +
-        '<div class="checkout-item-details">' +
-          '<h4>' + item.nome + '</h4>' +
-          '<p>Cor: ' + item.corSelecionada + '</p>' +
-          '<p>Qtd: ' + item.quantidade + '</p>' +
-        '</div>' +
-        '<div class="checkout-item-price">' +
-          'R$ ' + precoTotal +
-        '</div>' +
-      '</div>';
-  }
-  return html;
-}
-
 function renderizarCheckout() {
   var itens = pegarCarrinhoLocal();
   var total = calcularTotalLocal();
@@ -135,84 +114,9 @@ function renderizarCheckout() {
     return;
   }
 
-  var totalFormatado = total.toFixed(2).replace(".", ",");
-  var htmlItens = montarHtmlDosItens(itens);
+  var totaisObjeto = { totalValue: total };
 
-  conteudo.innerHTML =
-    '<div class="checkout-layout">' +
-      '<section class="checkout-form-section">' +
-        '<h2>Dados de Entrega</h2>' +
-        '<form id="checkout-form">' +
-          '<div class="form-group row">' +
-            '<div class="input-wrapper">' +
-              '<label for="cep">CEP</label>' +
-              '<input type="text" id="cep" name="cep" placeholder="00000-000" required>' +
-            '</div>' +
-            '<div class="input-wrapper">' +
-              '<label for="rua">Rua</label>' +
-              '<input type="text" id="rua" name="rua" placeholder="Rua das Flores" required>' +
-            '</div>' +
-          '</div>' +
-          '<div class="form-group row">' +
-            '<div class="input-wrapper">' +
-              '<label for="numero">Número</label>' +
-              '<input type="text" id="numero" name="numero" placeholder="123" required>' +
-            '</div>' +
-            '<div class="input-wrapper">' +
-              '<label for="bairro">Bairro</label>' +
-              '<input type="text" id="bairro" name="bairro" placeholder="Centro" required>' +
-            '</div>' +
-          '</div>' +
-          '<div class="form-group">' +
-            '<div class="input-wrapper">' +
-              '<label for="cidade">Cidade / Estado</label>' +
-              '<input type="text" id="cidade" name="cidade" placeholder="São Paulo - SP" required>' +
-            '</div>' +
-          '</div>' +
-          '<h2 class="payment-title">Forma de Pagamento</h2>' +
-          '<div class="payment-options">' +
-            '<label class="payment-option">' +
-              '<input type="radio" name="pagamento" value="pix" checked>' +
-              '<span class="payment-label">Pix</span>' +
-            '</label>' +
-            '<label class="payment-option">' +
-              '<input type="radio" name="pagamento" value="cartao">' +
-              '<span class="payment-label">Cartão de Crédito</span>' +
-            '</label>' +
-          '</div>' +
-          '<div id="credit-card-fields" class="credit-card-fields hidden">' +
-            '<div class="form-group">' +
-              '<input type="text" placeholder="Número do Cartão" id="cc-num">' +
-            '</div>' +
-            '<div class="form-group row">' +
-              '<input type="text" placeholder="Validade (MM/AA)" id="cc-val">' +
-              '<input type="text" placeholder="CVV" id="cc-cvv">' +
-            '</div>' +
-          '</div>' +
-          '<button type="submit" class="btn-checkout" disabled><i class="fas fa-lock"></i> Finalizar Pedido</button>' +
-        '</form>' +
-      '</section>' +
-      '<aside class="checkout-summary-section">' +
-        '<h2>Resumo do Pedido</h2>' +
-        '<div class="checkout-items-container">' +
-          htmlItens +
-        '</div>' +
-        '<div class="checkout-totals">' +
-          '<div class="totals-row">' +
-            '<span>Subtotal</span>' +
-            '<span>R$ ' + totalFormatado + '</span>' +
-          '</div>' +
-          '<div class="totals-row">' +
-            '<span>Frete</span>' +
-            '<span>Grátis</span>' +
-          '</div>' +
-          '<div class="totals-row total-final">' +
-            '<span>Total</span>' +
-            '<span>R$ ' + totalFormatado + '</span>' +
-          '</div>' +
-        '</div>' +
-      '</aside>' +
-    '</div>';
+  conteudo.innerHTML = CheckoutComponent(itens, totaisObjeto);
 
   iniciarComportamentosDoFormulario();
 }

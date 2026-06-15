@@ -11,7 +11,7 @@ import { carregarModuloHome } from "./controllers/adminHomeController.js";
 import { carregarModuloCategorias } from "./controllers/adminCategoriesController.js";
 import { carregarModuloProdutos } from "./controllers/adminProductsController.js";
 import { carregarModuloAbout } from "./controllers/adminAboutController.js";
-
+import { carregarModuloPedidos } from "./controllers/adminOrdersController.js";
 // 1. Proteger página para garantir que apenas admin acesse
 protectAdminPage();
 
@@ -25,6 +25,7 @@ var itensMenuAdmin = [
     { id: 'view-home', nome: 'Home (Hero)', icone: '🏠', link: '#' },
     { id: 'view-produtos', nome: 'Produtos', icone: '📦', link: '#' },
     { id: 'view-categorias', nome: 'Categorias', icone: '🏷️', link: '#' },
+    { id: 'view-pedidos', nome: 'Pedidos', icone: '🛒', link: '#' },
     { id: 'view-about', nome: 'Sobre Nós', icone: '🖼️', link: '#' }
 ];
 
@@ -64,6 +65,10 @@ window.mudarViewAdmin = function(idView) {
         titulo = "Gestão de Categorias";
         formHtml = '<div id="admin-category-form-container"></div>';
         listHtml = '<div id="admin-categories-list"></div>';
+    } else if (idView === 'view-pedidos') {
+        titulo = "Gestão de Pedidos";
+        formHtml = '<div id="admin-orders-form-container" style="padding: 2rem; color: #666; text-align: center;"><p>Os pedidos são processados pelo checkout da loja. <br>Utilize a aba "Consultar" para visualizar os recebidos.</p></div>';
+        listHtml = '<div id="admin-orders-list"></div>';
     } else if (idView === 'view-about') {
         titulo = "Imagens da Seção Sobre";
         formHtml = aboutFormComponent();
@@ -87,6 +92,8 @@ window.mudarViewAdmin = function(idView) {
         carregarModuloCategorias();
     } else if (idView === 'view-produtos') {
         carregarModuloProdutos();
+    } else if (idView === 'view-pedidos') {
+        carregarModuloPedidos();
     } else if (idView === 'view-about') {
         carregarModuloAbout();
     }

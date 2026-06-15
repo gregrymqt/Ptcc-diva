@@ -1,77 +1,79 @@
-import { getOrders } from "../../checkout/services/checkoutServices.js";
-
-export async function AdminOrdersComponent() {
-  const orders = await getOrders();
-
+export function AdminOrdersComponent(orders) {
   if (orders.length === 0) {
-    return `
-      <div class="empty-state">
-        <i class="fas fa-box-open empty-icon"></i>
-        <p>Nenhum pedido recebido até o momento.</p>
-      </div>
-    `;
+    return "<div class=\"empty-state\">\n" +
+           "  <i class=\"fas fa-box-open empty-icon\"></i>\n" +
+           "  <p>Nenhum pedido recebido até o momento.</p>\n" +
+           "</div>";
   }
 
   // Ordenar por data decrescente
-  orders.sort((a, b) => new Date(b.data) - new Date(a.data));
+  orders.sort(function(a, b) {
+    return new Date(b.data) - new Date(a.data);
+  });
 
-  const ordersHtml = orders.map(order => {
-    const dataFormatada = new Date(order.data).toLocaleDateString('pt-BR', {
+  var ordersHtml = "";
+  
+  for (var i = 0; i < orders.length; i++) {
+    var order = orders[i];
+    var dataFormatada = new Date(order.data).toLocaleDateString('pt-BR', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit'
     });
     
-    const valorFormatado = order.totais.totalValue.toFixed(2).replace('.', ',');
+    var valorFormatado = order.totais.totalValue.toFixed(2).replace('.', ',');
 
-    const itensPreview = order.itens.map(i => 
-      `<span class="order-item-chip">${i.quantidade}x ${i.nome} (${i.corSelecionada})</span>`
-    ).join('');
+    var itensPreview = "";
+    for (var j = 0; j < order.itens.length; j++) {
+      var item = order.itens[j];
+      itensPreview += "<span class=\"order-item-chip\">" + item.quantidade + "x " + item.nome + " (" + item.corSelecionada + ")</span>";
+    }
 
-    return `
-      <div class="admin-order-card">
-        <div class="order-card-header">
-          <div class="order-id">
-            <i class="fas fa-hashtag"></i> ${order.id}
-          </div>
-          <div class="order-status badge-waiting">
-            ${order.status}
-          </div>
-        </div>
-        
-        <div class="order-card-body">
-          <div class="order-info-group">
-            <span class="info-label">Cliente:</span>
-            <span class="info-value">${order.cliente} ${order.email ? `(${order.email})` : ''}</span>
-          </div>
-          <div class="order-info-group">
-            <span class="info-label">Data:</span>
-            <span class="info-value">${dataFormatada}</span>
-          </div>
-          <div class="order-info-group">
-            <span class="info-label">Itens:</span>
-            <div class="order-items-list">
-              ${itensPreview}
-            </div>
-          </div>
-          <div class="order-info-group">
-            <span class="info-label">Pagamento:</span>
-            <span class="info-value payment-method">${order.formaPagamento.toUpperCase()}</span>
-          </div>
-        </div>
-        
-        <div class="order-card-footer">
-          <div class="order-total">
-            Total: R$ ${valorFormatado}
-          </div>
-          <button class="btn-order-action" disabled>Gerenciar Envio</button>
-        </div>
-      </div>
-    `;
-  }).join('');
+    var emailHtml = "";
+    if (order.email) {
+      emailHtml = " (" + order.email + ")";
+    }
 
-  return `
-    <div class="admin-orders-list">
-      ${ordersHtml}
-    </div>
-  `;
+    ordersHtml += "<div class=\"admin-order-card\">\n" +
+                  "  <div class=\"order-card-header\">\n" +
+                  "    <div class=\"order-id\">\n" +
+                  "      <i class=\"fas fa-hashtag\"></i> " + order.id + "\n" +
+                  "    </div>\n" +
+                  "    <div class=\"order-status badge-waiting\">\n" +
+                  "      " + order.status + "\n" +
+                  "    </div>\n" +
+                  "  </div>\n" +
+                  "  \n" +
+                  "  <div class=\"order-card-body\">\n" +
+                  "    <div class=\"order-info-group\">\n" +
+                  "      <span class=\"info-label\">Cliente:</span>\n" +
+                  "      <span class=\"info-value\">" + order.cliente + emailHtml + "</span>\n" +
+                  "    </div>\n" +
+                  "    <div class=\"order-info-group\">\n" +
+                  "      <span class=\"info-label\">Data:</span>\n" +
+                  "      <span class=\"info-value\">" + dataFormatada + "</span>\n" +
+                  "    </div>\n" +
+                  "    <div class=\"order-info-group\">\n" +
+                  "      <span class=\"info-label\">Itens:</span>\n" +
+                  "      <div class=\"order-items-list\">\n" +
+                  "        " + itensPreview + "\n" +
+                  "      </div>\n" +
+                  "    </div>\n" +
+                  "    <div class=\"order-info-group\">\n" +
+                  "      <span class=\"info-label\">Pagamento:</span>\n" +
+                  "      <span class=\"info-value payment-method\">" + order.formaPagamento.toUpperCase() + "</span>\n" +
+                  "    </div>\n" +
+                  "  </div>\n" +
+                  "  \n" +
+                  "  <div class=\"order-card-footer\">\n" +
+                  "    <div class=\"order-total\">\n" +
+                  "      Total: R$ " + valorFormatado + "\n" +
+                  "    </div>\n" +
+                  "    <button class=\"btn-order-action\" disabled>Gerenciar Envio</button>\n" +
+                  "  </div>\n" +
+                  "</div>\n";
+  }
+
+  return "<div class=\"admin-orders-list\">\n" +
+         "  " + ordersHtml + "\n" +
+         "</div>";
 }
