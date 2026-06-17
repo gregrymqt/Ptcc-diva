@@ -3,22 +3,13 @@
    ================================================ */
 
 /* Variáveis Globais */
-:root {
-  --velvet-rose: #b34d68;
-  --velvet-rose-hover: #9c435a;
-  --light-gray: #f5f5f5;
-  --text-dark: #333333;
-  --text-muted: #666666;
-  --border-color: #dddddd;
-  --font-main: 'Montserrat', sans-serif;
-}
 
 body {
   font-family: var(--font-main);
   margin: 0;
   padding: 0;
-  color: var(--text-dark);
-  background-color: var(--light-gray);
+  color: var(--color-dark);
+  background-color: var(--color-light);
 }
 
 /* ================================================
@@ -45,14 +36,14 @@ body {
 }
 
 .about-text h2 {
-  color: var(--velvet-rose);
+  color: var(--color-primary);
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
 .about-text p {
   line-height: 1.6;
-  color: var(--text-muted);
+  color: var(--color-gray);
   margin-bottom: 1rem;
 }
 
@@ -61,7 +52,7 @@ body {
    ================================================ */
 .contact-section {
   padding: 4rem 2rem;
-  background-color: var(--light-gray);
+  background-color: var(--color-light);
 }
 
 .contact-container {
@@ -71,13 +62,13 @@ body {
 }
 
 .contact-container h2 {
-  color: var(--velvet-rose);
+  color: var(--color-primary);
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
 .contact-container p {
-  color: var(--text-muted);
+  color: var(--color-gray);
   margin-bottom: 2rem;
 }
 
@@ -97,14 +88,14 @@ body {
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--text-dark);
+  color: var(--color-dark);
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-gray-light);
   border-radius: 4px;
   font-family: var(--font-main);
   font-size: 1rem;
@@ -115,7 +106,7 @@ body {
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--velvet-rose);
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.2);
 }
 
@@ -123,7 +114,7 @@ body {
   display: inline-block;
   width: 100%;
   padding: 1rem;
-  background-color: var(--velvet-rose);
+  background-color: var(--color-primary);
   color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
@@ -136,7 +127,7 @@ body {
 }
 
 .btn-submit:hover {
-  background-color: var(--velvet-rose-hover);
+  background-color: var(--color-primary-dark);
   transform: translateY(-2px);
 }
 

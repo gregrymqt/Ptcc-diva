@@ -1,9 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-}
+
 
 /* ALTERAÃ‡ÃƒO: Adicionado o comportamento Flexbox no body */
 
@@ -179,8 +174,6 @@ main{
   line-height:1.5;
 
 }
-
-
 
 @media(min-width:768px){
 

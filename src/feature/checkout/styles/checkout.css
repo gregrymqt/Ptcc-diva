@@ -4,17 +4,6 @@
    Paleta Adotada: Velvet Rose (var(--color-primary))
    ========================================================= */
 
-:root {
-  --color-primary: var(--color-primary);
-  --color-primary-dark: #923a52;
-  --color-background-light: #faf8f5;
-  --color-background: #ffffff;
-  --color-text-dark: #2d2d2d;
-  --color-text-light: #777777;
-  --color-border: #cbd5e1;
-  --font-family-base: 'Montserrat', sans-serif;
-}
-
 /* ForÃ§a a tipografia Montserrat em absolutamente tudo para evitar Times New Roman */
 .checkout-main,
 .checkout-main *,
@@ -25,7 +14,7 @@
 }
 
 .checkout-main {
-  background-color: var(--color-background-light);
+  background-color: var(--color-light);
   min-height: 85vh;
   padding: 40px 15px;
 }
@@ -38,7 +27,7 @@
 .checkout-container h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
   margin-bottom: 35px;
   text-align: center;
 }
@@ -63,7 +52,7 @@
    ========================================================= */
 .checkout-form-section {
   flex: 1.6;
-  background-color: var(--color-background);
+  background-color: var(--color-white);
   padding: 35px 25px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(179, 77, 104, 0.03);
@@ -74,7 +63,7 @@
   font-size: 1.35rem;
   font-weight: 700;
   margin-bottom: 25px;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
   border-bottom: 2px solid #f1f5f9;
   padding-bottom: 10px;
   text-align: left;
@@ -117,10 +106,10 @@
 .credit-card-fields input {
   width: 100%;
   padding: 14px 16px;
-  border: 1.5px solid var(--color-border);
+  border: 1.5px solid var(--color-gray-light);
   border-radius: 10px;
   font-size: 0.95rem;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
   background-color: #ffffff;
   transition: all 0.2s ease;
   outline: none;
@@ -157,7 +146,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  border: 1.5px solid var(--color-border);
+  border: 1.5px solid var(--color-gray-light);
   border-radius: 10px;
   cursor: pointer;
   background-color: #ffffff;
@@ -179,7 +168,7 @@
 .payment-label {
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
 }
 
 /* Campos de CartÃ£o de CrÃ©dito */
@@ -188,7 +177,7 @@
   padding: 20px;
   background-color: #f8fafc;
   border-radius: 12px;
-  border: 1px dashed var(--color-border);
+  border: 1px dashed var(--color-gray-light);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -228,8 +217,8 @@
 }
 
 .btn-checkout:disabled {
-  background-color: var(--color-border);
-  color: var(--color-text-light);
+  background-color: var(--color-gray-light);
+  color: var(--color-gray);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -241,7 +230,7 @@
    ========================================================= */
 .checkout-summary-section {
   flex: 1;
-  background-color: var(--color-background);
+  background-color: var(--color-white);
   padding: 35px 25px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
@@ -259,7 +248,7 @@
   font-size: 1.35rem;
   font-weight: 700;
   margin-bottom: 25px;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
   border-bottom: 2px solid #f1f5f9;
   padding-bottom: 10px;
   text-align: left;
@@ -307,20 +296,20 @@
 .checkout-item-details h4 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
   margin: 0 0 4px 0;
 }
 
 .checkout-item-details p {
   font-size: 0.8rem;
-  color: var(--color-text-light);
+  color: var(--color-gray);
   margin: 2px 0;
 }
 
 .checkout-item-price {
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--color-text-dark);
+  color: var(--color-dark);
 }
 
 /* Bloco de Totais do Pedido */
@@ -334,7 +323,7 @@
   justify-content: space-between;
   margin-bottom: 12px;
   font-size: 0.95rem;
-  color: var(--color-text-light);
+  color: var(--color-gray);
 }
 
 .totals-row.total-final {
@@ -348,7 +337,7 @@
 
 .empty-cart-message {
   text-align: center;
-  color: var(--color-text-light);
+  color: var(--color-gray);
   padding: 30px 0;
   font-style: italic;
 }

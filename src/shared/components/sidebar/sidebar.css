@@ -2,15 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 /* Variáveis de estilo - Identidade visual "Velvet Rose" */
-:root {
-  --sidebar-font: 'Montserrat', sans-serif;
-  --sidebar-primary: #b34d68; /* Velvet Rose */
-  --sidebar-primary-hover: rgba(179, 77, 104, 0.1);
-  --sidebar-text: #333333;
-  --sidebar-bg: #ffffff;
-  --sidebar-overlay: rgba(0, 0, 0, 0.5);
-  --sidebar-width: 280px;
-}
 
 /* ==================================================
    MOBILE FIRST (Padrão)
@@ -22,18 +13,18 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  background-color: var(--sidebar-bg);
+  background-color: var(--color-white);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 900;
-  font-family: var(--sidebar-font);
+  font-family: var(--font-main);
 }
 
 .sidebar-mobile-title {
   font-size: 18px;
   font-weight: 600;
-  color: var(--sidebar-primary);
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -41,7 +32,7 @@
   background: none;
   border: none;
   font-size: 24px;
-  color: var(--sidebar-text);
+  color: var(--color-dark);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -56,7 +47,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--sidebar-overlay);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
   display: none;
   opacity: 0;
@@ -73,15 +64,15 @@
   position: fixed;
   top: 0;
   left: -100%; /* Escondida inicialmente */
-  width: var(--sidebar-width);
+  width: 280px;
   height: 100vh;
-  background-color: var(--sidebar-bg);
+  background-color: var(--color-white);
   z-index: 1000;
   transition: left 0.3s ease;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  font-family: var(--sidebar-font);
+  font-family: var(--font-main);
   overflow-y: auto;
 }
 
@@ -101,14 +92,14 @@
 .sidebar-brand {
   font-size: 20px;
   font-weight: 700;
-  color: var(--sidebar-primary);
+  color: var(--color-primary);
 }
 
 .sidebar-close-btn {
   background: none;
   border: none;
   font-size: 28px;
-  color: var(--sidebar-text);
+  color: var(--color-dark);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -131,7 +122,7 @@
   gap: 12px;
   padding: 12px 16px;
   text-decoration: none;
-  color: var(--sidebar-text);
+  color: var(--color-dark);
   font-size: 16px;
   font-weight: 500;
   border-radius: 6px; /* Cantos arredondados */
@@ -147,17 +138,17 @@
 
 /* Efeito Hover nos links */
 .sidebar-link:hover {
-  background-color: var(--sidebar-primary-hover);
-  color: var(--sidebar-primary);
+  background-color: rgba(179, 77, 104, 0.1);
+  color: var(--color-primary);
 }
 
 .sidebar-link:hover .sidebar-link-icon {
-  color: var(--sidebar-primary);
+  color: var(--color-primary);
 }
 
 /* Link Ativo */
 .sidebar-link.active {
-  background-color: var(--sidebar-primary);
+  background-color: var(--color-primary);
   color: #ffffff;
 }
 
