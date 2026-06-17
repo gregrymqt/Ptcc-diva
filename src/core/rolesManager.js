@@ -1,11 +1,11 @@
 /* ================================================
-   ROLES MANAGER — Gerencia os tipos de usuário
-   (permissões) dentro da aplicação.
-
-   Existem dois tipos de usuário:
-   - "user"  → usuário comum, pode navegar e comprar
-   - "admin" → administrador, pode cadastrar produtos
-              e visualizar todos os pedidos
+   ROLES MANAGER — Gerenciamento Central de Permissões
+   
+   Boa Prática (SSOT - Single Source of Truth):
+   Centralizamos a lógica de autorização e níveis de acesso
+   ("user" vs "admin") unicamente neste arquivo. Isso evita
+   códigos duplicados e facilita o bloqueio global de telas
+   de administração de forma segura.
    ================================================ */
 
 import { findUserByEmail, updateUser } from "./storage.js";

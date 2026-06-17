@@ -39,10 +39,15 @@ function getStorageData(chave, valorPadrao) {
 }
 
 /* Salva um dado no localStorage.
-   Converte o dado para texto antes de salvar,
-   porque o localStorage só aceita texto. */
+   Boa Prática (Tratamento de Erros de I/O): O try/catch previne que o sistema
+   quebre com erro crítico ("QuotaExceededError") caso a memória do navegador 
+   do usuário esteja cheia no momento do salvamento. */
 function setStorageData(chave, dado) {
-  localStorage.setItem(chave, JSON.stringify(dado));
+  try {
+    localStorage.setItem(chave, JSON.stringify(dado));
+  } catch (erro) {
+    console.error("Falha ao escrever no disco local. O armazenamento pode estar cheio.", erro);
+  }
 }
 
 

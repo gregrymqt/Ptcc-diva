@@ -21,6 +21,8 @@ Ptcc-diva/
 
 | Feature       | Descrição                                              |
 |---------------|--------------------------------------------------------|
+| `about`       | Página institucional, missão e contato                 |
+| `admin`       | Painel administrativo e dashboard do sistema           |
 | `auth`        | Login e cadastro de usuários                           |
 | `products`    | Listagem, detalhe e cadastro de produtos (admin)       |
 | `categories`  | Listagem e criação de categorias                       |
@@ -45,7 +47,7 @@ O projeto adota uma arquitetura **Feature-Based** (por funcionalidade), onde cad
 
 ## 💾 Persistência de Dados
 
-A aplicação **não usa backend**. Todos os dados são persistidos no `localStorage` do navegador, gerenciado pelo módulo `core/storage.js`. As operações simulam um delay de rede de 200ms para se aproximar do comportamento de uma API real.
+A aplicação **não usa backend**. Todos os dados são persistidos de forma robusta e síncrona no `localStorage` do navegador, com parse automático de objetos, cujo fluxo é gerenciado estritamente pelo módulo `core/storage.js`.
 
 **Chaves do localStorage utilizadas:**
 | Chave            | Conteúdo                          |

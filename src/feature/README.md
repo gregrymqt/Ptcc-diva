@@ -8,6 +8,8 @@ A pasta `feature` contém todos os **domínios de negócio** da loja Diva. Cada 
 
 | Feature       | Descrição                                                            |
 |---------------|----------------------------------------------------------------------|
+| `about/`      | Institucional: informações sobre a loja e de contato                 |
+| `admin/`      | Painel administrativo: gerência da loja e dashboard                  |
 | `auth/`       | Autenticação: login e cadastro de usuários                           |
 | `cart/`       | Carrinho de compras: adicionar, remover e ajustar quantidade         |
 | `categories/` | Categorias de produtos: listagem e criação (admin)                   |

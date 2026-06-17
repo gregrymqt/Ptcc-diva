@@ -11,7 +11,7 @@ A pasta `core` contém os **módulos de infraestrutura** que sustentam toda a ap
 Abstrai todas as operações de leitura e escrita no `localStorage` do navegador. Funciona como o "banco de dados" da aplicação.
 
 **Por que existe?**
-Em vez de cada feature chamar `localStorage.getItem()` e `localStorage.setItem()` diretamente, todas as operações passam por este módulo, que padroniza o comportamento (parse/stringify automático, tratamento de erros) e simula um delay de rede de 200ms para que o código se comporte de forma mais realista (async/await).
+Em vez de cada feature chamar `localStorage.getItem()` e `localStorage.setItem()` diretamente e espalhar sujeira pelo código, todas as operações passam por este módulo. Ele padroniza o comportamento (parse e stringify automáticos, tratamento de limite de disco excedido via try/catch) e atua como a fonte única da verdade (Single Source of Truth) para o acesso a dados locais.
 
 **Funções exportadas:**
 
