@@ -5,6 +5,7 @@ import { initNavbar } from "../../shared/components/navbar/navbarController.js";
 import { injetarSidebar } from "../../shared/components/sidebar/sidebarComponent.js";
 import { aboutFormComponent } from "../about/components/aboutFormComponent.js";
 import { aboutListComponent } from "../about/components/aboutListComponent.js";
+import { adminOrdersFormComponent } from "../checkout/components/adminOrdersFormComponent.js";
 
 // Importando os Controladores Isolados de cada aba
 import { carregarModuloHome } from "./controllers/adminHomeController.js";
@@ -67,7 +68,7 @@ window.mudarViewAdmin = function(idView) {
         listHtml = '<div id="admin-categories-list"></div>';
     } else if (idView === 'view-pedidos') {
         titulo = "Gestão de Pedidos";
-        formHtml = '<div id="admin-orders-form-container" style="padding: 2rem; color: #666; text-align: center;"><p>Os pedidos são processados pelo checkout da loja. <br>Utilize a aba "Consultar" para visualizar os recebidos.</p></div>';
+        formHtml = adminOrdersFormComponent();
         listHtml = '<div id="admin-orders-list"></div>';
     } else if (idView === 'view-about') {
         titulo = "Imagens da Seção Sobre";

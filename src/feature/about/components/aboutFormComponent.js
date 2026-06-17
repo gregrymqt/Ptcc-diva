@@ -4,6 +4,7 @@
 
 export function aboutFormComponent() {
     return (
+        '<div class="admin-section admin-form-wrapper">' +
         '<form id="about-image-form" class="admin-form">' +
             '<div class="form-group">' +
                 '<label for="about-image-upload">Upload de Imagem</label>' +
@@ -15,6 +16,7 @@ export function aboutFormComponent() {
                 '<input type="text" id="about-image-alt" required placeholder="Ex: Fachada da Loja Diva Makeup">' +
             '</div>' +
             '<button type="submit" class="btn-primary">Adicionar Imagem</button>' +
-        '</form>'
+        '</form>' +
+        '</div>'
     );
 }

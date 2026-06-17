@@ -6,6 +6,7 @@
 
 export function categoryFormComponent() {
   return (
+    '<div class="admin-section admin-form-wrapper">' +
     '<form id="category-form" class="admin-category-form">' +
       '<div class="form-header">' +
         '<h2>Nova Categoria</h2>' +
@@ -36,6 +37,7 @@ export function categoryFormComponent() {
           '<i class="fas fa-save"></i> Salvar Categoria' +
         '</button>' +
       '</div>' +
-    '</form>'
+    '</form>' +
+    '</div>'
   );
 }

@@ -1,9 +1,6 @@
 export function AdminOrdersComponent(orders) {
   if (orders.length === 0) {
-    return "<div class=\"empty-state\">\n" +
-           "  <i class=\"fas fa-box-open empty-icon\"></i>\n" +
-           "  <p>Nenhum pedido recebido até o momento.</p>\n" +
-           "</div>";
+    return '<div class="admin-section admin-list-wrapper"><div class="admin-empty-state" style="text-align: center; padding: 3rem 1rem; color: #777;"><i class="fas fa-box-open" style="font-size: 2.5rem; color: var(--color-primary); margin-bottom: 1rem; display:block;"></i><p style="font-size: 1.1rem; font-weight: 500; margin: 0;">Nenhum pedido recebido até o momento.</p></div></div>';
   }
 
   // Ordenar por data decrescente
@@ -73,7 +70,9 @@ export function AdminOrdersComponent(orders) {
                   "</div>\n";
   }
 
-  return "<div class=\"admin-orders-list\">\n" +
-         "  " + ordersHtml + "\n" +
+  return "<div class=\"admin-section admin-list-wrapper\">\n" +
+         "  <div class=\"admin-orders-list\">\n" +
+         "    " + ordersHtml + "\n" +
+         "  </div>\n" +
          "</div>";
 }

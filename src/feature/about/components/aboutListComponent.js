@@ -3,5 +3,5 @@
    ================================================ */
 
 export function aboutListComponent() {
-    return '<div id="admin-about-list" class="admin-list-container"></div>';
+    return '<div class="admin-section admin-list-wrapper"><div id="admin-about-list" class="admin-list-container"></div></div>';
 }

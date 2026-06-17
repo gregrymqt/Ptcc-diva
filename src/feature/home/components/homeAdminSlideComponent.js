@@ -19,5 +19,5 @@ export function homeImagePreviewComponent(base64Image) {
 }
 
 export function homeEmptySlidesComponent() {
-    return '<p>Nenhum slide cadastrado.</p>';
+    return '<div class="admin-empty-state" style="text-align: center; padding: 3rem 1rem; color: #777;"><p style="font-size: 1.1rem; font-weight: 500; margin: 0;">Nenhum banner ou slide cadastrado no momento.</p></div>';
 }

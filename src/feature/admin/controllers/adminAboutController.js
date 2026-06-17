@@ -4,7 +4,7 @@
 
 import { getAboutImagesConfig, addAboutImage, updateAboutImage, deleteAboutImage } from "../../about/services/aboutService.js";
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
-import { aboutAdminCardComponent, aboutImagePreviewComponent } from "../../about/components/aboutAdminCardComponent.js";
+import { aboutAdminCardComponent, aboutImagePreviewComponent, aboutEmptyImagesComponent } from "../../about/components/aboutAdminCardComponent.js";
 
 export function carregarModuloAbout() {
     inicializarLogicaAbout();
@@ -128,7 +128,7 @@ function renderizarImagensAbout() {
     if (!adminAboutList) return;
     
     if (aboutImages.length === 0) {
-        adminAboutList.innerHTML = "<p>Nenhuma imagem cadastrada na seção Sobre.</p>";
+        adminAboutList.innerHTML = aboutEmptyImagesComponent();
         return;
     }
 

@@ -6,6 +6,7 @@
 
 export function productFormComponent() {
   return (
+    '<div class="admin-section admin-form-wrapper">' +
     '<form id="product-form" class="admin-product-form">' +
       '<div class="form-header">' +
         '<h2>Novo Produto</h2>' +
@@ -71,6 +72,7 @@ export function productFormComponent() {
           '</button>' +
         '</div>' +
       '</div>' +
-    '</form>'
+    '</form>' +
+    '</div>'
   );
 }

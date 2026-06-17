@@ -1,6 +1,6 @@
 export function homeFormComponent() {
     return `
-        <div class="admin-form-wrapper">
+        <div class="admin-section admin-form-wrapper">
             <h2>Configuração da Seção Hero</h2>
             <form id="hero-form" class="admin-form">
                 <div class="form-group">

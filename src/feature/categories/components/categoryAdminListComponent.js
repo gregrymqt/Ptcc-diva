@@ -1,9 +1,10 @@
 export function categoryAdminListComponent(categorias) {
     if (!categorias || categorias.length === 0) {
-        return "<p style='color:#666;'>Nenhuma categoria cadastrada.</p>";
+        return '<div class="admin-section admin-list-wrapper"><div class="admin-empty-state" style="text-align: center; padding: 3rem 1rem; color: #777;"><p style="font-size: 1.1rem; font-weight: 500; margin: 0;">Nenhuma categoria cadastrada no momento.</p></div></div>';
     }
     
-    var html = '<table class="admin-table"><thead><tr><th>Imagem</th><th>Nome</th><th>Ações</th></tr></thead><tbody>';
+    var html = '<div class="admin-section admin-list-wrapper">' +
+               '<table class="admin-table"><thead><tr><th>Imagem</th><th>Nome</th><th>Ações</th></tr></thead><tbody>';
     for (var i = 0; i < categorias.length; i++) {
         var cat = categorias[i];
         html += '<tr>' +
@@ -15,6 +16,6 @@ export function categoryAdminListComponent(categorias) {
             '</td>' +
         '</tr>';
     }
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
     return html;
 }
