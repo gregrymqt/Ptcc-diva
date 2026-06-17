@@ -91,15 +91,18 @@ export function configurarMenuAutenticacao() {
     return;
   }
   
-  // Verifica no localStorage se existe um utilizador logado
+  // Verifica no localStorage se existe um usuário logado
   var usuarioLogadoStr = localStorage.getItem("usuarioLogado");
   
   if (usuarioLogadoStr) {
-    // Utilizador está logado
+    // O usuário está logado
     
     // Obter email para verificar role
     var email;
     try {
+      /* Boa Prática (Programação Defensiva): O JSON.parse pode falhar se o dado 
+         no localStorage for manipulado manualmente de forma incorreta. 
+         O try/catch previne a quebra da tela (White Screen of Death). */
       var usuarioParsed = JSON.parse(usuarioLogadoStr);
       email = usuarioParsed.email || usuarioLogadoStr;
     } catch (e) {
@@ -141,17 +144,17 @@ export function configurarMenuAutenticacao() {
         // Evita que a página seja recarregada pelo link
         e.preventDefault();
         
-        // Remove os dados do utilizador da sessão local
+        // Remove os dados do usuário da sessão local
         localStorage.removeItem("usuarioLogado");
         
-        // Redireciona o utilizador de volta para a página inicial
+        // Redireciona o usuário de volta para a página inicial
         window.location.href = "../../home/pages/home.html";
         showToast("Logout realizado com sucesso!");
         
       });
     }
   } else {
-    // Utilizador NÃO está logado
+    // O usuário NÃO está logado
     // Injeta o link de Entrar que redireciona para a página de Login
     authContainer.innerHTML = '<a href="../../auth/pages/login.html" id="navbar-login-btn">Entrar</a>';
   }

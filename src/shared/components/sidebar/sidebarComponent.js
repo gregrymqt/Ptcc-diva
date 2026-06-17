@@ -71,7 +71,8 @@ export function injetarSidebar(idContainer, itensMenu, config) {
     // Prepara o Container Principal
     containerPrincipal.classList.add("layout-com-sidebar");
 
-    // Injeta os elementos HTML no início do container principal sem destruir o que já existe
+    // Boa Prática (Performance de DOM): insertAdjacentHTML é muito mais eficiente que
+    // fazer `container.innerHTML += ...`, pois ele não destrói e recria a árvore de nós já existente na tela.
     var htmlFinal = htmlMobileHeader + htmlOverlay + htmlSidebar;
     containerPrincipal.insertAdjacentHTML('afterbegin', htmlFinal);
 

@@ -55,3 +55,25 @@ import { showToast } from "../../shared/components/toast/toastComponent.js";
 showToast("Produto adicionado ao carrinho!"); // Duração padrão
 showToast("Acesso negado!", 2500);           // Duração customizada em ms
 ```
+
+---
+
+## `modal/` — Modal Dinâmico
+
+Componente projetado para operações administrativas de CRUD (Update e Delete). Exibe caixas de diálogo flutuantes.
+
+| Arquivo                     | Responsabilidade                                         |
+|-----------------------------|----------------------------------------------------------|
+| `updateModalComponent.js`   | Engine base e API global (`exibirModalUpdate`, `exibirModalDelete`). |
+| `updateModal.css`           | Estilos estruturais e visuais do overlay e da caixa do modal. |
+
+---
+
+## `sidebar/` — Menu Lateral (Sidebar)
+
+Menu de navegação genérico otimizado para layouts Mobile-First, com suporte a overlay escuro.
+
+| Arquivo                 | Responsabilidade                                         |
+|-------------------------|----------------------------------------------------------|
+| `sidebarComponent.js`   | Função `injetarSidebar` que monta a estrutura lateral e o overlay no DOM. |
+| `sidebar.css`           | Animações de transição do menu off-canvas para telas menores. |

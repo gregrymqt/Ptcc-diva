@@ -7,9 +7,13 @@
    "pula" na tela como uma torrada numa torradeira.
    ================================================ */
 
-/* Cria e exibe uma mensagem na tela.
-   A mensagem some automaticamente após o tempo
-   definido (padrão: 3 segundos). */
+/**
+ * Cria e exibe uma mensagem flutuante (Toast) na tela.
+ * Boa Prática (Gerenciamento de Memória DOM): A função primeiro procura e destrói 
+ * instâncias antigas do toast antes de criar um novo, evitando vazamento de memória e sobreposição de divs.
+ * @param {string} mensagem - Texto a ser exibido.
+ * @param {number} [duracao=3000] - Tempo em milissegundos para sumir.
+ */
 export function showToast(mensagem, duracao) {
   // Se não passarem a duração, define 3000 milissegundos (3 segundos)
   if (!duracao) {
