@@ -15,100 +15,7 @@ import { navbarComponent } from "../../shared/components/navbar/navbarComponent.
 import { footerComponent }  from "../../shared/components/footer/footerComponent.js";
 import { showToast }        from "../../shared/components/toast/toastComponent.js";
 import { cartComponent }    from "./components/cartComponent.js";
-
-
-/* --------------------------------------------------
-   PARTE 1: FUNÇÕES DO CARRINHO
-   Lêem e salvam os dados do carrinho no localStorage.
-   A chave usada é "carrinho".
-   -------------------------------------------------- */
-
-// Nome da chave onde o carrinho fica salvo no navegador
-var CHAVE_CARRINHO = "carrinho";
-
-/* Lê e retorna todos os itens do carrinho.
-   Se não houver nada salvo, retorna uma lista vazia. */
-function pegarItensDoCarrinho() {
-  var dadosSalvos = localStorage.getItem(CHAVE_CARRINHO);
-
-  if (!dadosSalvos) {
-    return [];
-  }
-
-  return JSON.parse(dadosSalvos);
-}
-
-/* Salva a lista de itens do carrinho no localStorage. */
-function salvarCarrinho(itens) {
-  localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(itens));
-}
-
-/* Aumenta em 1 a quantidade de um item do carrinho.
-   Recebe o id do item como texto (vem do atributo data-id do HTML). */
-function aumentarQuantidade(id) {
-  var itens = pegarItensDoCarrinho();
-
-  // Percorre os itens um por um para achar o certo
-  for (var i = 0; i < itens.length; i++) {
-    if (itens[i].id === Number(id)) {
-      itens[i].quantidade = itens[i].quantidade + 1;
-    }
-  }
-
-  salvarCarrinho(itens);
-}
-
-/* Diminui em 1 a quantidade de um item.
-   Se a quantidade chegar a 0, remove o item do carrinho. */
-function diminuirQuantidade(id) {
-  var itens = pegarItensDoCarrinho();
-  var itensFiltrados = [];
-
-  for (var i = 0; i < itens.length; i++) {
-    var item = itens[i];
-
-    if (item.id === Number(id)) {
-      // Se a quantidade for maior que 1, só diminui
-      if (item.quantidade > 1) {
-        item.quantidade = item.quantidade - 1;
-        itensFiltrados.push(item);
-      }
-      // Se a quantidade for 1, não adiciona na lista (remove o item)
-
-    } else {
-      // Outros itens continuam normais
-      itensFiltrados.push(item);
-    }
-  }
-
-  salvarCarrinho(itensFiltrados);
-}
-
-/* Remove completamente um item do carrinho pelo id. */
-function removerItem(id) {
-  var itens = pegarItensDoCarrinho();
-  var itensFiltrados = [];
-
-  // Adiciona na lista apenas os itens que NÃO são o que queremos remover
-  for (var i = 0; i < itens.length; i++) {
-    if (itens[i].id !== Number(id)) {
-      itensFiltrados.push(itens[i]);
-    }
-  }
-
-  salvarCarrinho(itensFiltrados);
-}
-
-/* Calcula e retorna o valor total de todos os itens do carrinho. */
-function calcularTotal(itens) {
-  var total = 0;
-
-  for (var i = 0; i < itens.length; i++) {
-    total = total + (itens[i].preco * itens[i].quantidade);
-  }
-
-  return total;
-}
+import { getCart, updateCartQuantity, removeFromCart } from "./services/cartService.js";
 
 
 /* --------------------------------------------------
@@ -125,8 +32,8 @@ function render() {
   document.querySelector("#navbar").innerHTML = navbarComponent();
   document.querySelector("#footer").innerHTML = footerComponent();
 
-  // Pega os itens atuais do carrinho
-  var itens = pegarItensDoCarrinho();
+  // Boa Prática (SoC): A leitura dos dados agora é feita pela camada de Service
+  var itens = getCart();
 
   // Chama o componente que monta o HTML do carrinho
   document.querySelector("#cart-container").innerHTML = cartComponent(itens);
@@ -157,7 +64,17 @@ function iniciarEventos() {
   for (var i = 0; i < botoesAumentar.length; i++) {
     botoesAumentar[i].addEventListener("click", function() {
       var id = this.getAttribute("data-id");
-      aumentarQuantidade(id);
+      var itens = getCart();
+      var itemAtual;
+      
+      for (var n = 0; n < itens.length; n++) {
+        if (itens[n].id == id) itemAtual = itens[n];
+      }
+
+      if (itemAtual) {
+        // Boa Prática (SoC): Delegamos a regra de negócio para a camada Service
+        updateCartQuantity(id, itemAtual.quantidade + 1);
+      }
       render(); // Atualiza a tela após a mudança
     });
   }
@@ -168,7 +85,20 @@ function iniciarEventos() {
   for (var j = 0; j < botoesDiminuir.length; j++) {
     botoesDiminuir[j].addEventListener("click", function() {
       var id = this.getAttribute("data-id");
-      diminuirQuantidade(id);
+      var itens = getCart();
+      var itemAtual;
+
+      for (var n = 0; n < itens.length; n++) {
+        if (itens[n].id == id) itemAtual = itens[n];
+      }
+
+      if (itemAtual) {
+        if (itemAtual.quantidade > 1) {
+          updateCartQuantity(id, itemAtual.quantidade - 1);
+        } else {
+          removeFromCart(id);
+        }
+      }
       render();
     });
   }
@@ -179,7 +109,7 @@ function iniciarEventos() {
   for (var k = 0; k < botoesRemover.length; k++) {
     botoesRemover[k].addEventListener("click", function() {
       var id = this.getAttribute("data-id");
-      removerItem(id);
+      removeFromCart(id);
       showToast("Produto removido do carrinho!");
       render();
     });

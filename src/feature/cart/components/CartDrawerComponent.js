@@ -229,7 +229,7 @@ export function openCartDrawer() {
   renderCartItems();
 }
 
-/* Fecha la gaveta lateral do carrinho */
+/* Fecha a gaveta lateral do carrinho */
   export function closeCartDrawer() {
   var overlay = document.getElementById("cart-drawer-overlay");
   var gaveta = document.getElementById("cart-drawer");

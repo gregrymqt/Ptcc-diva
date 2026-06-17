@@ -1,5 +1,10 @@
 import { cartItemComponent } from "./cartItemComponent.js";
 
+/**
+ * Componente Funcional do Carrinho.
+ * Boa Prática (Arquitetura de Componentes): Esta função recebe os dados brutos (items) 
+ * e retorna estritamente a string HTML correspondente, sem manipular o DOM diretamente.
+ */
 export function cartComponent(items) {
   // Se o carrinho estiver vazio
   if (items.length === 0) {

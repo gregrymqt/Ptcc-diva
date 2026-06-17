@@ -2,10 +2,17 @@ import { getStorageData, setStorageData } from "../../../core/storage.js";
 
 var CHAVE_CARRINHO = "carrinho";
 
+/**
+ * Recupera os itens do carrinho salvos em Local Storage.
+ * Boa Prática (SoC): A persistência de dados ocorre unicamente aqui.
+ */
 export function getCart() {
     return getStorageData(CHAVE_CARRINHO, []);
 }
 
+/**
+ * Adiciona um novo produto ao carrinho ou incrementa sua quantidade.
+ */
 export function addToCart(produto, quantidade) {
     var cart = getCart();
     var encontrado = false;
@@ -32,6 +39,9 @@ export function addToCart(produto, quantidade) {
     setStorageData(CHAVE_CARRINHO, cart);
 }
 
+/**
+ * Atualiza explicitamente a quantidade de um item no carrinho.
+ */
 export function updateCartQuantity(produtoId, novaQuantidade) {
     var cart = getCart();
 
@@ -49,6 +59,9 @@ export function updateCartQuantity(produtoId, novaQuantidade) {
     setStorageData(CHAVE_CARRINHO, cart);
 }
 
+/**
+ * Remove um item completamente do carrinho.
+ */
 export function removeFromCart(produtoId) {
     var cart = getCart();
 
