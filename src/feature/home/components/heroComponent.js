@@ -1,5 +1,10 @@
 import { getHeroConfig } from "../services/heroService.js";
 
+/**
+ * Componente Burro (Dumb Component) do Carrossel Principal.
+ * Boa Prática (Arquitetura de Componentes): Ele apenas solicita os dados 
+ * e os transforma em marcação HTML, sem misturar temporizadores da tela aqui.
+ */
 export function heroComponent() {
   var heroSlides = getHeroConfig();
   

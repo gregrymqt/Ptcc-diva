@@ -23,7 +23,9 @@ index.html (raiz) → home.js
 | `home.js` | Inicializa a página home: renderiza a navbar, footer e conteúdos de destaque. |
 
 ### `components/`
-Componentes visuais específicos da home (ex: banner, seção de destaques).
+Componentes visuais específicos da home.
+- `heroComponent.js`: Renderiza o banner principal (carrossel) público.
+- `homeAdminSlideComponent.js`, `homeFormComponent.js`, `homeListComponent.js`: Componentes utilizados internamente pelo painel do Administrador para gerenciar o conteúdo dos banners.
 
 ### `pages/`
 Arquivo HTML da home.

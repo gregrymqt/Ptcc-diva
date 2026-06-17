@@ -6,8 +6,17 @@ export function getHeroConfig() {
     return slides;
 }
 
+/**
+ * Salva a configuração de slides do banner.
+ * Boa Prática (Tratamento de Erros): Protegemos a persistência com try/catch
+ * para evitar que o site trave caso a memória local do dispositivo esteja cheia.
+ */
 function setHeroConfig(config) {
-    setStorageData("heroConfig", config);
+    try {
+        setStorageData("heroConfig", config);
+    } catch (erro) {
+        console.error("Falha ao salvar a configuração do Banner:", erro);
+    }
 }
 
 export function addHeroSlide(slide) {

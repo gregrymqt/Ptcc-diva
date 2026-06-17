@@ -11,6 +11,7 @@ import { footerComponent }   from "../../shared/components/footer/footerComponen
 import { initNavbar }        from "../../shared/components/navbar/navbarController.js";
 
 import { categoryComponent } from "../categories/components/categoryComponent.js";
+import { getCategories }     from "../categories/services/categoryService.js";
 import { VitrineComponent }  from "../products/components/VitrineComponent.js";
 import { heroComponent }     from "./components/heroComponent.js";
 
@@ -50,6 +51,8 @@ function mostrarProximoSlide() {
   atualizarDots();
 }
 
+// Boa Prática (Acessibilidade do DOM): Anexamos as funções no objeto global 'window' 
+// para que o HTML de componentes gerados dinamicamente consiga enxergá-las através do 'onclick=""'.
 window.mudarSlide = function(n) {
   var slides = document.getElementsByClassName("hero-slide-item");
   if (slides.length <= 1) return;
@@ -117,13 +120,16 @@ function inicializarHome() {
   document.getElementById("navbar").innerHTML = navbarComponent();
 
   try {
+    // Boa Prática (SoC): O Controller busca os dados antes de enviá-los ao Componente Burro
+    const categorias = getCategories();
+    
     // O VitrineComponent agora é síncrono
     const vitrineHtml = VitrineComponent();
     
     // Monta todo o conteúdo principal da home concatenando os componentes
     document.getElementById("content").innerHTML =
       heroComponent() +
-      categoryComponent() +
+      categoryComponent(categorias) +
       vitrineHtml;
 
     // Coloca o footer na tela
