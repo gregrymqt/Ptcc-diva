@@ -7,6 +7,8 @@
    A chave usada é "favorites".
    ================================================ */
 
+import { getStorageData } from "../../../core/storage.js";
+
 // Nome da chave onde os favoritos ficam salvos
 var CHAVE_FAVORITOS = "favorites";
 
@@ -133,9 +135,8 @@ export function toggleFavorite(productId) {
 export function getFavoriteProducts() {
   var favoritos = getFavorites();
 
-  // Lê os produtos diretamente do localStorage
-  var dadosProdutos = localStorage.getItem("products");
-  var produtos      = dadosProdutos ? JSON.parse(dadosProdutos) : [];
+  // Boa Prática (SoC): Consumimos a camada central de armazenamento para ler produtos
+  var produtos = getStorageData("products", []);
 
   var resultado = [];
 

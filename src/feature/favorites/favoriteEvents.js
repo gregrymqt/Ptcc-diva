@@ -19,7 +19,10 @@ import { showToast }      from "../../shared/components/toast/toastComponent.js"
    Deve ser chamada uma vez ao inicializar a página. */
 export function initFavoriteEvents() {
 
-  // Coloca um listener no documento inteiro
+  // Boa Prática (Performance e Memória): Padrão "Event Delegation".
+  // Em vez de atrelar dezenas de 'ouvidores' (um para cada botão de coração na tela),
+  // atrelamos apenas UM ouvidor na raiz do documento. O navegador consome 
+  // muito menos RAM e a aplicação não trava.
   document.addEventListener("click", function(evento) {
 
     var botaoFav = evento.target.closest(".favorite-btn");

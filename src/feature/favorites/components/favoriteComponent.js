@@ -1,3 +1,8 @@
+/**
+ * Componente Burro (Dumb Component).
+ * Boa Prática (Arquitetura de Componentes): Este componente não possui lógicas de negócio.
+ * Ele apenas recebe o array de produtos favoritos e retorna a marcação HTML para a tela.
+ */
 export function favoriteComponent(products) {
 
     if (!products.length) {

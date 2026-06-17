@@ -8,21 +8,25 @@ import {
 }
 from "./services/favoriteService.js";
 
-import {
-  initNavbar
+import { initNavbar } from "../../shared/components/navbar/navbarController.js";
+import { initFavoriteEvents } from "./favoriteEvents.js";
+
+/**
+ * Renderiza a página inteira.
+ * Boa Prática: Todo o fluxo principal é encapsulado, 
+ * evitando código perdido rodando na raiz do arquivo.
+ */
+function render() {
+  document.getElementById("navbar").innerHTML = navbarComponent();
+  document.getElementById("footer").innerHTML = footerComponent();
+
+  var favoriteProducts = getFavoriteProducts();
+  document.getElementById("favorites-content").innerHTML = favoriteComponent(favoriteProducts);
+
+  initNavbar();
+  
+  // Bugfix: Agora inicializamos os ouvintes dos botões de "Remover"
+  initFavoriteEvents();
 }
-from "../../shared/components/navbar/navbarController.js";
 
-document.getElementById("navbar").innerHTML =
-  navbarComponent();
-
-document.getElementById("footer").innerHTML =
-  footerComponent();
-
-var favoriteProducts =
-  getFavoriteProducts();
-
-document.getElementById("favorites-content").innerHTML =
-  favoriteComponent(favoriteProducts);
-
-initNavbar();
+render();
