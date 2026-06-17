@@ -6,6 +6,7 @@
    ========================================================= */
 
 import { getCategories } from "./services/categoryService.js";
+import { categoryComponent } from "./components/categoryComponent.js";
 import { navbarComponent } from "../../shared/components/navbar/navbarComponent.js";
 import { footerComponent } from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }      from "../../shared/components/navbar/navbarController.js";
@@ -23,12 +24,18 @@ document.getElementById("footer").innerHTML = footerComponent();
    PARTE 2 E 3: BUSCAR CATEGORIAS E EXIBIR NA TELA
    -------------------------------------------------- */
 
-/* Monta o HTML de cada categoria e gerencia os botões de controle do Admin */
+/**
+ * Monta o HTML das categorias na tela.
+ * Boa Prática (Lógica de Filtro Front-End): O filtro de busca (termoBusca)
+ * manipula arrays diretamente na memória do navegador. Para aplicações pequenas,
+ * isso economiza idas ao banco de dados ou backend, aumentando a velocidade.
+ */
 function exibirCategorias(termoBusca) {
   if (termoBusca === undefined) {
     termoBusca = "";
   }
 
+  // 1. Acesso aos Dados através do Service (SoC)
   var categorias  = getCategories();
   var container   = document.getElementById("categories-container");
 
@@ -40,30 +47,23 @@ function exibirCategorias(termoBusca) {
   container.innerHTML = "";
 
   var termoMinusculo = termoBusca.toLowerCase();
+  var categoriasFiltradas = [];
 
-  // Percorre o array usando o laço de repetição tradicional for
+  // 2. Aplicação de Filtros em Memória
   for (var i = 0; i < categorias.length; i++) {
     var cat = categorias[i];
     var nomeMinusculo = cat.nome.toLowerCase();
 
     // Filtra pelo termo de busca digitado ou selecionado
-    if (nomeMinusculo.indexOf(termoMinusculo) === -1) {
-      continue;
+    if (nomeMinusculo.indexOf(termoMinusculo) !== -1) {
+      categoriasFiltradas.push(cat);
     }
-
-
-    // Concatena o card completo na div container do DOM
-    container.innerHTML = container.innerHTML +
-      '<article class="category-card">' +
-        '<img src="' + cat.imagem + '" alt="' + cat.nome + '">' +
-        '<div class="category-content">' +
-          '<h3>' + cat.nome + '</h3>' +
-          '<p>' + cat.descricao + '</p>' +
-        '</div>' +
-      '</article>';
   }
 
-
+  // 3. Renderização final através de Componente (SoC)
+  // Boa Prática: O Javascript não escreve HTML solto; ele apenas passa 
+  // os dados para o componente "burro" fazer o trabalho.
+  container.innerHTML = categoryComponent(categoriasFiltradas);
 }
 
 // Inicializa a renderização dos cards na tela

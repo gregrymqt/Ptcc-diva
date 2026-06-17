@@ -14,13 +14,11 @@ categories.html → categories.js
                       └── footerComponent    → exibe o rodapé
 ```
 
-## Fluxo de Criação (Admin)
+## Componentes Administrativos
 
-```
-create-category.html → create-category.js
-                            ├── protectAdminPage  → bloqueia acesso se não for admin
-                            └── [formulário de criação de categoria]
-```
+O módulo administrativo (`src/feature/admin`) consome os seguintes componentes desta pasta para construir as telas de edição de categoria:
+- `categoryFormComponent.js`
+- `categoryAdminListComponent.js`
 
 ---
 
@@ -30,10 +28,12 @@ create-category.html → create-category.js
 | Arquivo               | O que faz                                                    |
 |-----------------------|--------------------------------------------------------------|
 | `categories.js`       | Renderiza a lista de todas as categorias na página pública.  |
-| `create-category.js`  | Formulário de criação de categoria. Restrito a admins.       |
 
 ### `components/`
-Contém `categoryComponent.js` — função que recebe a lista de categorias e retorna o HTML dos cards de categoria.
+Contém as funções geradoras de interface HTML isoladas:
+- `categoryComponent.js`: HTML para os cards da vitrine pública.
+- `categoryFormComponent.js`: HTML do formulário de criação/edição.
+- `categoryAdminListComponent.js`: HTML da listagem gerencial.
 
 ### `models/`
 Define a estrutura de dados de uma categoria.
