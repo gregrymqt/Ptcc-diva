@@ -4,6 +4,10 @@ import { homeFormComponent } from "../../home/components/homeFormComponent.js";
 import { homeListComponent } from "../../home/components/homeListComponent.js";
 import { homeAdminSlideComponent, homeImagePreviewComponent, homeEmptySlidesComponent } from "../../home/components/homeAdminSlideComponent.js";
 
+/**
+ * Carrega a lógica da tela de configuração da Home (Carousel/Hero).
+ * Gerencia adição, edição e exclusão de slides exibidos na página inicial.
+ */
 export function carregarModuloHome() {
     var formContainer = document.getElementById("admin-home-form-container");
     var listContainer = document.getElementById("admin-home-list-container");
@@ -87,6 +91,9 @@ export function carregarModuloHome() {
     carregarConfiguracoes();
 }
 
+/**
+ * Acopla os listeners (eventos de submit e change) nos elementos do formulário Hero.
+ */
 function inicializarLogicaHome() {
     var heroForm = document.getElementById("hero-form");
     var inputTitle = document.getElementById("hero-title");

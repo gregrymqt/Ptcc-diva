@@ -5,6 +5,10 @@ import { productAdminListComponent } from "../../products/components/productAdmi
 import { productFormComponent } from "../../products/components/productFormComponent.js";
 import { productAdminDropdownItemComponent } from "../../products/components/productAdminDropdownComponent.js";
 
+/**
+ * Controlador de Produtos da interface Administrativa.
+ * Integra o formulário customizado com as categorias ativas, além do CRUD de Produtos.
+ */
 export function carregarModuloProdutos() {
     var formContainer = document.getElementById("admin-product-form-container");
     if (formContainer) {
@@ -13,7 +17,8 @@ export function carregarModuloProdutos() {
 
     var form = document.getElementById("product-form");
     
-    // Configurar Dropdown Customizado de Categorias
+    // Boa Prática (DOM Limpo / UI Dinâmica): Implementação de um Dropdown customizado para Seleção de Categorias,
+    // que consulta o `categoryService` dinamicamente ao invés de fixar chaves (Hardcode).
     var categoryDropdownList = document.getElementById("category-dropdown-list");
     var categoryDropdownHeader = document.getElementById("category-dropdown-header");
     var selectedCategoryId = null;
@@ -86,6 +91,7 @@ export function carregarModuloProdutos() {
                 ingredientes: ingredientes
             };
 
+            // Boa Prática (Fluxo Transacional Simulado): Envolve a persistência em um try/catch. Se falhar no CreateProduct, os campos não serão resetados.
             try {
                 createProduct(product);
                 showToast("Produto salvo!", 3000);

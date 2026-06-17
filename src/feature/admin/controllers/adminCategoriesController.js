@@ -3,6 +3,10 @@ import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { categoryAdminListComponent } from "../../categories/components/categoryAdminListComponent.js";
 import { categoryFormComponent } from "../../categories/components/categoryFormComponent.js";
 
+/**
+ * Controller responsável pela tela de Gestão de Categorias no Painel.
+ * Gerencia o DOM do form e lista, delegando chamadas aos Services.
+ */
 export function carregarModuloCategorias() {
     var formContainer = document.getElementById("admin-category-form-container");
     if (formContainer) {
@@ -24,6 +28,8 @@ export function carregarModuloCategorias() {
             var imgInput = document.getElementById("imagem");
             var file = imgInput && imgInput.files && imgInput.files[0];
 
+            // Boa Prática (FileReader): Lê a imagem como Base64 assincronamente para salvar no localStorage
+            // e garantir que será visível sem a necessidade de um backend real no contexto do TCC.
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function (evt) {
@@ -37,7 +43,7 @@ export function carregarModuloCategorias() {
                         showToast(erro.message, 3000, "error");
                     }
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file); // Converte para Data URI
             } else {
                 try {
                     var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: "" };

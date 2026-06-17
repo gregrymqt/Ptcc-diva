@@ -14,14 +14,17 @@ import { carregarModuloProdutos } from "./controllers/adminProductsController.js
 import { carregarModuloAbout } from "./controllers/adminAboutController.js";
 import { carregarModuloPedidos } from "./controllers/adminOrdersController.js";
 // 1. Proteger página para garantir que apenas admin acesse
+// Boa Prática (Segurança): Sempre validar o token antes de carregar dados sensíveis.
 protectAdminPage();
 
 // 2. Montar layout principal (Navbar e Footer)
+// Boa Prática (Arquitetura de Componentes): Reutilizamos o mesmo Navbar/Footer criados para as outras telas.
 document.getElementById("navbar").innerHTML = navbarComponent();
 document.getElementById("footer").innerHTML = footerComponent();
 initNavbar();
 
 // 3. Injeção da Sidebar
+// Configuração do menu lateral. Centralizar as configurações em arrays facilita a manutenção.
 var itensMenuAdmin = [
     { id: 'view-home', nome: 'Home (Hero)', icone: '🏠', link: '#' },
     { id: 'view-produtos', nome: 'Produtos', icone: '📦', link: '#' },
@@ -47,7 +50,12 @@ for (var i = 0; i < linksSidebar.length; i++) {
     })(itensMenuAdmin[i].id);
 }
 
-// 4. Motor de Renderização de Views
+/**
+ * 4. Motor de Renderização de Views
+ * Roteador local (SPA): Altera a seção principal do painel sem recarregar a página inteira.
+ * Boa Prática (SoC): Apenas delega a view correta, sem ter as lógicas de negócio misturadas aqui.
+ * @param {string} idView O identificador do link de menu clicado (ex: 'view-home').
+ */
 window.mudarViewAdmin = function(idView) {
     var contentArea = document.getElementById("admin-main-content");
     var titulo = "";
@@ -76,6 +84,7 @@ window.mudarViewAdmin = function(idView) {
         listHtml = aboutListComponent();
     }
 
+    // Injeta a estrutura básica na tela principal, com o título específico e as abas.
     contentArea.innerHTML = 
         '<div class="admin-container">' +
             '<header class="admin-header">' +
@@ -101,6 +110,12 @@ window.mudarViewAdmin = function(idView) {
 };
 
 // 5. Motor de Abas (Tabs)
+/**
+ * Renderiza o HTML das abas do painel admin.
+ * @param {string} formHtml HTML do formulário de cadastro.
+ * @param {string} listHtml HTML da lista de registros.
+ * @returns {string} String HTML formatada.
+ */
 function renderizarEstruturaAbas(formHtml, listHtml) {
     return '<div class="admin-tabs-container">' +
                '<div class="admin-tabs">' +

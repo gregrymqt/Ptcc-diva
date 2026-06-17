@@ -6,9 +6,16 @@ import { getAboutImagesConfig, addAboutImage, updateAboutImage, deleteAboutImage
 import { showToast } from "../../../shared/components/toast/toastComponent.js";
 import { aboutAdminCardComponent, aboutImagePreviewComponent, aboutEmptyImagesComponent } from "../../about/components/aboutAdminCardComponent.js";
 
+/**
+ * Carrega a lógica da tela "Sobre" dentro do Admin.
+ * Boa Prática (SoC): Isola todas as lógicas referentes ao "About" neste controller.
+ */
 export function carregarModuloAbout() {
     inicializarLogicaAbout();
     var adminAboutList = document.getElementById("admin-about-list");
+    
+    // Boa Prática (Event Delegation): Em vez de adicionar eventos de clique em cada botão individual (que podem ser dinâmicos),
+    // colocamos o escutador no pai ("adminAboutList") e verificamos a classe do elemento filho (event.target).
     if (adminAboutList) {
         adminAboutList.addEventListener("click", function(event) {
             var elementoClicado = event.target;
@@ -25,6 +32,7 @@ export function carregarModuloAbout() {
                 
                 if (window.exibirModalDelete) {
                     window.exibirModalDelete("Confirmar Exclusão", itemParaExcluir, "Tem certeza de que deseja remover esta imagem permanentemente?", function(objetoConfirmado) {
+                        // Boa Prática (Tratamento de Erros): Captura exceções para não "quebrar" a interface, exibindo erro em um Toast.
                         try {
                             deleteAboutImage(objetoConfirmado.id);
                             showToast("Imagem excluída com sucesso!", 3000);
@@ -77,6 +85,9 @@ export function carregarModuloAbout() {
     renderizarImagensAbout();
 }
 
+/**
+ * Adiciona eventos ao formulário de "Sobre", como envio e preview da imagem (upload de arquivo).
+ */
 function inicializarLogicaAbout() {
     var aboutForm = document.getElementById("about-image-form");
     var inputImage = document.getElementById("about-image-upload");
