@@ -57,14 +57,16 @@ export function productFormComponent() {
             '<textarea id="descricao" placeholder="Descreva os principais benefícios, diferenciais e composição..." required></textarea>' +
           '</div>' +
 
-          '<div class="input-group">' +
-            '<label for="modoUso">Modo de Uso</label>' +
-            '<textarea id="modoUso" placeholder="Instruções de aplicação..."></textarea>' +
-          '</div>' +
+          '<div class="input-row">' +
+            '<div class="input-group flex-1">' +
+              '<label for="modoUso">Modo de Uso</label>' +
+              '<textarea id="modoUso" placeholder="Instruções de aplicação..."></textarea>' +
+            '</div>' +
 
-          '<div class="input-group">' +
-            '<label for="ingredientes">Ingredientes</label>' +
-            '<textarea id="ingredientes" placeholder="Composição química e ingredientes..."></textarea>' +
+            '<div class="input-group flex-1">' +
+              '<label for="ingredientes">Ingredientes</label>' +
+              '<textarea id="ingredientes" placeholder="Composição química e ingredientes..."></textarea>' +
+            '</div>' +
           '</div>' +
 
           '<button type="submit" class="btn-save-product">' +

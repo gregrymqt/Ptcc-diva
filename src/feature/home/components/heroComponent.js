@@ -27,17 +27,19 @@ export function heroComponent() {
     
     htmlSlides += 
       '<section class="hero-slide-item' + isActive + '">' +
-        '<div class="hero-content">' +
-          '<h1>' + slide.titulo + '</h1>' +
-          '<p>' + slide.subtitulo + '</p>' +
-          '<div class="hero-buttons">' +
-            '<a href="../../products/pages/products.html" class="btn-primary">Comprar Agora</a>' +
-            '<a href="../../about/pages/about.html" class="btn-secondary">Conheça a Marca</a>' +
+        '<div class="hero-slide-inner">' +
+          '<div class="hero-content">' +
+            '<h1>' + slide.titulo + '</h1>' +
+            '<p>' + slide.subtitulo + '</p>' +
+            '<div class="hero-buttons">' +
+              '<a href="../../products/pages/products.html" class="btn-primary">Comprar Agora</a>' +
+              '<a href="../../about/pages/about.html" class="btn-secondary">Conheça a Marca</a>' +
+            '</div>' +
           '</div>' +
-        '</div>' +
-        '<div class="hero-image">' +
-          '<div class="carousel">' +
-            '<img src="' + slide.imagem + '" alt="Banner Diva Makeup">' +
+          '<div class="hero-image">' +
+            '<div class="carousel">' +
+              '<img src="' + slide.imagem + '" alt="Banner Diva Makeup">' +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</section>';

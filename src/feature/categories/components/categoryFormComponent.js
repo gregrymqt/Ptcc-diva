@@ -30,6 +30,9 @@ export function categoryFormComponent() {
         '<div class="input-group">' +
           '<label for="imagem">Imagem da Categoria (Upload)</label>' +
           '<input type="file" id="imagem" accept="image/*" required>' +
+          '<div class="preview-container" style="margin-top: 10px; display: none;" id="category-image-preview-container">' +
+            '<img id="category-image-preview" src="" alt="Preview da Categoria" style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; padding: 4px;">' +
+          '</div>' +
         '</div>' +
 
         /* Botão de Envio */

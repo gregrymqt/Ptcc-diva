@@ -5,14 +5,13 @@
    ========================================================= */
 
 export function productDetailComponent(produto, htmlSwatches, precoFormatado) {
-  // Determina a imagem e cor inicial (primeira variação ou placeholder)
-  var imagemInicial    = "https://via.placeholder.com/600x600?text=Sem+Imagem";
+  var imagemInicial    = produto.imagem || "https://via.placeholder.com/600x600?text=Sem+Imagem";
   var corInicial       = "Única";
   var temVariacoes     = produto.variacoes && produto.variacoes.length > 0;
 
   if (temVariacoes) {
-    imagemInicial = produto.variacoes[0].imagem;
-    corInicial    = produto.variacoes[0].cor;
+    imagemInicial = produto.variacoes[0].imagem || imagemInicial;
+    corInicial    = produto.variacoes[0].cor || corInicial;
   }
 
   var nomeCategoria   = produto.categoryName || "Produto";

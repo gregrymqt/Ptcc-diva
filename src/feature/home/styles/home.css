@@ -139,25 +139,34 @@
 
 .hero-carousel-container {
   width: 100%;
-  max-width: 1200px; /* Prende as setas perto do conteÃºdo em telas grandes */
+  max-width: 100%; /* Permite pegar a tela inteira */
   margin: 0 auto;
   position: relative;
+  overflow: hidden; /* Evitar scroll horizontal se algo sair */
 }
 
 .hero-slide-item {
   display: none;
-  flex-direction: column;
-  padding: 4rem 2rem;
   background-color: #ffffff;
-  gap: 2rem;
-  align-items: center;
-  text-align: center;
-  /* Nova animaÃ§Ã£o super fluida (Fade + Movimento) */
+  width: 100%;
+  /* Nova animação super fluida (Fade + Movimento) */
   animation: smoothFadeSlide 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .hero-slide-item.active {
+  display: block;
+}
+
+.hero-slide-inner {
   display: flex;
+  flex-direction: column;
+  padding: 4rem 2rem;
+  gap: 2rem;
+  align-items: center;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Nova regra de animaÃ§Ã£o */
@@ -270,7 +279,9 @@
   color: white;
   border: none;
   font-size: 2rem;
-  padding: 0.5rem 1rem;
+  width: 50px;
+  height: 50px;
+  padding: 0;
   cursor: pointer;
   border-radius: 50%;
   transition: background-color 0.3s ease;
@@ -320,12 +331,10 @@
 
 /* Tablet e Desktop */
 @media (min-width: 768px) {
-  .hero-slide-item {
+  .hero-slide-inner {
     flex-direction: row;
     text-align: left;
     padding: 6rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
   }
 
   .hero-content {
@@ -344,10 +353,10 @@
 
 @media (min-width: 1024px) {
   .prev-btn {
-    left: -60px; /* Joga 60px para fora do limite esquerdo */
+    left: 20px; /* Mantém a seta visível dentro da tela inteira */
   }
   .next-btn {
-    right: -60px; /* Joga 60px para fora do limite direito */
+    right: 20px; /* Mantém a seta visível dentro da tela inteira */
   }
 }
 

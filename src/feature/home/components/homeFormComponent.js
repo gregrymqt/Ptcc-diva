@@ -23,7 +23,7 @@ export function homeFormComponent() {
                     <label for="hero-image">Imagem do Banner</label>
                     <input type="file" id="hero-image" accept="image/*" />
                 </div>
-                <div id="image-preview" class="image-preview-container"></div>
+                <div id="image-preview" class="image-preview"></div>
                 
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Salvar Hero</button>

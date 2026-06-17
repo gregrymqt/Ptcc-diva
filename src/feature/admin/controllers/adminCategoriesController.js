@@ -14,6 +14,33 @@ export function carregarModuloCategorias() {
     }
 
     var form = document.getElementById("category-form");
+    
+    // Configuração do Preview de Imagem
+    var imgInput = document.getElementById("imagem");
+    var imgPreviewContainer = document.getElementById("category-image-preview-container");
+    var imgPreview = document.getElementById("category-image-preview");
+    var base64CategoryImage = null;
+
+    if (imgInput) {
+        imgInput.addEventListener("change", function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(evt) {
+                    base64CategoryImage = evt.target.result;
+                    if (imgPreview && imgPreviewContainer) {
+                        imgPreview.src = base64CategoryImage;
+                        imgPreviewContainer.style.display = "block";
+                    }
+                };
+                reader.readAsDataURL(file);
+            } else {
+                base64CategoryImage = null;
+                if (imgPreviewContainer) imgPreviewContainer.style.display = "none";
+            }
+        });
+    }
+
     if (form) {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -25,35 +52,25 @@ export function carregarModuloCategorias() {
                 return;
             }
 
-            var imgInput = document.getElementById("imagem");
-            var file = imgInput && imgInput.files && imgInput.files[0];
-
-            // Boa Prática (FileReader): Lê a imagem como Base64 assincronamente para salvar no localStorage
-            // e garantir que será visível sem a necessidade de um backend real no contexto do TCC.
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function (evt) {
-                    try {
-                        var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: evt.target.result };
-                        createCategory(category);
-                        showToast("Categoria cadastrada!", 3000);
-                        form.reset();
-                        renderizarListaCategorias();
-                    } catch (erro) {
-                        showToast(erro.message, 3000, "error");
-                    }
+            try {
+                var category = { 
+                    id: new Date().getTime(), 
+                    nome: nome, 
+                    descricao: desc, 
+                    imagem: base64CategoryImage || "" 
                 };
-                reader.readAsDataURL(file); // Converte para Data URI
-            } else {
-                try {
-                    var category = { id: new Date().getTime(), nome: nome, descricao: desc, imagem: "" };
-                    createCategory(category);
-                    showToast("Categoria cadastrada!", 3000);
-                    form.reset();
-                    renderizarListaCategorias();
-                } catch (erro) {
-                    showToast(erro.message, 3000, "error");
-                }
+                createCategory(category);
+                showToast("Categoria cadastrada!", 3000);
+                form.reset();
+                
+                // Limpar preview após salvar
+                base64CategoryImage = null;
+                if (imgPreviewContainer) imgPreviewContainer.style.display = "none";
+                if (imgPreview) imgPreview.src = "";
+                
+                renderizarListaCategorias();
+            } catch (erro) {
+                showToast(erro.message, 3000, "error");
             }
         });
     }
