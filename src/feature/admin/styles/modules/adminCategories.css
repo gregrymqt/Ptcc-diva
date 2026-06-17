@@ -1,0 +1,106 @@
+/* =========================================================
+   Layout e Componentes do Formulário de Categorias
+   ========================================================= */
+.admin-category-form {
+    width: 100%;
+}
+
+.admin-category-form .form-header {
+    margin-bottom: 2rem;
+}
+
+.admin-category-form .form-grid-single {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 600px; /* Mantém o formulário de coluna única compacto e elegante no desktop */
+    margin: 0 auto;
+}
+
+.admin-category-form .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.admin-category-form .input-group label {
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.admin-category-form input[type="text"],
+.admin-category-form textarea,
+.admin-category-form input[type="file"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.admin-category-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Estilização para o input de upload de arquivo */
+.admin-category-form input[type="file"] {
+    padding: 0.6rem;
+    border: 1px dashed var(--color-primary);
+    background-color: #fcf8f9;
+    cursor: pointer;
+}
+
+.admin-category-form input[type="file"]::file-selector-button {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background-color 0.3s;
+}
+
+.admin-category-form input[type="file"]::file-selector-button:hover {
+    background-color: #923a52;
+}
+
+.admin-category-form input:focus,
+.admin-category-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
+}
+
+/* Botão Salvar Categoria */
+.btn-save-category {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.btn-save-category:hover {
+    background-color: #923a52;
+    transform: translateY(-2px);
+}
+
+@media (min-width: 1024px) {
+    .btn-save-category {
+        width: auto;
+        align-self: flex-start;
+    }
+}

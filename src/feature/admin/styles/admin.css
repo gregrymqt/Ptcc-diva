@@ -1,3 +1,7 @@
+@import "./modules/adminProducts.css";
+@import "./modules/adminCategories.css";
+@import "./modules/adminOrders.css";
+
 /* ================================================
    ADMIN.CSS â€” Estilos da Ãrea Administrativa
    Paleta: Velvet Rose (var(--color-primary))
@@ -320,579 +324,205 @@
     color: #444;
 }
 
+.form-group label {
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px dashed var(--color-primary);
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    background-color: #fcf8f9;
+    color: #555;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+    border-color: #923a52;
+}
+
+.form-group input[type="file"]::file-selector-button {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+    background-color: #923a52;
+}
+
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
+}
+
+.image-preview {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
+    min-height: 150px;
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fcf8f9;
+    overflow: hidden;
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    align-self: flex-start;
+}
+
+.btn-primary:hover {
+    background-color: #923a52;
+    transform: translateY(-2px);
+}
+
+#admin-slides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-slide-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+.admin-slide-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.admin-slide-info {
+    flex-grow: 1;
+    margin: 0 1.5rem;
+}
+
+.admin-slide-info h3 {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.admin-slide-info p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.admin-slide-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Estilos base para os botÃµes de aÃ§Ã£o do painel administrativo */
+.btn-edit, .btn-delete {
+    padding: 0.5rem 1rem;
+    min-height: 44px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #ec971f;
+}
+
+.btn-delete {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c9302c;
+}
+
+/* ================================================
+   Tabelas de Listagem (Categorias e Produtos)
+   ================================================ */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.admin-table th, .admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.admin-table th {
+    background-color: #fcf8f9;
+    font-weight: 600;
+    color: #444;
+}
+
 .admin-table img {
     width: 60px;
     height: 60px;
     border-radius: 6px;
     object-fit: cover;
     display: block;
-}
-
-/* =========================================================
-   Layout e Componentes do Formulário de Produtos
-   ========================================================= */
-.admin-product-form {
-    width: 100%;
-}
-
-.admin-product-form .form-header {
-    margin-bottom: 2rem;
-}
-
-.admin-product-form .form-grid {
-    display: flex;
-    flex-direction: column; /* Mobile-First: Empilhado */
-    gap: 2rem;
-}
-
-.admin-product-form .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-}
-
-.admin-product-form .input-group label {
-    font-weight: 600;
-    color: #444;
-    font-size: 0.95rem;
-}
-
-.admin-product-form input[type="text"],
-.admin-product-form input[type="number"],
-.admin-product-form textarea {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.admin-product-form textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.admin-product-form input:focus,
-.admin-product-form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
-}
-
-/* Área de Upload de Imagem customizada */
-.upload-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed var(--color-primary);
-    background-color: #fcf8f9;
-    border-radius: 12px;
-    padding: 2rem;
-    cursor: pointer;
-    text-align: center;
-    min-height: 250px;
-    transition: background-color 0.3s;
-}
-
-.upload-area:hover {
-    background-color: #f5e9ec;
-}
-
-.upload-placeholder i {
-    font-size: 2.5rem;
-    color: var(--color-primary);
-    margin-bottom: 1rem;
-}
-
-.upload-placeholder span {
-    display: block;
-    font-weight: 600;
-    color: #333;
-}
-
-.upload-placeholder small {
-    color: #777;
-}
-
-.image-preview {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-/* Botão Salvar Produto */
-.btn-save-product {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.btn-save-product:hover {
-    background-color: #923a52;
-    transform: translateY(-2px);
-}
-
-/* Custom Dropdown Estilos básicos no form */
-.admin-product-form .custom-dropdown {
-    position: relative;
-}
-
-/* Desktop Responsiveness (Garante o comportamento lado a lado) */
-@media (min-width: 1024px) {
-    .admin-product-form .form-grid {
-        display: grid;
-        grid-template-columns: 320px 1fr; /* Upload na esquerda, dados na direita */
-        gap: 3rem;
-    }
-    .admin-product-form .input-row {
-        display: flex;
-        gap: 1.5rem;
-    }
-    .admin-product-form .flex-1 {
-        flex: 1;
-    }
-    .btn-save-product {
-        width: auto; /* Não ocupa tudo no desktop */
-        float: right;
-    }
-}
-
-/* =========================================================
-   Layout e Componentes do Formulário de Categorias
-   ========================================================= */
-.admin-category-form {
-    width: 100%;
-}
-
-.admin-category-form .form-header {
-    margin-bottom: 2rem;
-}
-
-.admin-category-form .form-grid-single {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    max-width: 600px; /* Mantém o formulário de coluna única compacto e elegante no desktop */
-    margin: 0 auto;
-}
-
-.admin-category-form .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.admin-category-form .input-group label {
-    font-weight: 600;
-    color: #444;
-    font-size: 0.95rem;
-}
-
-.admin-category-form input[type="text"],
-.admin-category-form textarea,
-.admin-category-form input[type="file"] {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.admin-category-form textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* Estilização para o input de upload de arquivo */
-.admin-category-form input[type="file"] {
-    padding: 0.6rem;
-    border: 1px dashed var(--color-primary);
-    background-color: #fcf8f9;
-    cursor: pointer;
-}
-
-.admin-category-form input[type="file"]::file-selector-button {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: 0.4rem 1rem;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    cursor: pointer;
-    margin-right: 1rem;
-    transition: background-color 0.3s;
-}
-
-.admin-category-form input[type="file"]::file-selector-button:hover {
-    background-color: #923a52;
-}
-
-.admin-category-form input:focus,
-.admin-category-form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
-}
-
-/* Botão Salvar Categoria */
-.btn-save-category {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.btn-save-category:hover {
-    background-color: #923a52;
-    transform: translateY(-2px);
-}
-
-.admin-product-form input:focus,
-.admin-product-form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
-}
-
-/* Área de Upload de Imagem customizada */
-.upload-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed var(--color-primary);
-    background-color: #fcf8f9;
-    border-radius: 12px;
-    padding: 2rem;
-    cursor: pointer;
-    text-align: center;
-    min-height: 250px;
-    transition: background-color 0.3s;
-}
-
-.upload-area:hover {
-    background-color: #f5e9ec;
-}
-
-.upload-placeholder i {
-    font-size: 2.5rem;
-    color: var(--color-primary);
-    margin-bottom: 1rem;
-}
-
-.upload-placeholder span {
-    display: block;
-    font-weight: 600;
-    color: #333;
-}
-
-.upload-placeholder small {
-    color: #777;
-}
-
-.image-preview {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-/* Botão Salvar Produto */
-.btn-save-product {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.btn-save-product:hover {
-    background-color: #923a52;
-    transform: translateY(-2px);
-}
-
-/* Custom Dropdown Estilos básicos no form */
-.admin-product-form .custom-dropdown {
-    position: relative;
-}
-
-/* Desktop Responsiveness (Garante o comportamento lado a lado) */
-@media (min-width: 1024px) {
-    .admin-product-form .form-grid {
-        display: grid;
-        grid-template-columns: 320px 1fr; /* Upload na esquerda, dados na direita */
-        gap: 3rem;
-    }
-    .admin-product-form .input-row {
-        display: flex;
-        gap: 1.5rem;
-    }
-    .admin-product-form .flex-1 {
-        flex: 1;
-    }
-    .btn-save-product {
-        width: auto; /* Não ocupa tudo no desktop */
-        float: right;
-    }
-}
-
-/* =========================================================
-   Layout e Componentes do Formulário de Categorias
-   ========================================================= */
-.admin-category-form {
-    width: 100%;
-}
-
-.admin-category-form .form-header {
-    margin-bottom: 2rem;
-}
-
-.admin-category-form .form-grid-single {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    max-width: 600px; /* Mantém o formulário de coluna única compacto e elegante no desktop */
-    margin: 0 auto;
-}
-
-.admin-category-form .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.admin-category-form .input-group label {
-    font-weight: 600;
-    color: #444;
-    font-size: 0.95rem;
-}
-
-.admin-category-form input[type="text"],
-.admin-category-form textarea,
-.admin-category-form input[type="file"] {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.admin-category-form textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* Estilização para o input de upload de arquivo */
-.admin-category-form input[type="file"] {
-    padding: 0.6rem;
-    border: 1px dashed var(--color-primary);
-    background-color: #fcf8f9;
-    cursor: pointer;
-}
-
-.admin-category-form input[type="file"]::file-selector-button {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: 0.4rem 1rem;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    cursor: pointer;
-    margin-right: 1rem;
-    transition: background-color 0.3s;
-}
-
-.admin-category-form input[type="file"]::file-selector-button:hover {
-    background-color: #923a52;
-}
-
-.admin-category-form input:focus,
-.admin-category-form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
-}
-
-/* Botão Salvar Categoria */
-.btn-save-category {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.btn-save-category:hover {
-    background-color: #923a52;
-    transform: translateY(-2px);
-}
-
-@media (min-width: 1024px) {
-    .btn-save-category {
-        width: auto;
-        align-self: flex-start;
-    }
-}
-
-/* =========================================================
-   Layout e Cards de Gestão de Pedidos (Checkout)
-   ========================================================= */
-.admin-orders-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 100%;
-}
-
-.admin-order-card {
-    background: #ffffff;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.admin-order-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-}
-
-.order-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f5f5f5;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-}
-
-.order-id {
-    font-weight: 700;
-    color: #333;
-    font-size: 1.1rem;
-}
-
-.order-id i {
-    color: var(--color-primary);
-}
-
-/* Badges de Status do Pedido */
-.badge-waiting {
-    background-color: #fef3c7;
-    color: #d97706;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.order-card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.order-info-group {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-}
-
-.info-label {
-    font-weight: 600;
-    color: #666;
-    min-width: 90px;
-}
-
-.info-value {
-    color: #333;
-}
-
-.payment-method {
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-/* Chips de Itens do Pedido */
-.order-items-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.order-item-chip {
-    background: #f3f4f6;
-    color: #4b5563;
-    padding: 0.25rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    border: 1px solid #e5e7eb;
-}
-
-.order-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #f5f5f5;
-    padding-top: 1rem;
-    margin-top: 1rem;
-}
-
-.order-total {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #111;
-}
-
-.btn-order-action {
-    background-color: #e5e7eb;
-    color: #9ca3af;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-    cursor: not-allowed;
 }

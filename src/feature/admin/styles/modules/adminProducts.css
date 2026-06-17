@@ -1,0 +1,141 @@
+/* =========================================================
+   Layout e Componentes do Formulário de Produtos
+   ========================================================= */
+.admin-product-form {
+    width: 100%;
+}
+
+.admin-product-form .form-header {
+    margin-bottom: 2rem;
+}
+
+.admin-product-form .form-grid {
+    display: flex;
+    flex-direction: column; /* Mobile-First: Empilhado */
+    gap: 2rem;
+}
+
+.admin-product-form .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.admin-product-form .input-group label {
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.admin-product-form input[type="text"],
+.admin-product-form input[type="number"],
+.admin-product-form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.admin-product-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.admin-product-form input:focus,
+.admin-product-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(179, 77, 104, 0.15);
+}
+
+/* Área de Upload de Imagem customizada */
+.upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--color-primary);
+    background-color: #fcf8f9;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    text-align: center;
+    min-height: 250px;
+    transition: background-color 0.3s;
+}
+
+.upload-area:hover {
+    background-color: #f5e9ec;
+}
+
+.upload-placeholder i {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.upload-placeholder span {
+    display: block;
+    font-weight: 600;
+    color: #333;
+}
+
+.upload-placeholder small {
+    color: #777;
+}
+
+.image-preview {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Botão Salvar Produto */
+.btn-save-product {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.btn-save-product:hover {
+    background-color: #923a52;
+    transform: translateY(-2px);
+}
+
+/* Custom Dropdown Estilos básicos no form */
+.admin-product-form .custom-dropdown {
+    position: relative;
+}
+
+/* Desktop Responsiveness (Garante o comportamento lado a lado) */
+@media (min-width: 1024px) {
+    .admin-product-form .form-grid {
+        display: grid;
+        grid-template-columns: 320px 1fr; /* Upload na esquerda, dados na direita */
+        gap: 3rem;
+    }
+    .admin-product-form .input-row {
+        display: flex;
+        gap: 1.5rem;
+    }
+    .admin-product-form .flex-1 {
+        flex: 1;
+    }
+    .btn-save-product {
+        width: auto; /* Não ocupa tudo no desktop */
+        float: right;
+    }
+}
