@@ -1,5 +1,11 @@
 /**
  * Componente de Modal Dinâmico para Operações CRUD (Update e Delete)
+ * 
+ * Boa Prática de Segurança e Manipulação do DOM:
+ * A construção é feita criando nós reais do DOM (document.createElement) em vez de 
+ * concatenar strings HTML (innerHTML), o que previne vulnerabilidades como XSS
+ * e facilita anexar eventos (addEventListener) de forma segura.
+ * 
  * Regras: Estrito ES5, uso exclusivo de var, funções tradicionais e manipulação nativa do DOM.
  */
 

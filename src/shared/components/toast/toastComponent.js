@@ -1,11 +1,12 @@
-/* ================================================
-   TOASTCOMPONENT.JS — Alertas na Tela
-
-   Este arquivo é responsável por mostrar aquelas
-   mensagens rápidas na tela (ex: "Produto salvo!").
-   Isso é conhecido como "Toast" (torrada), pois
-   "pula" na tela como uma torrada numa torradeira.
-   ================================================ */
+/**
+ * ================================================
+ * TOASTCOMPONENT.JS — Alertas na Tela
+ *
+ * Boa Prática (Manipulação Limpa do DOM e Temporizadores):
+ * O toast é gerado dinamicamente e, para evitar problemas de performance,
+ * ele se auto-destrói do DOM após o tempo determinado (uso de setTimeout).
+ * ================================================
+ */
 
 /**
  * Cria e exibe uma mensagem flutuante (Toast) na tela.

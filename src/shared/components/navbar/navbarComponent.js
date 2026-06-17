@@ -1,12 +1,19 @@
-/* ================================================
-   NAVBARCOMPONENT.JS — Barra de Navegação
+/**
+ * ================================================
+ * NAVBARCOMPONENT.JS — Barra de Navegação
+ *
+ * Boa Prática de Arquitetura (SoC - Separation of Concerns):
+ * Este arquivo é responsável *apenas* pela renderização do HTML (View).
+ * Nenhuma lógica de negócio ou de eventos (como cliques) é definida aqui.
+ * Isso torna o componente puro, previsível e fácil de testar.
+ * A lógica e os cliques estão no navbarController.js.
+ * ================================================
+ */
 
-   Este arquivo apenas constrói o HTML da barra
-   de navegação que fica no topo do site.
-   A lógica e os cliques estão no navbarController.js.
-   ================================================ */
-
-/* Retorna o HTML completo da Navbar. */
+/**
+ * Retorna o HTML completo da Navbar.
+ * @returns {string} String contendo a marcação HTML da navbar.
+ */
 export function navbarComponent() {
   return (
     '<header class="navbar">' +

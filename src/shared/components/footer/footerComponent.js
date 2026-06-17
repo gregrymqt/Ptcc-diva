@@ -1,11 +1,17 @@
-/* ================================================
-   FOOTERCOMPONENT.JS — Rodapé do Site
+/**
+ * ================================================
+ * FOOTERCOMPONENT.JS — Rodapé do Site
+ *
+ * Boa Prática de Componentização:
+ * O Footer é isolado em uma função para ser facilmente importado 
+ * e injetado em múltiplas telas, garantindo a consistência visual.
+ * ================================================
+ */
 
-   Constrói o HTML do rodapé que aparece no
-   final de todas as páginas da loja.
-   ================================================ */
-
-/* Retorna o HTML completo do Footer. */
+/**
+ * Retorna o HTML completo do Footer.
+ * @returns {string} HTML string com o layout do rodapé.
+ */
 export function footerComponent() {
   return (
     '<footer class="footer">' +

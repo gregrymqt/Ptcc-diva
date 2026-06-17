@@ -1,14 +1,13 @@
-/* ================================================
-   NAVBARCONTROLLER.JS — Comportamento da Navbar
-
-   Este arquivo adiciona a lógica interativa à
-   navbar que já foi criada pelo navbarComponent.js.
-
-   Ele cuida de:
-   - Abrir/fechar o menu hambúrguer no mobile
-   - Abrir a gaveta do carrinho ao clicar no ícone
-   - Atualizar o contador de itens no carrinho e favoritos
-   ================================================ */
+/**
+ * ================================================
+ * NAVBARCONTROLLER.JS — Comportamento da Navbar
+ * 
+ * Boa Prática de Arquitetura (Controllers):
+ * Separa a manipulação de eventos (cliques) e integração de serviços 
+ * da parte visual. Ele atua como uma ponte entre a Interface (Component) 
+ * e os Dados/Lógica (Services).
+ * ================================================
+ */
 
 import { getCartTotals }   from "../../../feature/cart/services/cartServices.js";
 import { openCartDrawer }  from "../../../feature/cart/components/CartDrawerComponent.js";
@@ -86,7 +85,7 @@ export function atualizarContadores() {
 export function configurarMenuAutenticacao() {
   var authContainer = document.getElementById("navbar-auth-container");
   
-  // Se o contentor não existir na página, não faz nada
+  // Se o container não existir na página, não faz nada
   if (!authContainer) {
     return;
   }
