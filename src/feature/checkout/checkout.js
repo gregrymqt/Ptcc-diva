@@ -12,7 +12,7 @@ import { showToast }        from "../../shared/components/toast/toastComponent.j
 import { getStorageData, setStorageData } from "../../core/storage.js";
 import { CheckoutComponent } from "./components/CheckoutComponent.js";
 import { createOrder } from "./services/checkoutServices.js";
-import { getCart, getCartTotals, clearCart } from "../../cart/services/cartServices.js";
+import { getCart, getCartTotals, clearCart } from "../../cart/services/cartService.js";
 
 /* --------------------------------------------------
    PARTE 1: PROTEÇÃO DE ROTA

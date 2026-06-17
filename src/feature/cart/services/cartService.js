@@ -76,7 +76,23 @@ export function removeFromCart(produtoId) {
 }
 
 export function clearCart() {
-    setStorageData(CHAVE_CARRINHO, []);
+  setStorageData(CHAVE_CARRINHO, []);
+  window.dispatchEvent(new Event("cartUpdated"));
+}
+
+/* Calcula e retorna o total de itens e o valor total do carrinho. */
+export function getCartTotals() {
+  var carrinho   = getCart();
+  var totalItens = 0;
+  var totalValor = 0;
+
+  // Percorre todos os itens somando quantidades e valores
+  for (var i = 0; i < carrinho.length; i++) {
+    totalItens = totalItens + carrinho[i].quantidade;
+    totalValor = totalValor + (carrinho[i].preco * carrinho[i].quantidade);
+  }
+
+  return { totalItems: totalItens, totalValue: totalValor };
 }
 
 export function getCartTotal() {

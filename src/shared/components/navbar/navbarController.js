@@ -9,7 +9,7 @@
  * ================================================
  */
 
-import { getCartTotals }   from "../../../feature/cart/services/cartServices.js";
+import { getCartTotals }   from "../../../feature/cart/services/cartService.js";
 import { openCartDrawer }  from "../../../feature/cart/components/CartDrawerComponent.js";
 import { getFavorites }    from "../../../feature/favorites/services/favoriteService.js";
 import { getUserRole }     from "../../../core/rolesManager.js";

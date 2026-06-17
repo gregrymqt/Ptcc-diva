@@ -1,4 +1,4 @@
-import { getOrders } from "../../checkout/checkout.js";
+import { getOrders } from "../../checkout/services/checkoutServices.js";
 import { AdminOrdersComponent } from "../../checkout/components/AdminOrdersComponent.js";
 
 export function carregarModuloPedidos() {
