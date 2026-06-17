@@ -7,20 +7,23 @@ export class RegisterService {
     const userExists = findUserByEmail(email);
 
     if (userExists) {
-      return { success: false, errorType: "email", message: "Este email já está registado." };
+      return { success: false, errorType: "email", message: "Este e-mail já está cadastrado." };
     }
 
-    // 2. Cria o objeto do utilizador definindo a role padrão como "user"
+    // 2. Cria o objeto do usuário definindo a role padrão como "user"
     const newUser = {
       nome,
       email,
       senha,
-      role: ROLES.USER // Garante que novos registos não são admins por engano
+      role: ROLES.USER // Garante que novos cadastros não são admins por engano
     };
 
     // 3. Guarda na base de dados (localStorage)
-    createUser(newUser);
-
-    return { success: true };
+    try {
+      createUser(newUser);
+      return { success: true };
+    } catch (e) {
+      return { success: false, errorType: "geral", message: "Erro inesperado ao criar usuário." };
+    }
   }
 }

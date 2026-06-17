@@ -9,9 +9,10 @@
    3. Verificar se o e-mail já existe e criar a conta
    ================================================ */
 
-import { createUser, findUserByEmail } from "../../core/storage.js";
 import { showToast } from "../../shared/components/toast/toastComponent.js";
 import { RegistroForm } from "./components/RegisterForm.js";
+import { RegistroModel } from "./models/RegisterModel.js";
+import { RegisterService } from "./services/RegisterService.js";
 
 
 /* --------------------------------------------------
@@ -48,36 +49,31 @@ registroForm.form.addEventListener("submit", function(evento) {
   /* --- 3A: VALIDAR OS CAMPOS ---
      Verifica se todos os campos foram preenchidos
      corretamente antes de tentar criar a conta. */
-  var camposSaoValidos = validarCampos(nome, email, senha, confirmar);
+  // Boa Prática (SoC): Delegamos totalmente as regras de negócio de validação
+  // dos formulários para o nosso RegistroModel
+  var validacao = RegistroModel.validate(nome, email, senha, confirmar);
 
-  // Se algum campo estiver errado, para aqui (o erro já foi exibido)
-  if (!camposSaoValidos) {
+  if (!validacao.isValid) {
+    if (validacao.errors.nome) registroForm.showError("nome", validacao.errors.nome);
+    if (validacao.errors.email) registroForm.showError("email", validacao.errors.email);
+    if (validacao.errors.senha) registroForm.showError("senha", validacao.errors.senha);
+    if (validacao.errors.confirmar) registroForm.showError("confirmar", validacao.errors.confirmar);
     return;
   }
 
-  /* --- 3B: VERIFICAR SE O E-MAIL JÁ EXISTE ---
-     Antes de criar a conta, confere se já tem
-     alguém cadastrado com esse e-mail. */
-  var usuarioExistente = findUserByEmail(email);
+  /* --- 3B: VERIFICAR SE O E-MAIL JÁ EXISTE E SALVAR ---
+     Boa Prática (SoC): Em vez de testar no componente, passamos para o Service
+     fazer as checagens no banco de dados e salvar tudo com segurança. */
+  var resultado = RegisterService.register(nome, email, senha);
 
-  if (usuarioExistente) {
-    registroForm.showError("email", "Este e-mail já está cadastrado.");
+  if (!resultado.success) {
+    if (resultado.errorType === "geral") {
+        showToast(resultado.message, 3000, "error");
+    } else {
+        registroForm.showError(resultado.errorType, resultado.message);
+    }
     return;
   }
-
-  /* --- 3C: CRIAR E SALVAR O NOVO USUÁRIO ---
-     Monta o objeto com os dados do novo usuário.
-     A role "user" é definida automaticamente —
-     nenhum cadastro normal vira admin. */
-  var novoUsuario = {
-    nome:  nome,
-    email: email,
-    senha: senha,
-    role:  "user"
-  };
-
-  // Salva o novo usuário no localStorage
-  createUser(novoUsuario);
 
   // Exibe mensagem de sucesso e limpa o formulário
   showToast("Conta criada com sucesso! Bem-vinda à Diva.");
@@ -88,65 +84,3 @@ registroForm.form.addEventListener("submit", function(evento) {
     window.location.href = window.location.origin + "/src/feature/home/pages/home.html";
   }, 1500);
 });
-
-
-/* --------------------------------------------------
-   FUNÇÕES AUXILIARES
-
-   Cada função abaixo tem uma responsabilidade
-   clara e bem definida, facilitando a leitura.
-   -------------------------------------------------- */
-
-/* Verifica se todos os campos do formulário de cadastro
-   estão preenchidos corretamente.
-   Retorna true (tudo ok) ou false (tem algum erro). */
-function validarCampos(nome, email, senha, confirmar) {
-  var tudoValido = true;
-
-  // Verifica se o nome foi preenchido
-  if (nome.trim() === "") {
-    registroForm.showError("nome", "O nome é obrigatório");
-    tudoValido = false;
-  }
-
-  // Verifica se o e-mail foi preenchido e tem formato válido
-  if (email.trim() === "") {
-    registroForm.showError("email", "O e-mail é obrigatório");
-    tudoValido = false;
-
-  } else if (!emailEhValido(email)) {
-    // O campo não está vazio, mas o formato está incorreto
-    registroForm.showError("email", "Digite um e-mail válido");
-    tudoValido = false;
-  }
-
-  // Verifica se a senha foi preenchida e tem pelo menos 6 caracteres
-  if (senha.trim() === "") {
-    registroForm.showError("senha", "A senha é obrigatória");
-    tudoValido = false;
-
-  } else if (senha.length < 6) {
-    registroForm.showError("senha", "A senha deve ter no mínimo 6 caracteres");
-    tudoValido = false;
-  }
-
-  // Verifica se a confirmação foi preenchida e é igual à senha
-  if (confirmar.trim() === "") {
-    registroForm.showError("confirmar", "Confirme a sua senha");
-    tudoValido = false;
-
-  } else if (confirmar !== senha) {
-    // As senhas digitadas são diferentes
-    registroForm.showError("confirmar", "As senhas não coincidem");
-    tudoValido = false;
-  }
-
-  return tudoValido;
-}
-
-/* Testa se o e-mail tem um formato válido (ex: nome@email.com).
-   Usa uma expressão regular para checar o padrão. */
-function emailEhValido(email) {
-  var padrao = /\S+@\S+\.\S+/;
-  return padrao.test(email);
-}

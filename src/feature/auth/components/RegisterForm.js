@@ -37,7 +37,7 @@ export class RegistroForm {
             '<span class="error-message" id="confirmar-error"></span>' +
           '</div>' +
           '<button class="btn-login" type="submit">' +
-            '<span>Registar Conta</span>' +
+            '<span>Cadastrar Conta</span>' +
           '</button>' +
         '</form>' +
         '<div class="login-footer">' +
