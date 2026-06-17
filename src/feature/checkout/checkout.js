@@ -11,72 +11,11 @@ import { initNavbar }       from "../../shared/components/navbar/navbarControlle
 import { showToast }        from "../../shared/components/toast/toastComponent.js";
 import { getStorageData, setStorageData } from "../../core/storage.js";
 import { CheckoutComponent } from "./components/CheckoutComponent.js";
-
-var CHAVE_CARRINHO = "carrinho";
-var CHAVE_PEDIDOS  = "pedidos";
-
-/* --------------------------------------------------
-   PARTE 1: FUNÇÕES DE LEITURA E PEDIDO
-   -------------------------------------------------- */
-function pegarCarrinhoLocal() {
-  return getStorageData(CHAVE_CARRINHO, []);
-}
-
-export function getOrders() {
-  return getStorageData(CHAVE_PEDIDOS, []);
-}
-
-function calcularTotalLocal() {
-  var carrinho = pegarCarrinhoLocal();
-  var total = 0;
-
-  for (var i = 0; i < carrinho.length; i++) {
-    total = total + (carrinho[i].preco * carrinho[i].quantidade);
-  }
-  return total;
-}
-
-function limparCarrinhoLocal() {
-  setStorageData(CHAVE_CARRINHO, []);
-  window.dispatchEvent(new Event("cartUpdated"));
-}
-
-function gerarIdDoPedido() {
-  return "PED-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-}
-
-function criarPedido(dadosEntrega, formaPagamento) {
-  var itensDoCarrinho = pegarCarrinhoLocal();
-
-  if (itensDoCarrinho.length === 0) {
-    throw new Error("O carrinho está vazio.");
-  }
-
-  var valorTotal = calcularTotalLocal();
-  var usuarioLogado = getStorageData("usuarioLogado");
-
-  var novoPedido = {
-    id:             gerarIdDoPedido(),
-    data:           new Date().toISOString(),
-    cliente:        usuarioLogado ? usuarioLogado.nome  : "Cliente Convidado",
-    email:          usuarioLogado ? usuarioLogado.email : "",
-    itens:          itensDoCarrinho,
-    total:          valorTotal,
-    dadosEntrega:   dadosEntrega,
-    formaPagamento: formaPagamento,
-    status:         "Aguardando Envio"
-  };
-
-  var pedidos = getStorageData(CHAVE_PEDIDOS, []);
-  pedidos.push(novoPedido);
-  setStorageData(CHAVE_PEDIDOS, pedidos);
-
-  limparCarrinhoLocal();
-  return novoPedido;
-}
+import { createOrder } from "./services/checkoutServices.js";
+import { getCart, getCartTotals, clearCart } from "../../cart/services/cartServices.js";
 
 /* --------------------------------------------------
-   PARTE 2: PROTEÇÃO DE ROTA
+   PARTE 1: PROTEÇÃO DE ROTA
    -------------------------------------------------- */
 function verificarLogin() {
   var usuarioLogado = getStorageData("usuarioLogado");
@@ -103,11 +42,12 @@ function verificarLogin() {
 }
 
 /* --------------------------------------------------
-   PARTE 3: MONTAR O HTML DA TELA (RENDER)
+   PARTE 2: MONTAR O HTML DA TELA (RENDER)
    -------------------------------------------------- */
 function renderizarCheckout() {
-  var itens = pegarCarrinhoLocal();
-  var total = calcularTotalLocal();
+  var itens = getCart();
+  var totais = getCartTotals();
+  var total = totais.totalValue;
   var conteudo = document.getElementById("checkout-content");
 
   if (!conteudo) {
@@ -122,7 +62,7 @@ function renderizarCheckout() {
 }
 
 /* --------------------------------------------------
-   PARTE 4: COMPORTAMENTOS E VALIDAÇÃO
+   PARTE 3: COMPORTAMENTOS E VALIDAÇÃO
    -------------------------------------------------- */
 function iniciarComportamentosDoFormulario() {
   var campoCep      = document.getElementById("cep");
@@ -130,7 +70,7 @@ function iniciarComportamentosDoFormulario() {
   var camposCartao  = document.getElementById("credit-card-fields");
   var formulario    = document.getElementById("checkout-form");
   var btnFinalizar  = formulario ? formulario.querySelector(".btn-checkout") : null;
-  var itensCarrinho = pegarCarrinhoLocal();
+  var itensCarrinho = getCart();
 
   var opcoesRadio = document.querySelectorAll('input[name="pagamento"]');
   for (var i = 0; i < opcoesRadio.length; i++) {
@@ -145,6 +85,7 @@ function iniciarComportamentosDoFormulario() {
 
   if (campoCep) {
     campoCep.addEventListener("input", function() {
+      // Boa Prática: Expressão Regular (Regex) limpa qualquer coisa que não seja número
       var valor = this.value.replace(/\D/g, "");
       valor = valor.replace(/^(\d{5})(\d)/, "$1-$2");
       this.value = valor.slice(0, 9);
@@ -187,8 +128,17 @@ function iniciarComportamentosDoFormulario() {
       var opcaoMarcada = document.querySelector('input[name="pagamento"]:checked');
       var formaPagamento = opcaoMarcada ? opcaoMarcada.value : "pix";
 
+      // Boa Prática (Tratamento de Erros): O bloco try/catch intercepta falhas (ex: disco cheio) 
+      // e garante que a tela não fique "congelada", destravando o botão para o usuário e 
+      // exibindo uma mensagem de alerta.
       try {
-        criarPedido(dadosEntrega, formaPagamento);
+        var carrinho = getCart();
+        var totais = getCartTotals();
+        var usuarioLogado = getStorageData("usuarioLogado");
+
+        createOrder(dadosEntrega, formaPagamento, carrinho, totais.totalValue, usuarioLogado);
+        clearCart();
+        
         showToast("Pedido realizado com sucesso!", "success");
 
         setTimeout(function() {
@@ -207,7 +157,7 @@ function iniciarComportamentosDoFormulario() {
 }
 
 /* --------------------------------------------------
-   PARTE 5: INICIALIZAÇÃO
+   PARTE 4: INICIALIZAÇÃO
    -------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", function() {
   var navbarEl = document.getElementById("navbar");

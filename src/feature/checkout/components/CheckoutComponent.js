@@ -1,3 +1,8 @@
+/**
+ * Componente Funcional Puro do Checkout.
+ * Boa Prática (Arquitetura de Componentes): Recebe dados brutos do carrinho
+ * e retorna unicamente a estrutura HTML do formulário, livre de lógicas de negócio.
+ */
 export function CheckoutComponent(cartItems, totals) {
   var itemsHtml = "";
 
