@@ -9,10 +9,10 @@ import { navbarComponent }  from "../../shared/components/navbar/navbarComponent
 import { footerComponent }  from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }       from "../../shared/components/navbar/navbarController.js";
 import { showToast }        from "../../shared/components/toast/toastComponent.js";
-import { getStorageData, setStorageData } from "../../core/storage.js";
+import { getStorageData } from "../../core/storage.js";
 import { CheckoutComponent } from "./components/CheckoutComponent.js";
 import { createOrder } from "./services/checkoutServices.js";
-import { getCart, getCartTotals, clearCart } from "../../cart/services/cartService.js";
+import { getCart, getCartTotals, clearCart } from "../cart/services/cartService.js";
 
 /* --------------------------------------------------
    PARTE 1: PROTEÇÃO DE ROTA
@@ -146,7 +146,7 @@ function iniciarComportamentosDoFormulario() {
         }, 2000);
 
       } catch (erro) {
-        showToast("Erro ao processar pedido: " + erro.message, "error");
+        showToast("Erro ao processar pedido: " + erro.message, 5000);
         if (btnFinalizar) {
           btnFinalizar.innerHTML = "<i class='fas fa-lock'></i> Finalizar Pedido";
           btnFinalizar.disabled = false;

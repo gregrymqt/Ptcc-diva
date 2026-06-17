@@ -8,7 +8,7 @@
    A chave usada no localStorage é "pedidos".
    ================================================ */
 
-import { getStorageData } from "../../../core/storage.js";
+import { getStorageData, setStorageData } from "../../../core/storage.js";
 
 // Nome da chave onde os pedidos ficam salvos
 var CHAVE_PEDIDOS = "pedidos";

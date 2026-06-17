@@ -26,7 +26,7 @@ export function addToCart(produto, corSelecionada) {
   if (indiceExistente !== -1) {
     carrinho[indiceExistente].quantidade = carrinho[indiceExistente].quantidade + 1;
   } else {
-    var imagemDoProduto = "https://via.placeholder.com/600x600?text=Sem+Imagem";
+    var imagemDoProduto = produto.imagem || "https://via.placeholder.com/600x600?text=Sem+Imagem";
 
     if (produto.variacoes) {
       for (var v = 0; v < produto.variacoes.length; v++) {

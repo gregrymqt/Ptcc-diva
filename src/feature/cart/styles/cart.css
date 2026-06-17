@@ -165,15 +165,22 @@
 
 .btn-remove {
   background: none;
-  border: none;
-  color: #999;
-  text-decoration: underline;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 6px 12px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-remove:hover {
-  color: var(--color-primary);
+  background-color: #e74c3c;
+  color: #fff;
 }
 
 /* Footer */

@@ -17,7 +17,7 @@ export function AdminOrdersComponent(orders) {
       hour: '2-digit', minute: '2-digit'
     });
     
-    var valorFormatado = order.totais.totalValue.toFixed(2).replace('.', ',');
+    var valorFormatado = (order.total || 0).toFixed(2).replace('.', ',');
 
     var itensPreview = "";
     for (var j = 0; j < order.itens.length; j++) {
