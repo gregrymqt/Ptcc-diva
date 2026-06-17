@@ -10,8 +10,8 @@ import { navbarComponent }   from "../../shared/components/navbar/navbarComponen
 import { footerComponent }   from "../../shared/components/footer/footerComponent.js";
 import { initNavbar }        from "../../shared/components/navbar/navbarController.js";
 
-import { categoryComponent } from "../../categories/components/categoryComponent.js";
-import { VitrineComponent }  from "../../products/components/VitrineComponent.js";
+import { categoryComponent } from "../categories/components/categoryComponent.js";
+import { VitrineComponent }  from "../products/components/VitrineComponent.js";
 import { heroComponent }     from "./components/heroComponent.js";
 
 /* --------------------------------------------------
@@ -116,8 +116,10 @@ function inicializarHome() {
   // Coloca a navbar na tela
   document.getElementById("navbar").innerHTML = navbarComponent();
 
-  // O VitrineComponent retorna uma Promise, precisamos aguardar
-  VitrineComponent().then(function(vitrineHtml) {
+  try {
+    // O VitrineComponent agora é síncrono
+    const vitrineHtml = VitrineComponent();
+    
     // Monta todo o conteúdo principal da home concatenando os componentes
     document.getElementById("content").innerHTML =
       heroComponent() +
@@ -132,9 +134,9 @@ function inicializarHome() {
 
     // Iniciar o carousel
     iniciarCarousel();
-  }).catch(function(error) {
+  } catch (error) {
     console.error("Erro ao carregar a vitrine:", error);
-  });
+  }
 }
 
 // Executa a inicialização assim que o arquivo é carregado

@@ -219,7 +219,7 @@ export function openCartDrawer() {
     btnFinalizar.onclick = function() {
       // Monta o endereço absoluto partindo da raiz do servidor (ex: http://127.0.0.1:5500)
       // Isso impede que a rota quebre independentemente de qual página o usuário esteja abrindo o carrinho.
-      var urlCheckout = window.location.origin + "/diva/src/feature/checkout/pages/checkout.html";
+      var urlCheckout = window.location.origin + "/src/feature/checkout/pages/checkout.html";
       
       // Realiza o redirecionamento de tela
       window.location.href = urlCheckout;

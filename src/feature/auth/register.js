@@ -85,7 +85,7 @@ registroForm.form.addEventListener("submit", function(evento) {
 
   // Aguarda 1.5 segundos antes de redirecionar para o login
   setTimeout(function() {
-    window.location.href = window.location.origin + "/diva/src/feature/home/pages/home.html";
+    window.location.href = window.location.origin + "/src/feature/home/pages/home.html";
   }, 1500);
 });
 

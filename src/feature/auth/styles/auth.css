@@ -31,8 +31,12 @@
 /* Container de Montagem */
 #app {
   width: 100%;
+  min-height: 100vh;          /* Ocupa a altura total da tela */
   display: flex;
-  justify-content: center;
+  justify-content: center;    /* Centraliza horizontalmente */
+  align-items: center;        /* Centraliza verticalmente */
+  padding: 24px;              /* Margem de segurança para mobile */
+  background-color: var(--clr-bg); /* Aplica o fundo suave do design system */
   animation: cardFadeIn 0.5s ease-out;
 }
 
