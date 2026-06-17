@@ -1,7 +1,8 @@
-import { getProductsWithCategory } from "../../products/services/productServices.js";
-
-export function VitrineComponent() {
-    var products = getProductsWithCategory();
+/**
+ * Componente Burro (Dumb Component) da Vitrine.
+ * Boa Prática: Não busca dados sozinhos; recebe "products" via parâmetro.
+ */
+export function VitrineComponent(products) {
 
     if (!products || products.length === 0) {
         return '<div class="vitrine-empty"><p>Nenhum produto encontrado no momento.</p></div>';

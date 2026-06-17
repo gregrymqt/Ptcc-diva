@@ -12,8 +12,8 @@
    ================================================ */
 
 import { getProductsWithCategory } from "./services/productServices.js";
+import { productComponent }        from "./components/productComponent.js";
 import { initFavoriteEvents }      from "../favorites/favoriteEvents.js";
-import { isFavorite }              from "../favorites/services/favoriteService.js";
 import { addToCart }               from "../cart/services/cartDrawerService.js";
 import { openCartDrawer }          from "../cart/components/CartDrawerComponent.js";
 import { showToast }               from "../../shared/components/toast/toastComponent.js";
@@ -35,19 +35,6 @@ document.getElementById("footer").innerHTML = footerComponent();
    dentro do container da página.
    -------------------------------------------------- */
 
-/* Monta o botão de favorito com o ícone certo
-   (❤️ se já é favorito, 🤍 se não é). */
-function montarBotaoFavorito(produtoId) {
-  var ehFavorito = isFavorite(produtoId);
-  var icone      = ehFavorito ? "❤️" : "🤍";
-
-  return (
-    '<button class="favorite-btn" data-product-id="' + produtoId + '">' +
-      icone +
-    '</button>'
-  );
-}
-
 /* Monta e exibe todos os cards de produto na tela. */
 function exibirProdutos() {
   var produtos  = getProductsWithCategory();
@@ -58,27 +45,14 @@ function exibirProdutos() {
   }
 
   container.innerHTML = "";
+  var htmlCards = "";
 
   for (var i = 0; i < produtos.length; i++) {
-    var produto = produtos[i];
-
-
-
-    container.innerHTML = container.innerHTML +
-      '<div class="product-card">' +
-        '<div class="product-image-wrapper">' +
-          '<img src="' + produto.imagem + '" alt="' + produto.nome + '">' +
-          montarBotaoFavorito(produto.id) +
-        '</div>' +
-        '<h3>' + produto.nome + '</h3>' +
-        '<p>' + produto.descricao + '</p>' +
-        '<small>Categoria: ' + produto.categoryName + '</small>' +
-        '<span>R$ ' + Number(produto.preco).toFixed(2) + '</span>' +
-        '<button class="add-to-cart-btn" data-id="' + produto.id + '">Adicionar ao Carrinho</button>' +
-      '</div>';
+    // Boa Prática (SoC): O HTML não é mais desenhado aqui. O Controller delega isso.
+    htmlCards += productComponent(produtos[i]);
   }
-
-
+  
+  container.innerHTML = htmlCards;
 }
 
 exibirProdutos();

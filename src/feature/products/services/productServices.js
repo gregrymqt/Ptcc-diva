@@ -42,9 +42,14 @@ export function getProducts() {
 }
 
 /* Salva a lista completa de produtos no localStorage.
-   Função interna — usada pelas funções abaixo. */
+   Boa Prática (Tratamento de Erros): Try/Catch impede que
+   falhas no disco (como limite excedido) travem o sistema. */
 function salvarProdutos(produtos) {
-  setStorageData(CHAVE_PRODUTOS, produtos);
+  try {
+    setStorageData(CHAVE_PRODUTOS, produtos);
+  } catch (erro) {
+    console.error("Falha ao salvar produtos. Espaço em disco insuficiente?", erro);
+  }
 }
 
 /* Cria e salva um novo produto no localStorage.

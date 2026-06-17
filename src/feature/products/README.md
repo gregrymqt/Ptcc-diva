@@ -44,11 +44,15 @@ create-product.html → create-product.js
 | `create-product.js`   | Painel admin com formulário de cadastro de produto e lista de pedidos. |
 
 ### `components/`
-| Arquivo                     | O que faz                                                    |
-|-----------------------------|--------------------------------------------------------------|
-| `productComponent.js`       | Função que gera os cards de produto (imagem, nome, preço, botões). |
-| `productFormComponent.js`   | Formulário de cadastro/edição de produto para o admin.       |
-| `AdminOrdersComponent.js`   | Componente async que busca e renderiza a lista de todos os pedidos. |
+| Arquivo                             | O que faz                                                    |
+|-------------------------------------|--------------------------------------------------------------|
+| `productComponent.js`               | Função que gera os cards de produto (imagem, nome, preço, botões). |
+| `VitrineComponent.js`               | Renderiza a seção de destaques (Vitrine).                    |
+| `featuredProductsComponent.js`      | Alternativa/variante de destaques.                           |
+| `productDetailComponent.js`         | Gera a marcação principal da página de detalhes.             |
+| `productFormComponent.js`           | Formulário de cadastro/edição de produto para o admin.       |
+| `productAdminListComponent.js`      | Lista os produtos no painel administrativo.                  |
+| `productAdminDropdownComponent.js`  | Dropdown para ações rápidas no painel administrativo.        |
 
 ### `models/`
 Define a estrutura de dados de um produto.

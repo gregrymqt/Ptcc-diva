@@ -13,6 +13,7 @@ import { initNavbar }        from "../../shared/components/navbar/navbarControll
 import { categoryComponent } from "../categories/components/categoryComponent.js";
 import { getCategories }     from "../categories/services/categoryService.js";
 import { VitrineComponent }  from "../products/components/VitrineComponent.js";
+import { getProductsWithCategory } from "../products/services/productServices.js";
 import { heroComponent }     from "./components/heroComponent.js";
 
 /* --------------------------------------------------
@@ -123,8 +124,9 @@ function inicializarHome() {
     // Boa Prática (SoC): O Controller busca os dados antes de enviá-los ao Componente Burro
     const categorias = getCategories();
     
-    // O VitrineComponent agora é síncrono
-    const vitrineHtml = VitrineComponent();
+    // O VitrineComponent agora é síncrono e Componente Burro (recebe dados)
+    const produtosVitrine = getProductsWithCategory();
+    const vitrineHtml = VitrineComponent(produtosVitrine);
     
     // Monta todo o conteúdo principal da home concatenando os componentes
     document.getElementById("content").innerHTML =
