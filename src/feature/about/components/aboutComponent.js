@@ -4,6 +4,11 @@
 
 import { getAboutImagesConfig } from "../services/aboutService.js";
 
+/**
+ * Componente principal da seção Sobre a Marca.
+ * Recupera as configurações visuais através do Service e monta a interface.
+ * @returns {string} Código HTML do componente
+ */
 export function aboutComponent() {
   var aboutImages = getAboutImagesConfig();
   var htmlImages = "";
@@ -14,6 +19,8 @@ export function aboutComponent() {
       htmlImages += '<img src="' + img.url + '" alt="' + img.alt + '" style="margin-bottom: 1rem;">';
     }
   } else {
+    // Boa Prática (UI/UX Fallback): Atributo 'onerror' provê uma imagem de fallback
+    // caso a original seja deletada ou sofra com links quebrados.
     htmlImages = '<img src="../../../../assets/images/about-marca.jpg" alt="Diva Makeup - Nossa História" onerror="this.src=\'https://via.placeholder.com/600x400?text=Diva+Makeup\'">';
   }
 

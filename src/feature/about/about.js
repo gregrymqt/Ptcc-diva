@@ -7,12 +7,17 @@ import { footerComponent } from "../../shared/components/footer/footerComponent.
 import { initNavbar }      from "../../shared/components/navbar/navbarController.js";
 import { aboutComponent }  from "./components/aboutComponent.js";
 
-/* Inicializa a página injetando os componentes globais */
+/**
+ * Função principal que atua como o Controller da página.
+ * Ela orquestra a injeção dos componentes na tela.
+ */
 function inicializarAbout() {
   var navbarEl = document.getElementById("navbar");
   var contentEl = document.getElementById("content");
   var footerEl = document.getElementById("footer");
 
+  // Boa Prática (Arquitetura de Componentes): Injeta HTML gerado dinamicamente
+  // promovendo extrema reutilização de código entre páginas
   if (navbarEl) {
     navbarEl.innerHTML = navbarComponent();
   }
@@ -29,13 +34,17 @@ function inicializarAbout() {
   configurarFormularioContato();
 }
 
-/* Configura o evento de submit do formulário de contato */
+/**
+ * Captura o formulário de contato e intercepta seu evento de envio.
+ */
 function configurarFormularioContato() {
   var formContato = document.getElementById("form-contato");
 
   if (formContato) {
     formContato.addEventListener("submit", function(event) {
-      event.preventDefault(); // Evita o recarregamento da página
+      // Boa Prática (Manipulação Limpa do DOM): Previne o recarregamento natural 
+      // da página, mantendo a característica de Single Page Application (SPA).
+      event.preventDefault();
 
       // Exibe uma mensagem de sucesso para o usuário
       alert("Mensagem enviada com sucesso! Retornaremos em breve.");
